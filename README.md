@@ -14,16 +14,16 @@ Schon immer hast du von "oben" geträumt; von der Sonne, über die bloß noch Le
 
 Wirst du sie jemals sehen?
 
-Beschreibung:\
-Inspiriert von "The Binding of Isaac", "Enter the Gungeon" und Dead Cells.\
-Prozedural generierte Level, ein Progressionsystem, sowie Ausrüstungsgegenstände und Gegnerhorden.\
-Kann Spuren von RPG-Elementen enthalten.\
+*Beschreibung*:\
+  Inspiriert von "The Binding of Isaac", "Enter the Gungeon" und Dead Cells.\
+  Prozedural generierte Level, ein Progressionsystem, sowie Ausrüstungsgegenstände und Gegnerhorden.\
+  Kann Spuren von RPG-Elementen enthalten.\
 
-Entwicklung mit:\
-Client (Spiel) - > Unity (C#)\
-Versionsverlauf -> GitHub\
-Organisation -> Nicht festgelegt (Issues, Trello oder Glo)\
-Spieldaten -> XML, JSON\
-Datenbank zur Datenspeicherung\
+*Entwicklung mit*:\
+  Client (Spiel) - > Unity (C#)\
+  Versionsverlauf -> GitHub\
+  Organisation -> Nicht festgelegt (Issues, Trello oder Glo)\
+  Spieldaten -> XML, JSON\
+  Datenbank zur Datenspeicherung\
 \
 **Team: Pascal Staadt, René Reifen, Nico Piel**
