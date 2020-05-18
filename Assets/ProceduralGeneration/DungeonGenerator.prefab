@@ -61,8 +61,8 @@ MonoBehaviour:
   maxWidth: 30
   minHeight: 5
   maxHeight: 30
-  minSpacingX: 4
-  maxSpacingX: 20
+  minSpacingX: 20
+  maxSpacingX: 40
   minSpacingY: -40
   maxSpacingY: 40
   stdLikelihood: 95
@@ -88,4 +88,12 @@ MonoBehaviour:
   wallCornerSe: {fileID: 1083720996130883523, guid: ed40a19db1a9360429ccd950c9a14841,
     type: 3}
   wallCornerSw: {fileID: 1083720996130883523, guid: 7350bcc7422d93944a14eb40d6544d9d,
+    type: 3}
+  wallCornerNwOuter: {fileID: 1083720996130883523, guid: 7efb8d2902d012e488e31df7b3e080fa,
+    type: 3}
+  wallCornerNeOuter: {fileID: 1083720996130883523, guid: dad66ba9a903ec645b5d01f03ea429a6,
+    type: 3}
+  wallCornerSeOuter: {fileID: 1083720996130883523, guid: 61561346f3099c44b8607e7ed8bd7ec3,
+    type: 3}
+  wallCornerSwOuter: {fileID: 1083720996130883523, guid: 76bf88c42dced5f46b0f3527c583a960,
     type: 3}
