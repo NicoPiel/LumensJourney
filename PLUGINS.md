@@ -1,7 +1,21 @@
 # Unity packages used
 
-- Burst
-- Cinemachine
-- Post Processing
-- Timeline
-- Visual Effect Graph
+- 2D Animation: 3.2.1
+- 2D Pixel Perfect: 2.0.4
+- 2D PSD Importer: 2.1.3
+- 2D Sprite: 1.0.0
+- 2D SpriteShape: 3.0.10
+- 2D Tilemap Editor: 1.0.0
+- Burst:; 1.3.0 preview.10
+- Cinemachine: 2.5.0
+- JetBrains Rider Editor: 2.0.2
+- Jobs: 0.2.8 preview.3
+- Post Processing: 2.3.0
+- Test Framework: 1.1.14
+- TextMesh Pro: 2.0.1
+- Timeline: 1.2.14
+- Unity Collaborate: 1.2.16
+- Unity UI: 1.0.0
+- Universal RP:  7.3.1
+- Visual Effect Graph: 7.3.1
+- Visual Studio Code Editor: 1.1.4

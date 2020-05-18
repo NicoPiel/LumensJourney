@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Xml;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
@@ -386,6 +384,9 @@ namespace ProceduralGeneration.Core
 
         private GameObject InstantiatePlayer()
         {
+            GameObject spawner = GameObject.Find("RoomSpawner");
+            Destroy(GameObject.Find("RoomSpawner(Clone)"));
+            
             GameObject player = GameObject.Find("Player(Clone)");
             Destroy(GameObject.Find("Player"));
 
