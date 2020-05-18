@@ -1,4 +1,4 @@
-# Roguelite
+# Roguelite - "Quest for Daylight?"
 
 Vor langer, langer Zeit herrschten Chaos und Anarchie in der Welt. Völker brachten einander um, der Konsequenzen unbewusst.
 Doch eines Tages hatten die Götter genug. Sie waren traurig darüber, all dieses Leid in der Welt zu sehen, die sie erschaffen hatten.
