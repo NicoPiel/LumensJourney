@@ -1,18 +1,45 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Player : MonoBehaviour
-{
-    private int CurrentHealth {get; set;}
-    private int MaxHealth  {get; set;}
-    private int AttackDamage {get; set;}
+public class Player {
     private string Playername {get; set;}
     
+    public Dictionary<string, int> playerstats { get; set; }
+    public Inventory Inventory { get; set;}
+    
     // Start is called before the first frame update
-    public Player(int currentHealth, string playername, int maxHealth = 20, int attackDamage = 5)
+    public Player(string playername, int maxHealth = 20, int attackDamage = 5, int defense = 5)
     {
-        CurrentHealth = currentHealth;
-        MaxHealth = maxHealth;
-        AttackDamage = attackDamage;
         Playername = playername;
+        Inventory = new Inventory();
+        playerstats = new Dictionary<string, int>();
+        ConstructDictionary(maxHealth, attackDamage, defense);
+    }
+
+    public void ConstructDictionary(int maxHealth, int attackDamage, int defense)
+    {
+        playerstats.Add("MaxHealth",  maxHealth);
+        playerstats.Add("CurrentHealth", maxHealth);
+        playerstats.Add("AttackDamage", attackDamage);
+        playerstats.Add("FireDamage", 0);
+        playerstats.Add("IceDamage", 0);
+        playerstats.Add("Defense", defense);
+        playerstats.Add("ElementalDefense", 0);
+    }
+    public void OnItemChange(GameItem item, bool removed)
+    {
+        foreach (var itemStat in item.ValueIncreasments)
+        {
+            if (removed)
+                playerstats[itemStat.Key] -= itemStat.Value;
+            else
+            {
+                playerstats[itemStat.Key] += itemStat.Value;
+            }
+                
+        }
+
+      
     }
 }

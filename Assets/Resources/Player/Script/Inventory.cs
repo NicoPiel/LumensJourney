@@ -1,0 +1,37 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class Inventory
+{
+    public List<GameItem> Items { get; set;}
+    public Inventory()
+    {
+        Items = new List<GameItem>();
+  
+    }
+    public void AddItem(GameItem item)
+    {
+        Items.Add(item);
+    }
+    public void AddItem(string item)
+    {
+        Items.Add(GameItem.ConstructItem(item));
+    }
+    public void RemoveItem(GameItem item)
+    {
+        Items.Remove(item);
+    }
+    public void RemoveItem(string item)
+    {
+        Items.Remove(GameItem.ConstructItem(item));
+    }
+    
+    public GameItem GetItem(string itemname)
+    {
+        return Items.Find(item => item.ItemName == itemname);
+    }
+    
+
+}

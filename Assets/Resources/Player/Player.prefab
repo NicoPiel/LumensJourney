@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8759012663102982379}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -2311659948842064771, guid: 49c7c9190abbec942add2e6a9abdc252,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  itembar: {fileID: 0}
 --- !u!50 &8759012663102982376
 Rigidbody2D:
   serializedVersion: 4
@@ -152,6 +153,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.008010685, y: -0.10523397}
-  m_Size: {x: 0.31146574, y: 0.3274871}
+  m_Offset: {x: -0.0095666945, y: -0.07025373}
+  m_Size: {x: 0.3274871, y: 0.53795505}
   m_Direction: 0

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Items>
+    <item name="Dragons claw">
+        <Values>
+            <value name="AttackDamage">12</value>
+            <value name="FireDamage">12</value>
+        </Values>
+    </item>
+    <item name="Water ring">
+        <Values>
+            <value name="Defense">7</value>
+            <value name="ElementalDefense">2</value>
+        </Values>
+    </item>
+</Items>

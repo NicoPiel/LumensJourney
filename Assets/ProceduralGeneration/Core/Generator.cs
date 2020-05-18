@@ -118,6 +118,8 @@ namespace ProceduralGeneration.Core
                 // Make random position for the doors
                 var doorLeft = Random.Range(yMin + 1, yMax - 1);
                 var doorRight = Random.Range(yMin + 1, yMax - 1);
+                
+                
 
                 // Generate all room tiles
                 for (var x = xMin; x <= xMax; x++)

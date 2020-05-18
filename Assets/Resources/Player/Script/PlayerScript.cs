@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Resources;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerScript : MonoBehaviour
 {
+  
+    
     public float speed;
 
     private Rigidbody2D _playerRigidbody2D;
@@ -13,27 +16,41 @@ public class PlayerScript : MonoBehaviour
 
     private Animator _animator;
     
+    private Player _player = new Player("Pacolos");
+
+    public ItemBar itembar;
+
+
+
+
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _player.Inventory.AddItem("Dragons claw");
+        _player.Inventory.AddItem("Water ring");
+        itembar = GameObject.Find("ItemBar").GetComponent<ItemBar>();
+        itembar.CreateItemBar(_player.Inventory);
+        
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        if(Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.UpArrow))
+        if(Input.GetKeyDown(KeyCode.I))
         {
             _animator.Play("SwingUp");
-        }else if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.RightArrow))
+        }else if (Input.GetKeyDown(KeyCode.L))
         {
             _animator.Play("SwingRight");
-        }else if (Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.DownArrow))
+            
+        }else if (Input.GetKeyDown(KeyCode.K))
         {
             _animator.Play("SwingDown");
-        }else if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.LeftArrow))
+        }else if (Input.GetKeyDown(KeyCode.J))
         {
             _animator.Play("SwingLeft");
         }
@@ -52,4 +69,6 @@ public class PlayerScript : MonoBehaviour
         _animator.SetFloat("Speed", _change.magnitude);
         _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.deltaTime));
     }
+
+
 }
