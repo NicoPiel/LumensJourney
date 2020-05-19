@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 using UnityEngine;
@@ -57,8 +58,14 @@ public class PlayerScript : MonoBehaviour
         else
         {
             _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
+            _change.Normalize();
         }
         
+        
+    }
+
+    private void FixedUpdate()
+    {
         MoveCharacter();
     }
 
@@ -67,7 +74,7 @@ public class PlayerScript : MonoBehaviour
         _animator.SetFloat("Horizontal", _change.x);
         _animator.SetFloat("Vertical", _change.y);
         _animator.SetFloat("Speed", _change.magnitude);
-        _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.deltaTime));
+        _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
     }
 
 
