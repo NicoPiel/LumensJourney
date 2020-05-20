@@ -442,5 +442,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player UI
       objectReference: {fileID: 0}
+    - target: {fileID: 8058454421614486849, guid: 50a4810ecce5e294bbcef46d96ed739e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 203
+      objectReference: {fileID: 0}
+    - target: {fileID: 8058454421614486849, guid: 50a4810ecce5e294bbcef46d96ed739e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -105
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50a4810ecce5e294bbcef46d96ed739e, type: 3}
