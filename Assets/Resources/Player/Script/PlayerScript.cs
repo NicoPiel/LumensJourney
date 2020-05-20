@@ -46,7 +46,6 @@ public class PlayerScript : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             _animator.Play("SwingUp");
-            healthbarScript.ChangeHealthBar(4);
         }else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             _animator.Play("SwingRight");
