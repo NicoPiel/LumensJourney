@@ -35,7 +35,8 @@ namespace ProceduralGeneration.Core
         [SerializeField]
         public GameObject wallTile;
 
-        [Space] [SerializeField] public GameObject wallTileNorth;
+        [Space] 
+        [SerializeField] public GameObject wallTileNorth;
         [SerializeField] public GameObject wallTileEast;
         [SerializeField] public GameObject wallTileSouth;
         [SerializeField] public GameObject wallTileWest;
