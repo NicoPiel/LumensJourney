@@ -11,23 +11,25 @@ public class HealthbarScript : MonoBehaviour
         ChangeHealthBar(5);
     }
 
-    void ChangeHealthBar(int currentHealth)
+    public void ChangeHealthBar(int currentHealth)
     {
+        Destroy(GameObject.Find("Healthbar"));
+        foreach (Transform child in transform) {
+            GameObject.Destroy(child.gameObject);
+        }
         var obj = Resources.Load<GameObject>("Healthbar/Prefab/Heart");
-        GameObject hearts= new GameObject("Hearts");
-        hearts.transform.parent = this.transform;
         if (obj == null)
         {
             Debug.Log("ja dann sip mir doch einen");
         }
-        float x = -5.1f;
-        float y = 4.7f;
+        float x = 25;
+        float y= -29;
         for (int i = currentHealth; i != 0; i--)
         {
             var newHeart = Instantiate(obj);
-            newHeart.transform.parent = hearts.transform;
-            newHeart.transform.position = new Vector3(x,y,0);
-            x += 0.5f;
+            newHeart.GetComponent<RectTransform>().SetParent(this.transform);
+            newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
+            x += 50;
         }
         
     }
