@@ -18,24 +18,24 @@ public class PlayerScript : MonoBehaviour
     private Animator _animator;
     
     private Player _player = new Player("Pacolos");
-    public HealthbarScript healthbarScript;
-    public ItemBar itembar;
+    public HealthbarScript healthBarScript;
+    public ItemBarScript itemBarScript;
     
     
 
     // Start is called before the first frame update
     void Start()
     {
-        healthbarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
+        healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
+        itemBarScript = GameObject.Find("ItemBar(Clone)").GetComponent<ItemBarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _player.Inventory.AddItem("Dragons claw");
         _player.Inventory.AddItem("Water ring");
-        //itembar = GameObject.Find("ItemBar").GetComponent<ItemBar>();
-        //itembar.CreateItemBar(_player.Inventory);
-
+        itemBarScript.CreateItemBar(_player.Inventory);
         
-        healthbarScript.ChangeHealthBar(2);
+        
+        healthBarScript.ChangeHealthBar(2);
 
     }
 
@@ -46,7 +46,7 @@ public class PlayerScript : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I))
         {
             _animator.Play("SwingUp");
-            healthbarScript.ChangeHealthBar(4);
+            healthBarScript.ChangeHealthBar(4);
         }else if (Input.GetKeyDown(KeyCode.L))
         {
             _animator.Play("SwingRight");

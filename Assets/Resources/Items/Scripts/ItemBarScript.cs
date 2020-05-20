@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemBar : MonoBehaviour
+public class ItemBarScript : MonoBehaviour
 {
     
     public void CreateItemBar(Inventory inv)
     {
-        GameObject itemBar = gameObject;
-
-        float x = -6.3f;
-        float y = 4.1f;
+        float x = 33f;
+        float y = -32f;
         foreach(var item in inv.Items)
         {
             var obj = Resources.Load<GameObject>("Items/Prefabs/"+item.ItemName);
@@ -19,9 +17,9 @@ public class ItemBar : MonoBehaviour
                 Debug.Log("Object could not be loaded");
             }
             var newItem = Instantiate(obj);
-            newItem.transform.parent = itemBar.transform;
-            newItem.transform.position = new Vector3(x,y,0);
-            x += 0.6f;
+            newItem.GetComponent<RectTransform>().SetParent(transform);
+            newItem.GetComponent<RectTransform>().anchoredPosition =  new Vector3(x, y, 0);
+            x += 47f;
         }
     }
 }
