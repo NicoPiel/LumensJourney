@@ -399,8 +399,6 @@ namespace ProceduralGeneration.Core
             player = (GameObject) Instantiate(Resources.Load("Player/Player"),
                 new Vector3(_rooms[0].x + 1, _rooms[0].y + 1, 0), Quaternion.identity, gameObject.transform);
 
-            if (Camera.main != null) Camera.main.transform.parent = player.transform;
-
             return player;
         }
 

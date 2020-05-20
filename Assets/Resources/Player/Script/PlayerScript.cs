@@ -43,18 +43,18 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             _animator.Play("SwingUp");
-            healthBarScript.ChangeHealthBar(4);
-        }else if (Input.GetKeyDown(KeyCode.L))
+            healthbarScript.ChangeHealthBar(4);
+        }else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             _animator.Play("SwingRight");
             
-        }else if (Input.GetKeyDown(KeyCode.K))
+        }else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _animator.Play("SwingDown");
-        }else if (Input.GetKeyDown(KeyCode.J))
+        }else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             _animator.Play("SwingLeft");
         }
