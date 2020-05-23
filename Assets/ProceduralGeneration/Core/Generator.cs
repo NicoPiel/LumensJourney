@@ -271,7 +271,10 @@ namespace ProceduralGeneration.Core
                     PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
                     
-                    for (var y = leftDoorY; y < rightDoorY; y++)
+                    
+                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, dungeon);
+
+                    for (var y = leftDoorY + 1; y < rightDoorY; y++)
                     {
                         if (width > 1 && y < rightDoorY)
                         {
