@@ -9,8 +9,8 @@ public class PickUpScript : MonoBehaviour
     public void SetPickUpItem(string itemName)
     {
         _item = GameItem.ConstructItem(itemName);
-        SpriteRenderer sr = gameObject.GetComponentInChildren<SpriteRenderer>();
-        sr.sprite = Resources.Load<Sprite>("Items/Tiles/" + _item.ItemName);
+        SpriteRenderer re = transform.Find("Item")?.GetComponent<SpriteRenderer>();
+        re.sprite = Resources.Load<Sprite>("Items/Tiles/" + _item.ItemName);
     }
 
     public void OnInfoZoneEnter()

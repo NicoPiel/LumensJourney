@@ -38,7 +38,6 @@ public class GameItem
 
     public static GameItem ConstructItem(string itemName)
     {
-        Debug.Log("Hello");
         GameItem item = new GameItem();
         XElement root = XElement.Load("Assets/Resources/Items/Data/items.xml");
         IEnumerable<XElement> items =
@@ -48,7 +47,6 @@ public class GameItem
         foreach (var itemData in items)
         {
             item.ItemName = itemName;
-            Debug.Log(item.ItemName);
             var Values = itemData.Elements("Values").Elements();
             foreach (var v in Values)
             {
