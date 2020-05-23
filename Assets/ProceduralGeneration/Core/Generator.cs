@@ -72,6 +72,8 @@ namespace ProceduralGeneration.Core
             InstantiatePlayer();
 
             Generated = true;
+            
+            Utility.Tooltip.ShowTooltip_Static("Hi, I'm a tooltip.");
 
             return true;
         }
