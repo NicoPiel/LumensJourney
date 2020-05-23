@@ -11,11 +11,12 @@ public class GameItem
     
     public Dictionary<string, int> ValueIncreasments {get; set;}
     public string ItemName {get; set;}
-
+    public bool IsInInventory { get; set; }
     public GameItem()
     {
         ValueIncreasments = new Dictionary<string, int>();
         ItemName = null;
+        IsInInventory = false;
     }
     
     

@@ -11,7 +11,7 @@ public class ItemBarScript : MonoBehaviour
         float y = -32f;
         foreach(var item in inv.Items)
         {
-            var obj = Resources.Load<GameObject>("Items/Prefabs/"+item.ItemName);
+            var obj = Resources.Load<GameObject>("ItemBar/Prefabs/"+item.ItemName);
             if (obj == null)
             {
                 Debug.Log("Object could not be loaded");
