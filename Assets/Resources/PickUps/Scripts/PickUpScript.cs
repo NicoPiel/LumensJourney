@@ -5,7 +5,7 @@ using UnityEngine;
 public class PickUpScript : MonoBehaviour
 {
     private GameItem _item;
-    // Start is called before the first frame update
+    
     public void SetPickUpItem(string itemName)
     {
         _item = GameItem.ConstructItem(itemName);

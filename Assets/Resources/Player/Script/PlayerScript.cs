@@ -30,8 +30,10 @@ public class PlayerScript : MonoBehaviour
         itemBarScript = GameObject.Find("ItemBar(Clone)").GetComponent<ItemBarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _player.Inventory.AddItem("Dragons claw");
-        _player.Inventory.AddItem("Water ring");
+        _player.Inventory.AddItem("Dragons Claw");
+        _player.Inventory.AddItem("Water Ring");
+        _player.Inventory.AddItem("Deadly Tooth");
+        _player.Inventory.AddItem("Posh Slug");
         itemBarScript.CreateItemBar(_player.Inventory);
         
         
