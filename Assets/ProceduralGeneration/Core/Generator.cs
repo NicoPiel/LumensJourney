@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,22 +10,28 @@ namespace ProceduralGeneration.Core
     [BurstCompile]
     public class Generator : MonoBehaviour
     {
-        [Header("Room Settings")] [Range(1, 30)]
-        public int roomNumber;
+        [Header("Room Settings")] 
+        [Range(1, 30)] public int RoomNumber;
 
-        [Space] [Range(5, 30)] public int minWidth;
+        [Space] 
+        [Range(5, 30)] public int minWidth;
         [Range(5, 30)] public int maxWidth;
-        [Space] [Range(5, 30)] public int minHeight;
+        
+        [Space] 
+        [Range(5, 30)] public int minHeight;
         [Range(5, 30)] public int maxHeight;
-        [Space] [Range(4, 40)] public int minSpacingX;
+        
+        [Space] 
+        [Range(4, 40)] public int minSpacingX;
         [Range(4, 40)] public int maxSpacingX;
-        [Space] [Range(-80, 0)] public int minSpacingY;
+        
+        [Space] 
+        [Range(-80, 0)] public int minSpacingY;
         [Range(0, 80)] public int maxSpacingY;
 
         [Header("Tileset")]
         [Tooltip("Determines the likelihood with which the standard floor tile will spawn.")]
-        [Range(0, 100)]
-        public int stdLikelihood;
+        [Range(0, 100)] public int stdLikelihood;
 
         [SerializeField] public GameObject standardFloorTile;
         [SerializeField] public List<GameObject> otherFloorTiles;
@@ -43,40 +50,28 @@ namespace ProceduralGeneration.Core
         [SerializeField] public Dictionary<int[], int[]> doorRelations;
         [Space] private List<Rect> _rooms;
 
+        private GameObject _dungeon;
+        public bool Generated { get; set; }
+
         public bool Generate()
         {
-            if (minWidth > maxWidth
-                || minHeight > maxHeight
-                || minSpacingX > maxSpacingX
-                || minSpacingY > maxSpacingY)
+            if ((minWidth > maxWidth)
+                || (minHeight > maxHeight)
+                || (minSpacingX > maxSpacingX)
+                || (minSpacingY > maxSpacingY))
             {
                 Debug.LogError(
                     "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
                 return false;
             }
 
-            GenerateRooms(roomNumber = 10);
+            _dungeon = CreateDungeonObject();
+
+            GenerateRooms(RoomNumber);
 
             InstantiatePlayer();
 
-            return true;
-        }
-        
-        public bool Generate(int numberOfRooms)
-        {
-            if (minWidth > maxWidth
-                || minHeight > maxHeight
-                || minSpacingX > maxSpacingX
-                || minSpacingY > maxSpacingY)
-            {
-                Debug.LogError(
-                    "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
-                return false;
-            }
-
-            GenerateRooms(numberOfRooms);
-
-            InstantiatePlayer();
+            Generated = true;
 
             return true;
         }
@@ -85,7 +80,7 @@ namespace ProceduralGeneration.Core
         {
             Debug.Log("Generating rooms..");
 
-            GameObject dungeon = CreateDungeonObject();
+            GameObject dungeon = _dungeon;
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
@@ -446,6 +441,16 @@ namespace ProceduralGeneration.Core
             var random = Random.Range((stdLikelihood + 1) - 100, stdLikelihood);
 
             return random > 0 ? standardFloorTile : tileCollection[Random.Range(0, tileCollection.Count)];
+        }
+
+        public GameObject GetParent()
+        {
+            return _dungeon;
+        }
+
+        public List<Rect> GetRooms()
+        {
+            return this._rooms;
         }
     }
 }

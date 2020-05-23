@@ -12,7 +12,7 @@ namespace ProceduralGeneration.Menu
         // OnInspector GUI
         public override void OnInspectorGUI()
         {
-            Stopwatch stopwatch = new Stopwatch();
+            var stopwatch = new Stopwatch();
             DrawDefaultInspector();
             
             if (GUILayout.Button("Generate") && Application.isPlaying)
@@ -24,6 +24,19 @@ namespace ProceduralGeneration.Menu
                 {
                     stopwatch.Stop();
                     Debug.Log($"Generated dungeon in {stopwatch.ElapsedMilliseconds}ms.");
+                }
+                stopwatch.Stop();
+            }
+            
+            if (GUILayout.Button("Decorate") && Application.isPlaying)
+            {
+                var decorator = FindObjectOfType<Decorator>();
+                
+                stopwatch.Restart();
+                if (decorator.Decorate())
+                {
+                    stopwatch.Stop();
+                    Debug.Log($"Decorated dungeon in {stopwatch.ElapsedMilliseconds}ms.");
                 }
                 stopwatch.Stop();
             }

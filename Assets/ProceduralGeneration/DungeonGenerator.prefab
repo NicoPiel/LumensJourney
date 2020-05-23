@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c9c921514e387e41b87b139cbe1a6dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomNumber: 10
+  RoomNumber: 10
   minWidth: 5
   maxWidth: 30
   minHeight: 5
