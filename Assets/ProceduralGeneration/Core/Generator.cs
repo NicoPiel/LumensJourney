@@ -34,30 +34,7 @@ namespace ProceduralGeneration.Core
         // Wall tiles
         [SerializeField]
         public GameObject wallTile;
-
-        [Space] 
-        [SerializeField] public GameObject wallTileNorth;
-        [SerializeField] public GameObject wallTileEast;
-        [SerializeField] public GameObject wallTileSouth;
-        [SerializeField] public GameObject wallTileWest;
-
-        [Space]
-        // Corner tiles
-        [SerializeField]
-        public GameObject wallCornerNw;
-
-        [SerializeField] public GameObject wallCornerNe;
-        [SerializeField] public GameObject wallCornerSe;
-        [SerializeField] public GameObject wallCornerSw;
-
-        [Space]
-        // Outer Corner tiles
-        [SerializeField]
-        public GameObject wallCornerNwOuter;
-
-        [SerializeField] public GameObject wallCornerNeOuter;
-        [SerializeField] public GameObject wallCornerSeOuter;
-        [SerializeField] public GameObject wallCornerSwOuter;
+        public GameObject wallTileTopDown;
 
         [Space] [Header("Doors")] [SerializeField]
         public List<int[]> leftDoors;
@@ -139,25 +116,25 @@ namespace ProceduralGeneration.Core
                         // Northwest corner
                         else if (x == xMin && y == yMax)
                         {
-                            PlaceTile(wallCornerNw, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
 
                         // Northeast corner
                         else if (x == xMax && y == yMax)
                         {
-                            PlaceTile(wallCornerNe, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
 
                         // Southwest corner
                         else if (x == xMin && y == yMin)
                         {
-                            PlaceTile(wallCornerSw, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
 
                         // Southeast corner
                         else if (x == xMax && y == yMin)
                         {
-                            PlaceTile(wallCornerSe, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
 
                         // Erect vertical walls
@@ -166,7 +143,7 @@ namespace ProceduralGeneration.Core
                             // Generate bottom wall, and make room for a door
                             if (y != doorLeft)
                             {
-                                PlaceTile(wallTileEast, x, y, dungeon);
+                                PlaceTile(wallTileTopDown, x, y, dungeon);
                             }
                             else if (y == doorLeft)
                             {
@@ -177,7 +154,7 @@ namespace ProceduralGeneration.Core
                                 }
                                 else
                                 {
-                                    PlaceTile(wallTileEast, x, y, dungeon);
+                                    PlaceTile(wallTileTopDown, x, y, dungeon);
                                 }
                             }
                         }
@@ -186,7 +163,7 @@ namespace ProceduralGeneration.Core
                             // Generate top wall, and make room for a door
                             if (y != doorRight)
                             {
-                                PlaceTile(wallTileWest, x, y, dungeon);
+                                PlaceTile(wallTileTopDown, x, y, dungeon);
                             }
                             else if (y == doorRight)
                             {
@@ -197,7 +174,7 @@ namespace ProceduralGeneration.Core
                                 }
                                 else
                                 {
-                                    PlaceTile(wallTileWest, x, y, dungeon);
+                                    PlaceTile(wallTileTopDown, x, y, dungeon);
                                 }
                             }
                         }
@@ -205,11 +182,11 @@ namespace ProceduralGeneration.Core
                         // Erect horizontal walls
                         else if (y == yMin)
                         {
-                            PlaceTile(wallTileSouth, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
                         else if (y == yMax)
                         {
-                            PlaceTile(wallTileNorth, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
                     }
                 }
@@ -254,11 +231,11 @@ namespace ProceduralGeneration.Core
                             // Place a wall directly above the corridor
                             PlaceTile(wallTile, x, leftDoorY + 1, dungeon);
                             // Place a dark tile above that
-                            PlaceTile(wallTileNorth, x, leftDoorY + 2, dungeon);
+                            PlaceTile(wallTileTopDown, x, leftDoorY + 2, dungeon);
                         }
 
                         // Place a dark tile directly below the corridor
-                        PlaceTile(wallTileSouth, x, leftDoorY - 1, dungeon);
+                        PlaceTile(wallTileTopDown, x, leftDoorY - 1, dungeon);
                     }
 
                     // Place floor tile
@@ -278,12 +255,12 @@ namespace ProceduralGeneration.Core
                         {
                             if (buffer > leftDoorX)
                             {
-                                PlaceTile(wallTileEast, buffer - 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, buffer - 1, y, dungeon);
                             }
 
                             if (buffer < rightDoorX)
                             {
-                                PlaceTile(wallTileWest, buffer + 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, buffer + 1, y, dungeon);
                             }
                         }
 
@@ -317,12 +294,12 @@ namespace ProceduralGeneration.Core
                         {
                             if (buffer > leftDoorX)
                             {
-                                PlaceTile(wallTileEast, buffer - 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, buffer - 1, y, dungeon);
                             }
 
                             if (buffer < rightDoorX)
                             {
-                                PlaceTile(wallTileWest, buffer + 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, buffer + 1, y, dungeon);
                             }
                         }
 
@@ -341,11 +318,11 @@ namespace ProceduralGeneration.Core
                             // Place a wall directly above the corridor
                             PlaceTile(wallTile, x, rightDoorY + 1, dungeon);
                             // Place a dark tile above that
-                            PlaceTile(wallTileNorth, x, rightDoorY + 2, dungeon);
+                            PlaceTile(wallTileTopDown, x, rightDoorY + 2, dungeon);
                         }
 
                         // Place a dark tile directly below the corridor
-                        PlaceTile(wallTileSouth, x, rightDoorY - 1, dungeon);
+                        PlaceTile(wallTileTopDown, x, rightDoorY - 1, dungeon);
                     }
 
                     PlaceTile(standardFloorTile, x, rightDoorY, dungeon);

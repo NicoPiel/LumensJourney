@@ -70,30 +70,9 @@ MonoBehaviour:
     type: 3}
   otherFloorTiles:
   - {fileID: 6492458723234207612, guid: 724f44ec027690b459a50df082420a48, type: 3}
-  - {fileID: 6492458723234207612, guid: 80068308b7586784e8ec67bc7461aa89, type: 3}
+  - {fileID: 6492458723234207612, guid: dc052b34107796542ac6989179815424, type: 3}
+  - {fileID: 6492458723234207612, guid: d6cc9e6eadf1a3a4f94fa34d39e25bea, type: 3}
   wallTile: {fileID: 1083720996130883523, guid: 1a05c6db55b130f4db8865e02232b12b,
     type: 3}
-  wallTileNorth: {fileID: 1083720996130883523, guid: f790108c0d5e14b4381d2bf14a9071fe,
-    type: 3}
-  wallTileEast: {fileID: 1083720996130883523, guid: 2cc99be611564f940bceab56029f2abf,
-    type: 3}
-  wallTileSouth: {fileID: 1083720996130883523, guid: ba20c2620268a6d49a7a0d9c784d7e44,
-    type: 3}
-  wallTileWest: {fileID: 1083720996130883523, guid: d88628fdd5e4ff64cbea3018434fdad9,
-    type: 3}
-  wallCornerNw: {fileID: 1083720996130883523, guid: 74f7fa903ab09734893fcb9124f1cdb7,
-    type: 3}
-  wallCornerNe: {fileID: 1083720996130883523, guid: ad16b169c3a812c4081b3b9351ba69b4,
-    type: 3}
-  wallCornerSe: {fileID: 1083720996130883523, guid: ed40a19db1a9360429ccd950c9a14841,
-    type: 3}
-  wallCornerSw: {fileID: 1083720996130883523, guid: 7350bcc7422d93944a14eb40d6544d9d,
-    type: 3}
-  wallCornerNwOuter: {fileID: 1083720996130883523, guid: 7efb8d2902d012e488e31df7b3e080fa,
-    type: 3}
-  wallCornerNeOuter: {fileID: 1083720996130883523, guid: dad66ba9a903ec645b5d01f03ea429a6,
-    type: 3}
-  wallCornerSeOuter: {fileID: 1083720996130883523, guid: 61561346f3099c44b8607e7ed8bd7ec3,
-    type: 3}
-  wallCornerSwOuter: {fileID: 1083720996130883523, guid: 76bf88c42dced5f46b0f3527c583a960,
+  wallTileTopDown: {fileID: 1083720996130883523, guid: ad16b169c3a812c4081b3b9351ba69b4,
     type: 3}
