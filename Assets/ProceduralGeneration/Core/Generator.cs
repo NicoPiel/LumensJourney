@@ -319,7 +319,7 @@ namespace ProceduralGeneration.Core
                     
                     for (var y = leftDoorY; y > rightDoorY; y--)
                     {
-                        if (width > 1 && y < leftDoorY - 1)
+                        if (width > 1 && y > rightDoorY + 1)
                         {
                             if (xBuffer > leftDoorX)
                             {
@@ -336,6 +336,7 @@ namespace ProceduralGeneration.Core
                     }
                     
                     // Place walls to complete the lower-left corner
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY - 1, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer, rightDoorY - 1, dungeon);
