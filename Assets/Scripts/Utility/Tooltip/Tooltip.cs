@@ -19,15 +19,9 @@ namespace Utility
             
             _backgroundRectTransform = transform.Find("background").GetComponent<RectTransform>();
             _tooltipText = transform.Find("text").GetComponent<TMP_Text>();
+            HideTooltip();
         }
-
-        private void Update()
-        {
-            Vector2 localPoint;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(transform.parent.GetComponent<RectTransform>(), Input.mousePosition, _uiCamera, out localPoint);
-            transform.localPosition = localPoint;
-        }
-
+        
         private void ShowTooltip(string tooltipString)
         {
             _uiCamera = Camera.main;
@@ -48,7 +42,7 @@ namespace Utility
             _instance.ShowTooltip(tooltipString);
         }
 
-        public static void HideTooltip_Static(string tooltipString)
+        public static void HideTooltip_Static()
         {
             _instance.HideTooltip();
         }

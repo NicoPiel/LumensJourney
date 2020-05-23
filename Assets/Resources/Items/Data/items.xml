@@ -13,9 +13,13 @@
         </Values>
     </item>
     <item name="Deadly Tooth">
-        <value name="AttackDamage">12</value>
+        <Values>
+            <value name="AttackDamage">12</value>
+        </Values>
     </item>
     <item name="Posh Slug">
-        <value name="ElementalDefense">9</value>
+        <Values>
+            <value name="ElementalDefense">9</value>
+        </Values>
     </item>
 </Items>

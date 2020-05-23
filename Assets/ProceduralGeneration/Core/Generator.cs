@@ -73,7 +73,6 @@ namespace ProceduralGeneration.Core
 
             Generated = true;
             
-            Utility.Tooltip.ShowTooltip_Static("Hi, I'm a tooltip.");
 
             return true;
         }

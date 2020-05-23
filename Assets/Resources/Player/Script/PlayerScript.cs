@@ -19,24 +19,15 @@ public class PlayerScript : MonoBehaviour
     
     private Player _player = new Player("Pacolos");
     public HealthbarScript healthBarScript;
-    public ItemBarScript itemBarScript;
-    
-    
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
-        itemBarScript = GameObject.Find("ItemBar(Clone)").GetComponent<ItemBarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _player.Inventory.AddItem("Dragons Claw");
-        _player.Inventory.AddItem("Water Ring");
-        _player.Inventory.AddItem("Deadly Tooth");
-        _player.Inventory.AddItem("Posh Slug");
-        itemBarScript.CreateItemBar(_player.Inventory);
-        
-        
         healthBarScript.ChangeHealthBar(2);
 
     }
@@ -66,6 +57,11 @@ public class PlayerScript : MonoBehaviour
         }
         
         
+    }
+
+    public void AddToInventory(GameItem item)
+    {
+        _player.Inventory.AddItem(item); 
     }
 
     private void FixedUpdate()

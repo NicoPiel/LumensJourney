@@ -11,12 +11,10 @@ public class GameItem
     
     public Dictionary<string, int> ValueIncreasments {get; set;}
     public string ItemName {get; set;}
-    public bool IsInInventory { get; set; }
     public GameItem()
     {
         ValueIncreasments = new Dictionary<string, int>();
         ItemName = null;
-        IsInInventory = false;
     }
     
     
@@ -44,12 +42,16 @@ public class GameItem
             from el in root.Elements("item")
             where (string) el.Attribute("name") == itemName
             select el;
+
+        
         foreach (var itemData in items)
         {
             item.ItemName = itemName;
-            var Values = itemData.Elements("Values").Elements();
-            foreach (var v in Values)
+            var values = itemData.Elements("Values").Elements();
+
+            foreach (var v in values)
             {
+   
                 string attribute = v.Attribute("name").Value;
                 int val = Int32.Parse(v.Value);
                 item.ValueIncreasments.Add(attribute, val);

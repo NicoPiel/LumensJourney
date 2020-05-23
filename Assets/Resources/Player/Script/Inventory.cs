@@ -14,10 +14,12 @@ public class Inventory
     public void AddItem(GameItem item)
     {
         Items.Add(item);
+        ItemBarScript.UpdateItemBar_Static(this);
     }
     public void AddItem(string item)
     {
         Items.Add(GameItem.ConstructItem(item));
+        ItemBarScript.UpdateItemBar_Static(this);
     }
     public void RemoveItem(GameItem item)
     {
