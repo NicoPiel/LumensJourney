@@ -72,7 +72,6 @@ namespace ProceduralGeneration.Core
             InstantiatePlayer();
 
             Generated = true;
-            
 
             return true;
         }
