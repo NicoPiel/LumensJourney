@@ -216,7 +216,7 @@ namespace ProceduralGeneration.Core
                 var rightDoorX = doorRelation.Value[0];
                 var rightDoorY = doorRelation.Value[1];
 
-                int buffer = 0;
+                int xBuffer = 0;
 
                 int width = math.abs(rightDoorX - leftDoorX);
                 int height = rightDoorY - leftDoorY;
@@ -226,7 +226,7 @@ namespace ProceduralGeneration.Core
                 {
                     if (width > 1)
                     {
-                        if (x < middle)
+                        if (x < middle - 1)
                         {
                             // Place a wall directly above the corridor
                             PlaceTile(wallTile, x, leftDoorY + 1, dungeon);
@@ -241,75 +241,96 @@ namespace ProceduralGeneration.Core
                     // Place floor tile
                     PlaceTile(standardFloorTile, x, leftDoorY, dungeon);
 
-                    buffer = x + 2;
+                    xBuffer = x + 1;
                 }
 
                 if (height > 0)
                 {
-                    // TODO: South-West Corner
+                    // Place a corner tile
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, dungeon);
+                    // Place two walls to complete the lower-right corner
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
                     
-                    //
-                    for (var y = leftDoorY + 3; y < rightDoorY - 1; y++)
+                    for (var y = leftDoorY; y < rightDoorY; y++)
                     {
                         if (width > 1 && y > leftDoorY)
                         {
-                            if (buffer > leftDoorX)
+                            if (xBuffer > leftDoorX)
                             {
-                                PlaceTile(wallTileTopDown, buffer - 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer - 1, y, dungeon);
                             }
 
-                            if (buffer < rightDoorX)
+                            if (xBuffer < rightDoorX)
                             {
-                                PlaceTile(wallTileTopDown, buffer + 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer + 1, y, dungeon);
                             }
                         }
 
-                        PlaceTile(standardFloorTile, buffer, y, dungeon);
+                        PlaceTile(standardFloorTile, xBuffer, y, dungeon);
                     }
                     
+                    // Place seven walls to complete the upper-left corner
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 2, dungeon);
                     
-                    // North-West Corner
-                    var tempBuffer = buffer;
+                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer, rightDoorY + 1, dungeon);
                     
-                    PlaceTile(standardFloorTile, tempBuffer, rightDoorY, dungeon);
-                    PlaceTile(standardFloorTile, tempBuffer, rightDoorY - 1, dungeon);
-                    
-                    PlaceTile(standardFloorTile, ++tempBuffer, rightDoorY, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, dungeon);
                 }
                 
                 else if (height < 0)
                 {
-                    // North-East Corner
-                    var tempBuffer = buffer-2;
+                    // Place walls to complete the upper-right corner
+                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, dungeon);
                     
-                    PlaceTile(standardFloorTile, ++tempBuffer, leftDoorY, dungeon);
-                    PlaceTile(standardFloorTile, ++tempBuffer, leftDoorY, dungeon);
-
-                    PlaceTile(standardFloorTile, tempBuffer, leftDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, dungeon);
                     
-                    //
-                    for (var y = leftDoorY - 2; y > rightDoorY + 2; y--)
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 1, dungeon);
+                    
+                    // Place a corner tile
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, dungeon);
+                    
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
+                    
+                    for (var y = leftDoorY; y > rightDoorY; y--)
                     {
-                        if (width > 1 && y < leftDoorY)
+                        if (width > 1 && y < leftDoorY - 1)
                         {
-                            if (buffer > leftDoorX)
+                            if (xBuffer > leftDoorX)
                             {
-                                PlaceTile(wallTileTopDown, buffer - 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer - 1, y, dungeon);
                             }
 
-                            if (buffer < rightDoorX)
+                            if (xBuffer < rightDoorX)
                             {
-                                PlaceTile(wallTileTopDown, buffer + 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer + 1, y, dungeon);
                             }
                         }
 
-                        PlaceTile(standardFloorTile, buffer, y, dungeon);
+                        PlaceTile(standardFloorTile, xBuffer, y, dungeon);
                     }
                     
-                    // TODO: South-East Corner
+                    // Place walls to complete the lower-left corner
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY - 1, dungeon);
+                    PlaceTile(wallTile, xBuffer + 1, rightDoorY, dungeon);
                 }
                 
-                for (var x = buffer + 2; x < rightDoorX; x++)
+                // Get to the y of the right door
+                PlaceTile(standardFloorTile, xBuffer, rightDoorY, dungeon);
+                PlaceTile(standardFloorTile, xBuffer + 1, rightDoorY, dungeon);
+                
+                for (var x = xBuffer + 2; x < rightDoorX; x++)
                 {
                     if (width > 1)
                     {
@@ -326,6 +347,8 @@ namespace ProceduralGeneration.Core
                     }
 
                     PlaceTile(standardFloorTile, x, rightDoorY, dungeon);
+
+                    xBuffer += 1;
                 }
             }
         }
