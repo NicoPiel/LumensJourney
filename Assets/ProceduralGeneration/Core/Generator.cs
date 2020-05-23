@@ -55,14 +55,33 @@ namespace ProceduralGeneration.Core
                 return false;
             }
 
-            GenerateRooms();
+            GenerateRooms(roomNumber = 10);
+
+            InstantiatePlayer();
+
+            return true;
+        }
+        
+        public bool Generate(int numberOfRooms)
+        {
+            if (minWidth > maxWidth
+                || minHeight > maxHeight
+                || minSpacingX > maxSpacingX
+                || minSpacingY > maxSpacingY)
+            {
+                Debug.LogError(
+                    "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
+                return false;
+            }
+
+            GenerateRooms(numberOfRooms);
 
             InstantiatePlayer();
 
             return true;
         }
 
-        private void GenerateRooms()
+        private void GenerateRooms(int numberOfRooms)
         {
             Debug.Log("Generating rooms..");
 
@@ -74,7 +93,7 @@ namespace ProceduralGeneration.Core
             leftDoors = new List<int[]>();
             doorRelations = new Dictionary<int[], int[]>();
 
-            for (var i = 0; i < roomNumber; i++)
+            for (var i = 0; i < numberOfRooms; i++)
             {
                 var randomRoomWidth = Random.Range(minWidth, maxWidth);
                 var randomRoomHeight = Random.Range(minHeight, maxHeight);
@@ -167,7 +186,7 @@ namespace ProceduralGeneration.Core
                             }
                             else if (y == doorRight)
                             {
-                                if (_rooms.Count < roomNumber)
+                                if (_rooms.Count < numberOfRooms)
                                 {
                                     PlaceTile(standardFloorTile, x, y, dungeon);
                                     rightDoors.Add(new[] {xMax, doorRight});
@@ -295,8 +314,6 @@ namespace ProceduralGeneration.Core
                     PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 1, dungeon);
                     
                     // Place a corner tile
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, dungeon);
-                    
                     PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
                     
@@ -323,7 +340,23 @@ namespace ProceduralGeneration.Core
                     PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY - 1, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer, rightDoorY - 1, dungeon);
                     PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY - 1, dungeon);
-                    PlaceTile(wallTile, xBuffer + 1, rightDoorY, dungeon);
+                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, dungeon);
+                }
+                
+                else if (height == 0)
+                {
+                    // Place walls to complete a straight corridor
+                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, dungeon);
+                    
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, dungeon);
+                    
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, dungeon);
+                    PlaceTile(wallTile, xBuffer + 1, leftDoorY + 1, dungeon);
+                    
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
                 }
                 
                 // Get to the y of the right door
