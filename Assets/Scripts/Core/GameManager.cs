@@ -1,14 +1,17 @@
 ﻿using System;
 using ProceduralGeneration.Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
     public class GameManager : MonoBehaviour
     {
         private static GameManager _instance;
+        private Generator _generator;
+        private Player _player;
 
-        private void Awake()
+        private void Start()
         {
             DontDestroyOnLoad(this);
             _instance = this;
@@ -21,8 +24,14 @@ namespace Core
 
         private void NewGame()
         {
-            StartCoroutine(Utility.Methods.LoadYourAsyncScene("PCGTestScene"));
-            Generator.Generate_Static();
+            //StartCoroutine(Utility.Methods.LoadYourAsyncScene("PCGTestScene"));
+            SceneManager.LoadScene("PCGTestScene");
+            SceneManager.sceneLoaded += (scene, loadSceneMode) =>
+            {
+                _generator = GameObject.FindWithTag("Generator")?.GetComponent<Generator>();
+                if (_generator != null) _generator.Generate();
+            };
+
         }
         
         

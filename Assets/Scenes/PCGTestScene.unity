@@ -128,11 +128,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8925199393286143425, guid: afda22f19a060a444b273483af8ae529,
-        type: 3}
-      propertyPath: RoomNumber
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 8925199393286143426, guid: afda22f19a060a444b273483af8ae529,
         type: 3}
       propertyPath: m_Name

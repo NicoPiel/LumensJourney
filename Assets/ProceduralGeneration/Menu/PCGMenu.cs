@@ -17,10 +17,10 @@ namespace ProceduralGeneration.Menu
             
             if (GUILayout.Button("Generate") && Application.isPlaying)
             {
-                var generator = FindObjectOfType<Generator>();
+                var generator = GameObject.FindWithTag("Generator").GetComponent<Generator>();
                 
                 stopwatch.Restart();
-                if (Generator.Generate_Static())
+                if (generator.Generate())
                 {
                     stopwatch.Stop();
                     Debug.Log($"Generated dungeon in {stopwatch.ElapsedMilliseconds}ms.");

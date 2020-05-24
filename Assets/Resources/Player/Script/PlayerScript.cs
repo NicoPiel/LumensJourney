@@ -19,10 +19,11 @@ public class PlayerScript : MonoBehaviour
     private Player _player = new Player("Pacolos");
     public HealthbarScript healthBarScript;
     public BoxCollider2D hitCollider;
+    private static readonly int StateExit = Animator.StringToHash("StateExit");
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
@@ -30,11 +31,11 @@ public class PlayerScript : MonoBehaviour
         healthBarScript.ChangeHealthBar(2);
         hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
         hitCollider.gameObject.SetActive(false);
-        _animator.SetBool("StateExit", false);
+        _animator.SetBool(StateExit, false);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -42,7 +43,7 @@ public class PlayerScript : MonoBehaviour
             hitCollider.size= new Vector2(2, 1);
             hitCollider.offset =new Vector2(0, -1);
             hitCollider.gameObject.SetActive(true);
-            _animator.SetBool("StateExit", false);
+            _animator.SetBool(StateExit, false);
             _animator.Play("SwingUp");
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -51,7 +52,7 @@ public class PlayerScript : MonoBehaviour
             hitCollider.size = new Vector2(1,1.5f);
             hitCollider.offset =  new Vector2(0,-1);
             hitCollider.gameObject.SetActive(true);
-            _animator.SetBool("StateExit", false);
+            _animator.SetBool(StateExit, false);
             _animator.Play("SwingRight");
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -60,7 +61,7 @@ public class PlayerScript : MonoBehaviour
             hitCollider.size=new Vector2(2,1);
             hitCollider.offset=new Vector2(0,-0.5f);
             hitCollider.gameObject.SetActive(true);
-            _animator.SetBool("StateExit", false);
+            _animator.SetBool(StateExit, false);
             _animator.Play("SwingDown");
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -69,7 +70,7 @@ public class PlayerScript : MonoBehaviour
             hitCollider.size=new Vector2(1,1.5f);
             hitCollider.offset=new Vector2(0,-1);
             hitCollider.gameObject.SetActive(true);
-            _animator.SetBool("StateExit", false);
+            _animator.SetBool(StateExit, false);
             _animator.Play("SwingLeft");
         }
         else
@@ -78,10 +79,10 @@ public class PlayerScript : MonoBehaviour
             _change.Normalize();
         }
 
-        if (_animator.GetBool("StateExit") == true)
+        if (_animator.GetBool(StateExit))
         {
             hitCollider.gameObject.SetActive(false);
-            _animator.SetBool("StateExit", false);
+            _animator.SetBool(StateExit, false);
             Debug.Log("State Exit");
         }
     }
