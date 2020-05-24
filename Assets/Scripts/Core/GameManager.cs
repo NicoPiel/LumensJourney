@@ -24,8 +24,7 @@ namespace Core
 
         private void NewGame()
         {
-            //StartCoroutine(Utility.Methods.LoadYourAsyncScene("PCGTestScene"));
-            SceneManager.LoadScene("PCGTestScene");
+            StartCoroutine(Utility.Methods.LoadYourAsyncScene("PCGTestScene"));
             SceneManager.sceneLoaded += (scene, loadSceneMode) =>
             {
                 _generator = GameObject.FindWithTag("Generator")?.GetComponent<Generator>();
