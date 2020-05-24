@@ -8,8 +8,6 @@ using UnityEngine.Events;
 
 public class PlayerScript : MonoBehaviour
 {
-  
-    
     public float speed;
 
     private Rigidbody2D _playerRigidbody2D;
@@ -17,7 +15,7 @@ public class PlayerScript : MonoBehaviour
     private Vector3 _change;
 
     private Animator _animator;
-    
+
     private Player _player = new Player("Pacolos");
     public HealthbarScript healthBarScript;
     public BoxCollider2D hitCollider;
@@ -32,60 +30,70 @@ public class PlayerScript : MonoBehaviour
         healthBarScript.ChangeHealthBar(2);
         hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
         hitCollider.gameObject.SetActive(false);
-
+        _animator.SetBool("StateExit", false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            hitCollider.transform.rotation = new Quaternion(0,0,180, 0);
+            hitCollider.transform.eulerAngles = new Vector3(0, 0, 180);
+            hitCollider.size= new Vector2(2, 1);
+            hitCollider.offset =new Vector2(0, -1);
             hitCollider.gameObject.SetActive(true);
+            _animator.SetBool("StateExit", false);
             _animator.Play("SwingUp");
-            hitCollider.gameObject.SetActive(false);
-        }else if (Input.GetKeyDown(KeyCode.RightArrow))
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            hitCollider.transform.rotation = new Quaternion(0,0,270, 0);
+            hitCollider.transform.eulerAngles = new Vector3(0, 0, 90);
+            hitCollider.size = new Vector2(1,1.5f);
+            hitCollider.offset =  new Vector2(0,-1);
             hitCollider.gameObject.SetActive(true);
+            _animator.SetBool("StateExit", false);
             _animator.Play("SwingRight");
-            hitCollider.gameObject.SetActive(false);
-            
-        }else if (Input.GetKeyDown(KeyCode.DownArrow))
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            hitCollider.transform.rotation = new Quaternion(0,0,0, 0);
+            hitCollider.transform.eulerAngles = new Vector3(0, 0, 0);
+            hitCollider.size=new Vector2(2,1);
+            hitCollider.offset=new Vector2(0,-0.5f);
             hitCollider.gameObject.SetActive(true);
-            
+            _animator.SetBool("StateExit", false);
             _animator.Play("SwingDown");
-            hitCollider.gameObject.SetActive(false);
-        }else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            hitCollider.transform.rotation = new Quaternion(0,0,90, 0);
+            hitCollider.transform.eulerAngles = new Vector3(0, 0, 270);
+            hitCollider.size=new Vector2(1,1.5f);
+            hitCollider.offset=new Vector2(0,-1);
             hitCollider.gameObject.SetActive(true);
-            Debug.Log("Penis an");
+            _animator.SetBool("StateExit", false);
             _animator.Play("SwingLeft");
-            hitCollider.gameObject.SetActive(false);
-            Debug.Log("Penis aus");
         }
         else
         {
             _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
             _change.Normalize();
         }
-        
-        
-        
+
+        if (_animator.GetBool("StateExit") == true)
+        {
+            hitCollider.gameObject.SetActive(false);
+            _animator.SetBool("StateExit", false);
+            Debug.Log("State Exit");
+        }
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Penis");
     }
 
     public void AddToInventory(GameItem item)
     {
-        _player.Inventory.AddItem(item); 
+        _player.Inventory.AddItem(item);
     }
 
     private void FixedUpdate()
@@ -100,6 +108,4 @@ public class PlayerScript : MonoBehaviour
         _animator.SetFloat("Speed", _change.magnitude);
         _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
     }
-
-
 }

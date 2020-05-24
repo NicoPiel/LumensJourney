@@ -1,4 +1,5 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Mathematics;
@@ -52,6 +53,11 @@ namespace ProceduralGeneration.Core
 
         private GameObject _dungeon;
         public bool Generated { get; set; }
+
+        public void Start()
+        {
+            Generate();
+        }
 
         public bool Generate()
         {
