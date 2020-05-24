@@ -16,5 +16,16 @@ namespace Utility
                 yield return null;
             }
         }
+        
+        public static IEnumerator LoadYourAsyncScene(int sceneNumber)
+        {
+            Debug.Log($"Loading scene {sceneNumber}");
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNumber);
+            
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+        }
     }
 }

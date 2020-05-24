@@ -1,6 +1,4 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
@@ -11,6 +9,8 @@ namespace ProceduralGeneration.Core
     [BurstCompile]
     public class Generator : MonoBehaviour
     {
+        private static Generator _instance;
+        
         [Header("Room Settings")] 
         [Range(1, 30)] public int RoomNumber;
 
@@ -54,12 +54,18 @@ namespace ProceduralGeneration.Core
         private GameObject _dungeon;
         public bool Generated { get; set; }
 
-        public void Start()
+        private void Awake()
         {
-            Generate();
+            DontDestroyOnLoad(this);
+            _instance = this;
         }
 
-        public bool Generate()
+        public static bool Generate_Static()
+        {
+            return _instance.Generate();
+        }
+
+        private bool Generate()
         {
             if ((minWidth > maxWidth)
                 || (minHeight > maxHeight)

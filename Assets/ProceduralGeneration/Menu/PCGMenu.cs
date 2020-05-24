@@ -20,7 +20,7 @@ namespace ProceduralGeneration.Menu
                 var generator = FindObjectOfType<Generator>();
                 
                 stopwatch.Restart();
-                if (generator.Generate())
+                if (Generator.Generate_Static())
                 {
                     stopwatch.Stop();
                     Debug.Log($"Generated dungeon in {stopwatch.ElapsedMilliseconds}ms.");

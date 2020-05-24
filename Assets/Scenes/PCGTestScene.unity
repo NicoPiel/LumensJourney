@@ -268,10 +268,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3138002409783450942, guid: 50a4810ecce5e294bbcef46d96ed739e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3138002410225263037, guid: 50a4810ecce5e294bbcef46d96ed739e,
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467241792107098617, guid: 50a4810ecce5e294bbcef46d96ed739e,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6467241792107098618, guid: 50a4810ecce5e294bbcef46d96ed739e,
         type: 3}

@@ -1,4 +1,5 @@
 ﻿using System;
+using ProceduralGeneration.Core;
 using UnityEngine;
 
 namespace Core
@@ -21,6 +22,7 @@ namespace Core
         private void NewGame()
         {
             StartCoroutine(Utility.Methods.LoadYourAsyncScene("PCGTestScene"));
+            Generator.Generate_Static();
         }
         
         
