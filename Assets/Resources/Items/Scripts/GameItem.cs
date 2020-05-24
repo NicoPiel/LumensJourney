@@ -34,6 +34,12 @@ public class GameItem
         return base.GetHashCode();
     }
 
+    
+    
+    
+    
+    
+    
     public static GameItem ConstructItem(string itemName)
     {
         GameItem item = new GameItem();

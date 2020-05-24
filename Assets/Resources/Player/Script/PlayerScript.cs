@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +20,7 @@ public class PlayerScript : MonoBehaviour
     
     private Player _player = new Player("Pacolos");
     public HealthbarScript healthBarScript;
-
+    public BoxCollider2D hitCollider;
 
 
     // Start is called before the first frame update
@@ -29,6 +30,8 @@ public class PlayerScript : MonoBehaviour
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         healthBarScript.ChangeHealthBar(2);
+        hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
+        hitCollider.gameObject.SetActive(false);
 
     }
 
@@ -38,17 +41,32 @@ public class PlayerScript : MonoBehaviour
         
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
+            hitCollider.transform.rotation = new Quaternion(0,0,180, 0);
+            hitCollider.gameObject.SetActive(true);
             _animator.Play("SwingUp");
+            hitCollider.gameObject.SetActive(false);
         }else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
+            hitCollider.transform.rotation = new Quaternion(0,0,270, 0);
+            hitCollider.gameObject.SetActive(true);
             _animator.Play("SwingRight");
+            hitCollider.gameObject.SetActive(false);
             
         }else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            hitCollider.transform.rotation = new Quaternion(0,0,0, 0);
+            hitCollider.gameObject.SetActive(true);
+            
             _animator.Play("SwingDown");
+            hitCollider.gameObject.SetActive(false);
         }else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
+            hitCollider.transform.rotation = new Quaternion(0,0,90, 0);
+            hitCollider.gameObject.SetActive(true);
+            Debug.Log("Penis an");
             _animator.Play("SwingLeft");
+            hitCollider.gameObject.SetActive(false);
+            Debug.Log("Penis aus");
         }
         else
         {
@@ -57,6 +75,12 @@ public class PlayerScript : MonoBehaviour
         }
         
         
+        
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        Debug.Log("Penis");
     }
 
     public void AddToInventory(GameItem item)
