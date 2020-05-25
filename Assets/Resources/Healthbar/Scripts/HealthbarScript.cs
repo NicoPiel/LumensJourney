@@ -20,7 +20,7 @@ public class HealthbarScript : MonoBehaviour
         var obj = Resources.Load<GameObject>("Healthbar/Prefab/Heart");
         if (obj == null)
         {
-            Debug.Log("ja dann sip mir doch einen");
+            Debug.Log("Heart not found");
         }
         float x = 25;
         float y= -29;
