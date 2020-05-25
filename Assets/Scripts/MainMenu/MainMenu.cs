@@ -29,7 +29,7 @@ namespace MainMenu
         public void PlayMenuSound()
         {
             var audioSource = GetComponent<AudioSource>();
-            audioSource.clip = (AudioClip) Resources.Load("Audio/Clicks/click3");
+            audioSource.clip = Resources.Load<AudioClip>("Audio/Clicks/click3");
             audioSource.Play();
         }
 

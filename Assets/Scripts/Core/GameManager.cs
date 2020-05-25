@@ -9,10 +9,12 @@ namespace Core
     {
         private static GameManager _instance;
         private Generator _generator;
-        private Player _player;
+        private GameObject _player;
 
         private GameObject _canvas;
         private Camera _camera;
+
+        private AudioClip _menuSound;
 
         private bool _ingame = false;
         private bool _paused = false;
@@ -21,6 +23,8 @@ namespace Core
         {
             DontDestroyOnLoad(this);
             _instance = this;
+            
+            _menuSound = Resources.Load<AudioClip>("Audio/Clicks/click3");
         }
 
         private void Update()
@@ -79,12 +83,21 @@ namespace Core
                 _generator = GameObject.FindWithTag("Generator")?.GetComponent<Generator>();
                 if (_generator != null) _generator.Generate();
 
+                _player = GameObject.FindWithTag("Player");
+
                 _camera = Camera.main;
                 _canvas = GameObject.Find("PauseMenu");
                 _canvas.gameObject.SetActive(false);
 
                 _ingame = true;
             };
+        }
+        
+        public void PlayMenuSound()
+        {
+            var audioSource = GetComponent<AudioSource>();
+            audioSource.clip = _menuSound;
+            audioSource.Play();
         }
         
         public void Quit()
