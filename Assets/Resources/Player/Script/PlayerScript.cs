@@ -5,22 +5,23 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour
 {
     public float speed;
-
     private Rigidbody2D _playerRigidbody2D;
-
     private Vector3 _change;
-
+    private AudioSource _audioSource;
     private Animator _animator;
-
     private Player _player = new Player("Pacolos");
     public HealthbarScript healthBarScript;
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
-    private AudioSource footstepAudioSource;
+
+
+    public Dictionary<string, AudioClip> _audioClips;
+
 
 
     // Start is called before the first frame update
@@ -29,12 +30,16 @@ public class PlayerScript : MonoBehaviour
         healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _audioClips = new Dictionary<String, AudioClip>();
         healthBarScript.ChangeHealthBar(2);
         hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
         hitCollider.gameObject.SetActive(false);
         _animator.SetBool(StateExit, false);
 
-        footstepAudioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
+
+        AddAudioClips();
+
     }
 
     // Update is called once per frame
@@ -92,7 +97,16 @@ public class PlayerScript : MonoBehaviour
 
     public void PlayFootsteps()
     {
-        footstepAudioSource.Play();
+        int rnd = Random.Range(0, 3);
+        _audioSource.clip = _audioClips["footstep0"+rnd];
+        _audioSource.Play();
+    }
+
+    public void PlaySwordWoosh()
+    {
+        int rnd = Random.Range(1, 8);
+        _audioSource.clip = _audioClips["woosh"+rnd];
+        _audioSource.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -116,5 +130,24 @@ public class PlayerScript : MonoBehaviour
         _animator.SetFloat("Vertical", _change.y);
         _animator.SetFloat("Speed", _change.magnitude);
         _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
+    }
+
+    private void AddAudioClips()
+    {
+        for( int i = 1; i <= 8; i++ )
+        {
+            _audioClips.Add("woosh"+i, Resources.Load<AudioClip>("Audio/Wooshes/woosh"+i));
+            
+        }
+
+        foreach (var vari in _audioClips)
+        {
+            Debug.Log(vari.Value);
+        }
+
+        for (int i = 0; i <= 2; i++)
+        {
+            _audioClips.Add("footstep0"+i, Resources.Load<AudioClip>("Audio/Footsteps/footstep0"+i));
+        }
     }
 }
