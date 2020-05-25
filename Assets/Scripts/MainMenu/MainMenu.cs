@@ -26,6 +26,13 @@ namespace MainMenu
 #endif
         }
 
+        public void PlayMenuSound()
+        {
+            var audioSource = GetComponent<AudioSource>();
+            audioSource.clip = (AudioClip) Resources.Load("Audio/Clicks/click3");
+            audioSource.Play();
+        }
+
         private static Texture2D SpriteToTexture(Sprite sprite)
         {
             var croppedTexture = new Texture2D( (int)sprite.rect.width, (int)sprite.rect.height );
