@@ -137,12 +137,6 @@ public class PlayerScript : MonoBehaviour
         for( int i = 1; i <= 8; i++ )
         {
             _audioClips.Add("woosh"+i, Resources.Load<AudioClip>("Audio/Wooshes/woosh"+i));
-            
-        }
-
-        foreach (var vari in _audioClips)
-        {
-            Debug.Log(vari.Value);
         }
 
         for (int i = 0; i <= 2; i++)
