@@ -20,6 +20,7 @@ public class PlayerScript : MonoBehaviour
     public HealthbarScript healthBarScript;
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
+    private AudioSource footstepAudioSource;
 
 
     // Start is called before the first frame update
@@ -32,6 +33,8 @@ public class PlayerScript : MonoBehaviour
         hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
         hitCollider.gameObject.SetActive(false);
         _animator.SetBool(StateExit, false);
+
+        footstepAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -85,6 +88,11 @@ public class PlayerScript : MonoBehaviour
             _animator.SetBool(StateExit, false);
             Debug.Log("State Exit");
         }
+    }
+
+    public void PlayFootsteps()
+    {
+        footstepAudioSource.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
