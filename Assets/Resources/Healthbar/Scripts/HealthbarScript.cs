@@ -6,7 +6,7 @@ using UnityEngine;
 public class HealthbarScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    public void ChangeHealthBar(int currentHealth)
+    public void ChangeHealthBar(int currentHealth, int maxHealth)
     {
         Destroy(GameObject.Find("Healthbar"));
         foreach (Transform child in transform) {

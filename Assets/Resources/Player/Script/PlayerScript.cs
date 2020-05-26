@@ -19,7 +19,7 @@ public class PlayerScript : MonoBehaviour
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
 
-    public float LightLevel { get; set; }
+    
 
 
     public Dictionary<string, AudioClip> _audioClips;
@@ -33,7 +33,7 @@ public class PlayerScript : MonoBehaviour
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _audioClips = new Dictionary<String, AudioClip>();
-        healthBarScript.ChangeHealthBar(2);
+        healthBarScript.ChangeHealthBar(2, 0);
         hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
         hitCollider.gameObject.SetActive(false);
         _animator.SetBool(StateExit, false);
@@ -145,5 +145,10 @@ public class PlayerScript : MonoBehaviour
         {
             _audioClips.Add("footstep0"+i, Resources.Load<AudioClip>("Audio/Footsteps/footstep0"+i));
         }
+    }
+
+    public float GetPlayerLightLevel()
+    {
+        return _player.LightLevel;
     }
 }
