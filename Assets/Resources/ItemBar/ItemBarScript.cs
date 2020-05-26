@@ -34,7 +34,7 @@ public class ItemBarScript : MonoBehaviour
             }
             
             var newItem = Instantiate(obj);
-            newItem.GetComponent<RawImage>().texture = Resources.Load<Texture>("Items/Tiles/" + item.ItemName);
+            newItem.GetComponentInChildren<RawImage>().texture = Resources.Load<Texture>("Items/Tiles/" + item.ItemName);
             newItem.GetComponent<RectTransform>().SetParent(transform);
             newItem.GetComponent<RectTransform>().anchoredPosition =  new Vector3(x, y, 0);
             x += 47f;

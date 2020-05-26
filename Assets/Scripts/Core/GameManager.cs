@@ -57,30 +57,6 @@ namespace Core
             }
         }
 
-        private void Pause()
-        {
-            Time.timeScale = 0.0f;
-            _canvas.SetActive(true);
-            _camera.GetComponent<AudioListener>().enabled = false;
-            _paused = true;
-        }
-        
-        private void Resume() {
-            Time.timeScale = 1.0f;
-            _canvas.SetActive(false);
-            _camera.GetComponent<AudioListener>().enabled = true;
-            _paused = false;
-        }
-        
-        public void ResumeOnClick() {
-            Time.timeScale = 1.0f;
-            _canvas = GameObject.Find("PauseMenu");
-            if (_canvas != null) _canvas.SetActive(false);
-            _camera = Camera.main;
-            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
-            _paused = false;
-        }
-
         public static void NewGame_Static()
         {
             _instance.NewGame();
@@ -128,6 +104,30 @@ namespace Core
 
                 chrom.intensity.value *= playerScript.LightLevel;
             }
+        }
+        
+        private void Pause()
+        {
+            Time.timeScale = 0.0f;
+            _canvas.SetActive(true);
+            _camera.GetComponent<AudioListener>().enabled = false;
+            _paused = true;
+        }
+        
+        private void Resume() {
+            Time.timeScale = 1.0f;
+            _canvas.SetActive(false);
+            _camera.GetComponent<AudioListener>().enabled = true;
+            _paused = false;
+        }
+        
+        public void ResumeOnClick() {
+            Time.timeScale = 1.0f;
+            _canvas = GameObject.Find("PauseMenu");
+            if (_canvas != null) _canvas.SetActive(false);
+            _camera = Camera.main;
+            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
+            _paused = false;
         }
 
         public void PlayMenuSound()
