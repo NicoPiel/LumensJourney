@@ -1,5 +1,10 @@
 ﻿using ProceduralGeneration.Core;
+using UnityEditor.U2D.Animation;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using Utility;
 
@@ -7,9 +12,13 @@ namespace Core
 {
     public class GameManager : MonoBehaviour
     {
+        // Events
+        public UnityEvent newGameStarted;
+        
         private static GameManager _instance;
         private Generator _generator;
-        private GameObject _player;
+        [SerializeField]
+        private GameObject player;
 
         private GameObject _canvas;
         private Camera _camera;
@@ -25,6 +34,9 @@ namespace Core
             _instance = this;
             
             _menuSound = Resources.Load<AudioClip>("Audio/Clicks/click3");
+            
+            // Events
+            newGameStarted = new UnityEvent();
         }
 
         private void Update()
@@ -81,18 +93,40 @@ namespace Core
             SceneManager.sceneLoaded += (scene, loadSceneMode) =>
             {
                 _generator = GameObject.FindWithTag("Generator")?.GetComponent<Generator>();
-                if (_generator != null) _generator.Generate();
 
-                _player = GameObject.FindWithTag("Player");
+                if (_generator != null)
+                {
+                    _generator.dungeonGenerated.AddListener(() =>
+                    {
+                        player = GameObject.FindWithTag("Player");
 
-                _camera = Camera.main;
-                _canvas = GameObject.Find("PauseMenu");
-                _canvas.gameObject.SetActive(false);
+                        _camera = Camera.main;
+                        _canvas = GameObject.Find("PauseMenu");
+                        _canvas.gameObject.SetActive(false);
 
-                _ingame = true;
+                        _ingame = true;
+                    });
+
+                    _generator.Generate();
+                }
             };
+            
+            newGameStarted?.Invoke();
         }
-        
+
+        private void ControlLightLevel()
+        {
+            if (_ingame)
+            {
+                var playerLight = player.transform.Find("PlayerLight").gameObject.GetComponent<Light2D>();
+                
+                playerLight.pointLightOuterRadius = 8 * player.GetComponent<PlayerScript>().LightLevel + 2;
+                ChromaticAberration chrom;
+                
+                _camera.GetComponent<Volume>().profile.TryGet(out chrom);
+            }
+        }
+
         public void PlayMenuSound()
         {
             var audioSource = GetComponent<AudioSource>();

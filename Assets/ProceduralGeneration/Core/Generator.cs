@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 namespace ProceduralGeneration.Core
@@ -10,6 +11,10 @@ namespace ProceduralGeneration.Core
     [BurstCompile]
     public class Generator : MonoBehaviour
     {
+        // Events
+
+        public UnityEvent dungeonGenerated;
+    
         [Header("Room Settings")] 
         [Range(1, 30)] public int RoomNumber;
 
@@ -57,6 +62,9 @@ namespace ProceduralGeneration.Core
         private void Awake()
         {
             DontDestroyOnLoad(this);
+            dungeonGenerated = new UnityEvent();
+            
+            dungeonGenerated.AddListener(OnDungeonGenerated);
         }
 
         public bool Generate()
@@ -76,9 +84,8 @@ namespace ProceduralGeneration.Core
             GenerateRooms(RoomNumber);
 
             InstantiatePlayer();
-
-            Generated = true;
-
+            
+            dungeonGenerated?.Invoke();
             return true;
         }
 
@@ -391,6 +398,11 @@ namespace ProceduralGeneration.Core
                     xBuffer += 1;
                 }
             }
+        }
+
+        private void OnDungeonGenerated()
+        {
+            Generated = true;
         }
 
         private static GameObject CreateDungeonObject()

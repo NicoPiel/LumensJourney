@@ -19,6 +19,8 @@ public class PlayerScript : MonoBehaviour
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
 
+    public float LightLevel { get; set; }
+
 
     public Dictionary<string, AudioClip> _audioClips;
 
