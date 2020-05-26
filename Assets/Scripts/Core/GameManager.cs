@@ -119,11 +119,14 @@ namespace Core
             if (_ingame)
             {
                 var playerLight = player.transform.Find("PlayerLight").gameObject.GetComponent<Light2D>();
+                var playerScript = player.GetComponent<PlayerScript>();
                 
-                playerLight.pointLightOuterRadius = 8 * player.GetComponent<PlayerScript>().LightLevel + 2;
+                playerLight.pointLightOuterRadius = 6 * playerScript.LightLevel + 2;
+                
                 ChromaticAberration chrom;
-                
                 _camera.GetComponent<Volume>().profile.TryGet(out chrom);
+
+                chrom.intensity.value *= playerScript.LightLevel;
             }
         }
 
