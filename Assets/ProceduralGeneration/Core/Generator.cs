@@ -13,7 +13,7 @@ namespace ProceduralGeneration.Core
     {
         // Events
 
-        public UnityEvent dungeonGenerated;
+        public UnityEvent onDungeonGenerated;
     
         [Header("Room Settings")] 
         [Range(1, 30)] public int RoomNumber;
@@ -62,9 +62,9 @@ namespace ProceduralGeneration.Core
         private void Awake()
         {
             DontDestroyOnLoad(this);
-            dungeonGenerated = new UnityEvent();
+            onDungeonGenerated = new UnityEvent();
             
-            dungeonGenerated.AddListener(OnDungeonGenerated);
+            onDungeonGenerated.AddListener(OnDungeonGenerated);
         }
 
         public bool Generate()
@@ -85,7 +85,7 @@ namespace ProceduralGeneration.Core
 
             InstantiatePlayer();
             
-            dungeonGenerated?.Invoke();
+            onDungeonGenerated?.Invoke();
             return true;
         }
 

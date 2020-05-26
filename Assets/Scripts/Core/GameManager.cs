@@ -96,7 +96,7 @@ namespace Core
 
                 if (_generator != null)
                 {
-                    _generator.dungeonGenerated.AddListener(() =>
+                    _generator.onDungeonGenerated.AddListener(() =>
                     {
                         player = GameObject.FindWithTag("Player");
 
@@ -114,7 +114,7 @@ namespace Core
             newGameStarted?.Invoke();
         }
 
-        private void ControlLightLevel()
+        private void OnPlayerLightLevelChanged()
         {
             if (_ingame)
             {
