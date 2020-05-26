@@ -6,11 +6,6 @@ using UnityEngine;
 public class HealthbarScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
-    {
-        ChangeHealthBar(5);
-    }
-
     public void ChangeHealthBar(int currentHealth)
     {
         Destroy(GameObject.Find("Healthbar"));

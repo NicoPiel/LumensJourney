@@ -24,7 +24,7 @@ namespace ProceduralGeneration
                     Quaternion.identity,
                     _generator.GetParent().transform);
 
-                pickUp.GetComponent<PickUpScript>().SetPickUpItem("Dragons Claw");
+                pickUp.GetComponent<PickUpScript>().SetPickUpItem("Red Potion");
                 
                 return true;
             }

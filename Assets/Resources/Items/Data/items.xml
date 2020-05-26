@@ -22,4 +22,9 @@
             <value name="ElementalDefense">9</value>
         </Values>
     </item>
+    <item name="Red Potion">
+        <Values>
+            <value name="MaxHealth">10</value>
+        </Values>
+    </item>
 </Items>
