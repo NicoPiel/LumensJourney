@@ -1,8 +1,10 @@
 ﻿using Core;
+using Unity.Burst;
 using UnityEngine;
 
 namespace MainMenu
 {
+    [BurstCompile]
     public class MainMenu : MonoBehaviour
     {
         public Sprite cursorSprite;

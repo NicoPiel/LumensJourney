@@ -1,10 +1,10 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
+using Unity.Burst;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Utility
 {
+    [BurstCompile]
     public class Tooltip : MonoBehaviour
     {
         private static Tooltip _instance;

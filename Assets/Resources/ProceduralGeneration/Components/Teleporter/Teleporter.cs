@@ -1,12 +1,12 @@
-﻿using System;
-using Core;
+﻿using Core;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility;
-using Random = UnityEngine.Random;
 
 namespace Resources.ProceduralGeneration.Components.Teleporter
 {
+    [BurstCompile]
     public class Teleporter : MonoBehaviour
     {
         private void OnTriggerEnter2D(Collider2D other)

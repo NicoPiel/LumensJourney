@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using TMPro;
+using Unity.Burst;
 using UnityEngine;
 
 namespace Utility
 {
+    [BurstCompile]
     public class TextFade : MonoBehaviour
     {
         public static IEnumerator FadeTextToFullAlpha(float t, TMP_Text text)

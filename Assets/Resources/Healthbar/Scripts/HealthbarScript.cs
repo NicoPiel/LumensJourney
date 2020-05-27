@@ -1,40 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using Unity.Burst;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class HealthbarScript : MonoBehaviour
+namespace Resources.Healthbar.Scripts
 {
-    // Start is called before the first frame update
-    public void ChangeHealthBar(int currentHealth, int maxHealth)
+    [BurstCompile]
+    public class HealthbarScript : MonoBehaviour
     {
-        Destroy(GameObject.Find("Healthbar"));
-        foreach (Transform child in transform) {
-            GameObject.Destroy(child.gameObject);
-        }
-        var obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/Heart");
-        if (obj == null)
+        // Start is called before the first frame update
+        public void ChangeHealthBar(int currentHealth, int maxHealth)
         {
-            Debug.Log("Heart not found");
-        }
-        float x = 25;
-        float y= -29;
-        for (int i = currentHealth; i != 0; i--)
-        {
-            var newHeart = Instantiate(obj);
-            newHeart.GetComponent<RectTransform>().SetParent(this.transform);
-            newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
-            x += 50;
-        }
-        obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/EmptyHeart");
-        for (int i = maxHealth - currentHealth; i != 0; i--)
-        {
-            var newHeart = Instantiate(obj);
-            newHeart.GetComponent<RectTransform>().SetParent(this.transform);
-            newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
-            x += 50;
-        }
+            Destroy(GameObject.Find("Healthbar"));
+            foreach (Transform child in transform) {
+                Destroy(child.gameObject);
+            }
+            var obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/Heart");
+            if (obj == null)
+            {
+                Debug.Log("Heart not found");
+            }
+            float x = 25;
+            float y= -29;
+            for (int i = currentHealth; i != 0; i--)
+            {
+                var newHeart = Instantiate(obj);
+                newHeart.GetComponent<RectTransform>().SetParent(this.transform);
+                newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
+                x += 50;
+            }
+            obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/EmptyHeart");
+            for (int i = maxHealth - currentHealth; i != 0; i--)
+            {
+                var newHeart = Instantiate(obj);
+                newHeart.GetComponent<RectTransform>().SetParent(this.transform);
+                newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
+                x += 50;
+            }
         
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
@@ -14,6 +15,7 @@ namespace Utility
     ///
     /// Just activate / deactivate this component as usual to pause / resume flicker
     /// </summary>
+    [BurstCompile]
     public class LightFlickerEffect : MonoBehaviour {
         [Tooltip("External light to flicker; you can leave this null if you attach script to a light")]
         public new Light2D light;

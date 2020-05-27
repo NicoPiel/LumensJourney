@@ -1,9 +1,11 @@
 ﻿using System.Collections;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Utility
 {
+    [BurstCompile]
     public class Methods : MonoBehaviour
     {
         public static IEnumerator LoadYourSceneAsync(string sceneName)

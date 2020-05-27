@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using Resources.Player.Script;
 using Resources.ProceduralGeneration.Core;
 using TMPro;
+using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,6 +14,7 @@ using Utility;
 
 namespace Core
 {
+    [BurstCompile]
     public class GameManager : MonoBehaviour
     {
         // Events

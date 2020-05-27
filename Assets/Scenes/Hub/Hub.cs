@@ -1,12 +1,15 @@
 ﻿using Core;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Utility;
 
+
 namespace Scenes.Hub
 {
+    [BurstCompile]
     public class Hub : MonoBehaviour
     {
         private void Start()

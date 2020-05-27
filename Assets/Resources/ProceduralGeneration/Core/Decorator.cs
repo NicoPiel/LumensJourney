@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using Unity.Burst;
+using UnityEngine;
 
 namespace Resources.ProceduralGeneration.Core
 {
+    [BurstCompile]
     public class Decorator : MonoBehaviour
     {
         private Generator _generator;
