@@ -183,6 +183,7 @@ namespace Assets.Player.Script
         public void PlayerChangeLightLevel(int lightlevel)
         {
             _player.playerstats["CurrentLightLevel"] += lightlevel;
+            if (_player.playerstats["CurrentLightLevel"] < 0) _player.playerstats["CurrentLightLevel"] = 0;
             lightBar.ChangeProgress(_player.playerstats["CurrentLightLevel"], _player.playerstats["MaxLightLevel"]);
             onPlayerLightLevelChanged.Invoke();
         }
