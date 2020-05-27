@@ -149,6 +149,6 @@ public class PlayerScript : MonoBehaviour
 
     public float GetPlayerLightLevel()
     {
-        return _player.LightLevel;
+        return (float) _player.playerstats["CurrentLightLevel"] / (float) _player.playerstats["MaxLightLevel"];
     }
 }

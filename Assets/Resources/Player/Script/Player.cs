@@ -28,6 +28,8 @@ public class Player {
         playerstats.Add("IceDamage", 0);
         playerstats.Add("Defense", defense);
         playerstats.Add("ElementalDefense", 0);
+        playerstats.Add("MaxLightLevel", 1000);
+        playerstats.Add("CurrentLightLevel", 1000);
     }
     public void OnItemChange(GameItem item, bool removed)
     {
