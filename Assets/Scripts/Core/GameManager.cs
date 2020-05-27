@@ -22,7 +22,7 @@ namespace Core
         
         private static GameManager _instance;
         public static Generator Generator { get; set; }
-
+        
         public static GameObject Player { get; set; }
 
         private GameObject _canvas;
@@ -43,6 +43,8 @@ namespace Core
             // Events
             onNewGameStarted = new UnityEvent();
             onNewLevel = new UnityEvent();
+
+            CurrentLevel = 0;
         }
 
         private void Update()
@@ -72,34 +74,24 @@ namespace Core
         private void NewGame()
         {
             StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
+            
+            Generator = LoadDungeonGenerator().GetComponent<Generator>();
+            Generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
+            
+            Player = InstantiatePlayer();
 
-            SceneManager.sceneLoaded += (scene, loadSceneMode) =>
+            _canvas = GameObject.Find("PauseMenu");
+            _canvas.gameObject.SetActive(false);
+
+            SceneManager.sceneLoaded += (scene, mode) =>
             {
-                if (scene.name == "Hub")
-                {
-                    Generator = LoadDungeonGenerator().GetComponent<Generator>();
-                    Player = InstantiatePlayer();
-
-                    _canvas = GameObject.Find("PauseMenu");
-                    _canvas.gameObject.SetActive(false);
-
-                    Generator.onDungeonGenerated.AddListener(() =>
-                    {
-                        _camera = Camera.main;
-                        _canvas = transform.Find("PauseMenu").gameObject;
-                        _canvas.gameObject.SetActive(false);
-
-                        StartCoroutine(FadeTextInAndOut());
-                    });
-                }
-
                 if (scene.name == "Dungeon")
                 {
                     Player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
                 }
-                
-                _ingame = true;
             };
+
+            _ingame = true;
 
             onNewGameStarted?.Invoke();
         }
@@ -121,27 +113,44 @@ namespace Core
         {
             Debug.Log("Light change event Game Manager.");
             
-            if (_ingame && Camera.main != null && Player != null)
-            {
-                var playerScript = Player.GetComponent<PlayerScript>();
+            if (!_ingame || Camera.main == null || Player == null) return;
+            
+            var playerScript = Player.GetComponent<PlayerScript>();
                 
-                var playerLight = Player.transform.Find("PlayerLight").GetComponent<Light2D>();
-                playerLight.intensity = 1;
-                playerLight.pointLightOuterRadius = 6 * playerScript.GetPlayerLightLevel() + 2;
+            var playerLight = Player.transform.Find("PlayerLight").GetComponent<Light2D>();
+            playerLight.intensity = 1;
+            playerLight.pointLightOuterRadius = 6 * playerScript.GetPlayerLightLevel() + 2;
 
-                var volume = _camera.GetComponent<Volume>();
+            var volume = _camera.GetComponent<Volume>();
 
-                ChromaticAberration chromaticAberration;
-                LensDistortion lensDistortion;
+            ChromaticAberration chromaticAberration;
+            LensDistortion lensDistortion;
 
-                volume.profile.TryGet(out chromaticAberration);
-                volume.profile.TryGet(out lensDistortion);
+            volume.profile.TryGet(out chromaticAberration);
+            volume.profile.TryGet(out lensDistortion);
 
-                chromaticAberration.intensity.value *= playerScript.GetPlayerLightLevel();
-                lensDistortion.intensity.value = 0.1f;
+            chromaticAberration.intensity.value = 0.5f * playerScript.GetPlayerLightLevel();
+            lensDistortion.intensity.value = 0.1f;
 
-                Player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = true;
+            Player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = true;
+        }
+
+        private void OnDungeonGenerated()
+        {
+            _camera = Camera.main;
+            _canvas = transform.Find("PauseMenu").gameObject;
+            _canvas.gameObject.SetActive(false);
+
+            CurrentLevel += 1;
+
+            var text = transform.Find("PlayerUI")?.Find("LevelTooltip")?.GetComponent<TMP_Text>();
+            if (text != null)
+            {
+                text.text = $"Level {CurrentLevel}";
+                text.gameObject.SetActive(true);
             }
+
+            StartCoroutine(FadeLevelTextInAndOut());
         }
 
         private GameObject InstantiatePlayer()
@@ -192,13 +201,16 @@ namespace Core
             audioSource.Play();
         }
 
-        private IEnumerator FadeTextInAndOut()
+        private IEnumerator FadeLevelTextInAndOut()
         {
             var text = transform.Find("PlayerUI")?.Find("LevelTooltip")?.GetComponent<TMP_Text>();
             
-            StartCoroutine(TextFade.FadeTextToZeroAlpha(3f, text));
-            yield return new WaitForSeconds(3f);
             StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(TextFade.FadeTextToZeroAlpha(2f, text));
+            yield return new WaitForSeconds(2f);
+            
+            if (text != null) text.gameObject.SetActive(false);
         }
         
         public void Quit()

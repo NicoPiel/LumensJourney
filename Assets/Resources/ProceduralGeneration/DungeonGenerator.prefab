@@ -56,6 +56,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c9c921514e387e41b87b139cbe1a6dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onDungeonGenerated:
+    m_PersistentCalls:
+      m_Calls: []
   RoomNumber: 10
   minWidth: 5
   maxWidth: 30
@@ -72,6 +75,7 @@ MonoBehaviour:
   - {fileID: 6492458723234207612, guid: 724f44ec027690b459a50df082420a48, type: 3}
   - {fileID: 6492458723234207612, guid: dc052b34107796542ac6989179815424, type: 3}
   - {fileID: 6492458723234207612, guid: d6cc9e6eadf1a3a4f94fa34d39e25bea, type: 3}
+  door: {fileID: 1083720996130883523, guid: e2f2a5262c3139742a7a390402b7889c, type: 3}
   wallTile: {fileID: 1083720996130883523, guid: 1a05c6db55b130f4db8865e02232b12b,
     type: 3}
   wallTileTopDown: {fileID: 1083720996130883523, guid: ad16b169c3a812c4081b3b9351ba69b4,

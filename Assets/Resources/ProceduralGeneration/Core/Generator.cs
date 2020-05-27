@@ -52,6 +52,7 @@ namespace Resources.ProceduralGeneration.Core
 
         [SerializeField] private GameObject standardFloorTile;
         [SerializeField] private List<GameObject> otherFloorTiles;
+        [SerializeField] private GameObject door;
 
         [Space]
 
@@ -100,6 +101,8 @@ namespace Resources.ProceduralGeneration.Core
 
             PlacePlayer();
             
+            PlaceTeleporter();
+            
             onDungeonGenerated?.Invoke();
             return true;
         }
@@ -122,6 +125,8 @@ namespace Resources.ProceduralGeneration.Core
             GenerateRooms(RoomNumber);
 
             PlacePlayer();
+            
+            PlaceTeleporter();
             
             onDungeonGenerated?.Invoke();
             return true;
@@ -176,30 +181,6 @@ namespace Resources.ProceduralGeneration.Core
                         else if (x != xMin && x != xMax && y == yMax - 1)
                         {
                             PlaceTile(wallTile, x, y, dungeon);
-                        }
-
-                        // Northwest corner
-                        else if (x == xMin && y == yMax)
-                        {
-                            PlaceTile(wallTileTopDown, x, y, dungeon);
-                        }
-
-                        // Northeast corner
-                        else if (x == xMax && y == yMax)
-                        {
-                            PlaceTile(wallTileTopDown, x, y, dungeon);
-                        }
-
-                        // Southwest corner
-                        else if (x == xMin && y == yMin)
-                        {
-                            PlaceTile(wallTileTopDown, x, y, dungeon);
-                        }
-
-                        // Southeast corner
-                        else if (x == xMax && y == yMin)
-                        {
-                            PlaceTile(wallTileTopDown, x, y, dungeon);
                         }
 
                         // Erect vertical walls
@@ -268,6 +249,7 @@ namespace Resources.ProceduralGeneration.Core
             }
 
             GenerateCorridors(dungeon);
+            GenerateDoors(dungeon);
         }
 
         private void GenerateCorridors(GameObject dungeon)
@@ -438,6 +420,19 @@ namespace Resources.ProceduralGeneration.Core
             }
         }
 
+        private void GenerateDoors(GameObject dungeon)
+        {
+            foreach (var leftDoor in _leftDoors)
+            {
+                PlaceTile(door, leftDoor[0], leftDoor[1], dungeon);
+            }
+            
+            foreach (var rightDoor in _rightDoors)
+            {
+                PlaceTile(door, rightDoor[0], rightDoor[1], dungeon);
+            }
+        }
+
         private void OnDungeonGenerated()
         {
             Generated = true;
@@ -484,7 +479,7 @@ namespace Resources.ProceduralGeneration.Core
         {
             Rect lastRoom = _rooms[_rooms.Count - 1];
             
-            Instantiate(UnityEngine.Resources.Load("ProceduralGeneration/Components/Teleporter/Teleporter"), 
+            Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"), 
                 new Vector3(lastRoom.x + lastRoom.width/2, lastRoom.y + lastRoom.height/2, 0), 
                 Quaternion.identity, 
                 _dungeon.transform);

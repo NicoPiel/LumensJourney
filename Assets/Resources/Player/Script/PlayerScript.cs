@@ -170,7 +170,6 @@ public class PlayerScript : MonoBehaviour
         _player.playerstats["CurrentLightLevel"] += lightlevel;
         lightBar.ChangeProgress(_player.playerstats["CurrentLightLevel"], _player.playerstats["MaxLightLevel"]);
         onPlayerLightLevelChanged.Invoke();
-        Debug.Log($"Light level changed to {GetPlayerLightLevel()*100}%.");
     }
 
     public void PlayerTakeDamage(int damage)
