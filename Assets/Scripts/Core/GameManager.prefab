@@ -44,6 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8739f7f21ada0f145a46ff647e9b1b2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onNewGameStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onNewLevel:
+    m_PersistentCalls:
+      m_Calls: []
+  generator: {fileID: 8925199393286143425, guid: afda22f19a060a444b273483af8ae529,
+    type: 3}
+  player: {fileID: 8759012663102982383, guid: e968301f1b4fce9488e840d8ebda0d1d, type: 3}
 --- !u!82 &1680244929
 AudioSource:
   m_ObjectHideFlags: 0

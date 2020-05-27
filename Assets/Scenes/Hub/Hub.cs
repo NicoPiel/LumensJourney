@@ -14,9 +14,11 @@ namespace Scenes.Hub
     {
         private void Start()
         {
-            if (Camera.main != null && GameManager.Player != null)
+            GameObject player = GameManager.GetGameManager_Static().GetPlayer();
+            
+            if (Camera.main != null && player != null)
             {
-                var playerLight = GameManager.Player.transform.Find("PlayerLight").GetComponent<Light2D>();
+                var playerLight = player.transform.Find("PlayerLight").GetComponent<Light2D>();
                 playerLight.intensity = 0;
                 
                 var volume = Camera.main.GetComponent<Volume>();
@@ -30,7 +32,7 @@ namespace Scenes.Hub
                 chromaticAberration.intensity.value = 0;
                 lensDistortion.intensity.value = 0;
 
-                GameManager.Player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = false;
+                player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = false;
             }
         }
     }

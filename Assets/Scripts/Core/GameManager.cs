@@ -1,9 +1,8 @@
 ﻿using System.Collections;
-using Resources.Player.Script;
-using Resources.ProceduralGeneration.Core;
+using Assets.Player.Script;
+using Assets.ProceduralGeneration.Core;
 using TMPro;
 using Unity.Burst;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -22,11 +21,10 @@ namespace Core
         public UnityEvent onNewLevel;
 
         public int CurrentLevel { get; set; }
-        
+
         private static GameManager _instance;
-        public static Generator Generator { get; set; }
-        
-        public static GameObject Player { get; set; }
+        [SerializeField] private Generator generator;
+        [SerializeField] private GameObject player;
 
         private GameObject _canvas;
         private Camera _camera;
@@ -36,7 +34,7 @@ namespace Core
         private bool _ingame = false;
         private bool _paused = false;
 
-        private void Start()
+        private void Awake()
         {
             DontDestroyOnLoad(this);
             _instance = this;
@@ -77,11 +75,9 @@ namespace Core
         private void NewGame()
         {
             StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
-            
-            Generator = LoadDungeonGenerator().GetComponent<Generator>();
-            Generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
-            
-            Player = InstantiatePlayer();
+            generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
+
+            player = InstantiatePlayer();
 
             _canvas = GameObject.Find("PauseMenu");
             _canvas.gameObject.SetActive(false);
@@ -90,7 +86,7 @@ namespace Core
             {
                 if (scene.name == "Dungeon")
                 {
-                    Player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
+                    player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
                 }
             };
 
@@ -99,28 +95,15 @@ namespace Core
             onNewGameStarted?.Invoke();
         }
 
-        private static GameObject LoadDungeonGenerator()
-        {
-            GameObject generator = GameObject.FindWithTag("Generator");
-
-            if (generator == null)
-            {
-                generator = Instantiate(UnityEngine.Resources.Load<GameObject>("ProceduralGeneration/DungeonGenerator"), new Vector3(0, 0, 0), quaternion.identity);
-                generator.name = "DungeonGenerator";
-            }
-
-            return generator;
-        }
-
         private void OnPlayerLightLevelChanged()
         {
             Debug.Log("Light change event Game Manager.");
-            
-            if (!_ingame || Camera.main == null || Player == null) return;
-            
-            var playerScript = Player.GetComponent<PlayerScript>();
-                
-            var playerLight = Player.transform.Find("PlayerLight").GetComponent<Light2D>();
+
+            if (!_ingame || Camera.main == null || player == null) return;
+
+            var playerScript = player.GetComponent<PlayerScript>();
+
+            var playerLight = player.transform.Find("PlayerLight").GetComponent<Light2D>();
             playerLight.intensity = 1;
             playerLight.pointLightOuterRadius = 6 * playerScript.GetPlayerLightLevel() + 2;
 
@@ -135,7 +118,7 @@ namespace Core
             chromaticAberration.intensity.value = 0.5f * playerScript.GetPlayerLightLevel();
             lensDistortion.intensity.value = 0.1f;
 
-            Player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = true;
+            player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = true;
         }
 
         private void OnDungeonGenerated()
@@ -158,11 +141,11 @@ namespace Core
 
         private GameObject InstantiatePlayer()
         {
-            GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("UI/PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             pauseMenu.name = "PauseMenu";
-            GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI/PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             playerUi.name = "PlayerUI";
-            GameObject player = Instantiate(UnityEngine.Resources.Load<GameObject>("Player/Player"), new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
+            Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             return player;
         }
@@ -207,18 +190,33 @@ namespace Core
         private IEnumerator FadeLevelTextInAndOut()
         {
             var text = transform.Find("PlayerUI")?.Find("LevelTooltip")?.GetComponent<TMP_Text>();
-            
+
             StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
             yield return new WaitForSeconds(3f);
             StartCoroutine(TextFade.FadeTextToZeroAlpha(2f, text));
             yield return new WaitForSeconds(2f);
-            
+
             if (text != null) text.gameObject.SetActive(false);
         }
-        
+
         public void Quit()
         {
             StartCoroutine(Methods.LoadYourSceneAsync("MainMenu"));
+        }
+
+        public GameObject GetPlayer()
+        {
+            return _instance.player;
+        }
+
+        public Generator GetGenerator()
+        {
+            return _instance.generator;
+        }
+
+        public static GameManager GetGameManager_Static()
+        {
+            return _instance;
         }
     }
 }
