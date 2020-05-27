@@ -12,6 +12,8 @@ namespace Assets.PlayerUI.Scripts
 
         public GameObject lightbar;
 
+        public GameObject lightShardCounter;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -23,6 +25,10 @@ namespace Assets.PlayerUI.Scripts
 
             var lb = Instantiate(lightbar, transform);
             lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(40, 90, 0);
+
+            var lsc = Instantiate(lightShardCounter, transform);
+            lsc.GetComponent<RectTransform>().anchoredPosition = new Vector3(-120,-40,0);
+            
         }
 
         // Update is called once per frame

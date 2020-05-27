@@ -274,6 +274,8 @@ MonoBehaviour:
   itembar: {fileID: 1092449444180184704, guid: 37e07bf27848ae94e909aa1af368f3f3, type: 3}
   lightbar: {fileID: 4211082639063681482, guid: 8beca237789577848a87433330ad7e46,
     type: 3}
+  lightShardCounter: {fileID: 2355456198193913016, guid: e83157b262e399247a932ef3b2cda196,
+    type: 3}
 --- !u!1001 &6467241791651949335
 PrefabInstance:
   m_ObjectHideFlags: 0

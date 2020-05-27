@@ -24,6 +24,7 @@ namespace Assets.Player.Script
         private Player _player = new Player("Pacolos");
         public HealthbarScript healthBarScript;
         public LightBarScript lightBar;
+        public LightShardDisplayScript lightShardScript;
         public BoxCollider2D hitCollider;
         private static readonly int StateExit = Animator.StringToHash("StateExit");
     
@@ -31,6 +32,7 @@ namespace Assets.Player.Script
         public UnityEvent onPlayerTakeDamage;
         public UnityEvent onItemAddedToPlayerInventory;
         public UnityEvent onPlayerLightLevelChanged;
+        public UnityEvent onPlayerLightShardsChanged;
         #endregion
         public Dictionary<string, AudioClip> _audioClips;
 
@@ -43,6 +45,7 @@ namespace Assets.Player.Script
             SetUpEvents();
             healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
             lightBar = GameObject.Find("Lightbar(Clone)").GetComponent<LightBarScript>();
+            lightShardScript = GameObject.Find("LightShardCounter(Clone)").GetComponent<LightShardDisplayScript>();
             _playerRigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _audioClips = new Dictionary<String, AudioClip>();
@@ -65,11 +68,21 @@ namespace Assets.Player.Script
             onPlayerTakeDamage = new UnityEvent();
             onItemAddedToPlayerInventory = new UnityEvent();
             onPlayerLightLevelChanged = new UnityEvent();
+            onPlayerLightShardsChanged = new UnityEvent();
         }
 
         // Update is called once per frame
         private void Update()
         {
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                PlayerChangeLightShards(50);
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                PlayerChangeLightShards(-50);
+            }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 hitCollider.transform.eulerAngles = new Vector3(0, 0, 180);
@@ -185,6 +198,18 @@ namespace Assets.Player.Script
         public float GetPlayerLightLevel()
         {
             return (float) _player.playerstats["CurrentLightLevel"] / (float) _player.playerstats["MaxLightLevel"];
+        }
+
+        public int GetLightShardAmount()
+        {
+            return _player.Inventory.Lightshard;
+        }
+
+        public void PlayerChangeLightShards(int lightShards)
+        {
+            _player.Inventory.Lightshard += lightShards;
+            lightShardScript.UpdateLightShardDisplay(_player.Inventory.Lightshard);
+            onPlayerLightLevelChanged.Invoke();
         }
 
         private IEnumerator LoseLightPerSecond(int lightLoss)
