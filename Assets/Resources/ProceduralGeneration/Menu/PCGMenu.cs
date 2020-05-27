@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
 using Resources.ProceduralGeneration.Core;
+using Unity.Burst;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace ProceduralGeneration.Menu
+namespace Resources.ProceduralGeneration.Menu
 {
+    [BurstCompile]
     [CustomEditor(typeof(Generator))]
     public class PcgMenu : Editor
     {

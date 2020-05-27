@@ -18,8 +18,8 @@ namespace Resources.Healthbar.Scripts
             {
                 Debug.Log("Heart not found");
             }
-            float x = 25;
-            float y= -29;
+            float x = 0;
+            float y= 0;
             for (int i = currentHealth; i != 0; i--)
             {
                 var newHeart = Instantiate(obj);
