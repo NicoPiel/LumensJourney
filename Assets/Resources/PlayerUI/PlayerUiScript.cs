@@ -11,6 +11,7 @@ namespace Resources.PlayerUI
         public GameObject itembar;
 
         public GameObject lightbar;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -20,14 +21,13 @@ namespace Resources.PlayerUI
             var ib = Instantiate(itembar, transform);
             ib.GetComponent<RectTransform>().anchoredPosition = new Vector3(-760, 400, 0);
 
-        var lb = Instantiate(lightbar, transform);
-        lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(42, -450, 0);
-    }
+            var lb = Instantiate(lightbar, transform);
+            lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(40, -980, 0);
+        }
 
         // Update is called once per frame
         void Update()
         {
-        
         }
     }
 }
