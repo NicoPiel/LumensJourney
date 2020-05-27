@@ -59,7 +59,6 @@ namespace Assets.Player.Script
             AddAudioClips();
         
             GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(lightLoss)); });
-
         }
     
 
