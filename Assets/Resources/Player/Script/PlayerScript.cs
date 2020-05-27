@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Resources;
 using System.Runtime.CompilerServices;
+using Core;
+using Resources.ProceduralGeneration.Core;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -18,11 +21,12 @@ public class PlayerScript : MonoBehaviour
     public HealthbarScript healthBarScript;
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
-
+    
+    #region UnityEvents
     public UnityEvent onPlayerTakeDamage;
     public UnityEvent onItemAddedToPlayerInventory;
-
-
+    public UnityEvent onPlayerLightLevelChanged;
+    #endregion
     public Dictionary<string, AudioClip> _audioClips;
 
 
@@ -44,13 +48,17 @@ public class PlayerScript : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         AddAudioClips();
+        
+        GameManager.Generator.onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
 
     }
+    
 
     private void SetUpEvents()
     {
         onPlayerTakeDamage = new UnityEvent();
         onItemAddedToPlayerInventory = new UnityEvent();
+        onPlayerLightLevelChanged = new UnityEvent();
     }
 
     // Update is called once per frame
@@ -97,7 +105,6 @@ public class PlayerScript : MonoBehaviour
             _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
             _change.Normalize();
         }
-
         if (_animator.GetBool(StateExit))
         {
             hitCollider.gameObject.SetActive(false);
@@ -105,7 +112,6 @@ public class PlayerScript : MonoBehaviour
             Debug.Log("State Exit");
         }
     }
-
     public void PlayFootsteps()
     {
         int rnd = Random.Range(0, 3);
@@ -156,6 +162,12 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    public void PlayerChangeLightLevel(int lightlevel)
+    {
+        _player.playerstats["CurrentLightLevel"] += lightlevel;
+        onPlayerLightLevelChanged.Invoke();
+    }
+
     public void PlayerTakeDamage(int damage)
     {
         _player.playerstats["CurrentHealth"] -= damage;
@@ -166,5 +178,16 @@ public class PlayerScript : MonoBehaviour
     public float GetPlayerLightLevel()
     {
         return (float) _player.playerstats["CurrentLightLevel"] / (float) _player.playerstats["MaxLightLevel"];
+    }
+
+    private IEnumerator LoseLightPerSecond()
+    {
+        int maxLightLevelLoss = 300;
+        while (maxLightLevelLoss >= 0)
+        {
+            maxLightLevelLoss--;
+            PlayerChangeLightLevel(-1);
+            yield return new WaitForSeconds(1f);
+        }
     }
 }
