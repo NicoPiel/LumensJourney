@@ -10,6 +10,7 @@ namespace Assets.Player.Script
     public class Inventory
     {
         public List<GameItem> Items { get; set;}
+        public int Lightshard { get; set; }
         public Inventory()
         {
             Items = new List<GameItem>();

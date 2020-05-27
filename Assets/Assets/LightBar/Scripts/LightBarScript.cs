@@ -1,19 +1,24 @@
-﻿using Unity.Burst;
+﻿using System;
+using TMPro;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.LightBar.Scripts
+namespace Resources.LightBar.Scripts
 {
     [BurstCompile]
     public class LightBarScript : MonoBehaviour
     {
         // Start is called before the first frame update
         private Slider slider;
+        private TMP_Text _tmpText;
 
         private int _targetValue;
         private int speed;
         void Start()
         {
+            _tmpText = gameObject.GetComponentInChildren<TMP_Text>();
+            _tmpText.text = "100%";
             slider = gameObject.GetComponent<Slider>();
             slider.value = 1000;
             speed = 10;
@@ -32,6 +37,10 @@ namespace Assets.LightBar.Scripts
         {
             slider.maxValue = maxlvl;
             slider.value = lightChange;
+            float temp = ((float) lightChange / maxlvl); // 980/1000
+            
+            
+            _tmpText.text = Math.Ceiling(temp * 100d) + "%";
         }
     
     }
