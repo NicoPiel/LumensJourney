@@ -148,6 +148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6204403411881304901}
   - component: {fileID: 726157911917083250}
+  - component: {fileID: 1994238304237913774}
   m_Layer: 0
   m_Name: PlayerLight
   m_TagString: Untagged
@@ -210,6 +211,22 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &1994238304237913774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8701616885335472190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9b937155a4ae145be3f2952d29b46d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 726157911917083250}
+  minIntensity: 0.8
+  maxIntensity: 1
+  smoothing: 5
 --- !u!1 &8759012663102982383
 GameObject:
   m_ObjectHideFlags: 0

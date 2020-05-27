@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Utility;
 
 namespace Scenes.Hub
 {
@@ -25,6 +26,8 @@ namespace Scenes.Hub
 
                 chromaticAberration.intensity.value = 0;
                 lensDistortion.intensity.value = 0;
+
+                GameManager.Player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = false;
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using Resources.ProceduralGeneration.Core;
+﻿using System.Collections;
+using Resources.ProceduralGeneration.Core;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,7 +18,8 @@ namespace Core
         public UnityEvent onNewGameStarted;
         public UnityEvent onNewLevel;
 
-
+        public int CurrentLevel { get; set; }
+        
         private static GameManager _instance;
         public static Generator Generator { get; set; }
 
@@ -83,12 +86,19 @@ namespace Core
                     Generator.onDungeonGenerated.AddListener(() =>
                     {
                         _camera = Camera.main;
-                        //_canvas = GameObject.Find("PauseMenu");
-                        //_canvas.gameObject.SetActive(false);
+                        _canvas = transform.Find("PauseMenu").gameObject;
+                        _canvas.gameObject.SetActive(false);
 
-                        _ingame = true;
+                        StartCoroutine(FadeTextInAndOut());
                     });
                 }
+
+                if (scene.name == "Dungeon")
+                {
+                    Player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
+                }
+                
+                _ingame = true;
             };
 
             onNewGameStarted?.Invoke();
@@ -109,6 +119,8 @@ namespace Core
 
         private void OnPlayerLightLevelChanged()
         {
+            Debug.Log("Light change event Game Manager.");
+            
             if (_ingame && Camera.main != null && Player != null)
             {
                 var playerScript = Player.GetComponent<PlayerScript>();
@@ -127,6 +139,8 @@ namespace Core
 
                 chromaticAberration.intensity.value *= playerScript.GetPlayerLightLevel();
                 lensDistortion.intensity.value = 0.1f;
+
+                Player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = true;
             }
         }
 
@@ -144,23 +158,27 @@ namespace Core
         private void Pause()
         {
             Time.timeScale = 0.0f;
-            _canvas.SetActive(true);
-            _camera.GetComponent<AudioListener>().enabled = false;
+            _canvas = transform.Find("PauseMenu").gameObject;
+            if (_canvas != null) _canvas.SetActive(true);
+            _camera = Camera.main;
+            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = false;
             _paused = true;
         }
 
         private void Resume()
         {
             Time.timeScale = 1.0f;
-            _canvas.SetActive(false);
-            _camera.GetComponent<AudioListener>().enabled = true;
+            _canvas = transform.Find("PauseMenu").gameObject;
+            if (_canvas != null) _canvas.SetActive(false);
+            _camera = Camera.main;
+            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
             _paused = false;
         }
 
         public void ResumeOnClick()
         {
             Time.timeScale = 1.0f;
-            _canvas = GameObject.Find("PauseMenu");
+            _canvas = transform.Find("PauseMenu").gameObject;
             if (_canvas != null) _canvas.SetActive(false);
             _camera = Camera.main;
             if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
@@ -174,6 +192,15 @@ namespace Core
             audioSource.Play();
         }
 
+        private IEnumerator FadeTextInAndOut()
+        {
+            var text = transform.Find("PlayerUI")?.Find("LevelTooltip")?.GetComponent<TMP_Text>();
+            
+            StartCoroutine(TextFade.FadeTextToZeroAlpha(3f, text));
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
+        }
+        
         public void Quit()
         {
             StartCoroutine(Methods.LoadYourSceneAsync("MainMenu"));

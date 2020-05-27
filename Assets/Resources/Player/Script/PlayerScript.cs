@@ -49,7 +49,7 @@ public class PlayerScript : MonoBehaviour
 
         AddAudioClips();
         
-        GameManager.Generator.onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
+        GameManager.Generator.onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(2)); });
 
     }
     
@@ -166,6 +166,7 @@ public class PlayerScript : MonoBehaviour
     {
         _player.playerstats["CurrentLightLevel"] += lightlevel;
         onPlayerLightLevelChanged.Invoke();
+        Debug.Log($"Light level changed to {GetPlayerLightLevel()*100}%.");
     }
 
     public void PlayerTakeDamage(int damage)
@@ -180,13 +181,13 @@ public class PlayerScript : MonoBehaviour
         return (float) _player.playerstats["CurrentLightLevel"] / (float) _player.playerstats["MaxLightLevel"];
     }
 
-    private IEnumerator LoseLightPerSecond()
+    private IEnumerator LoseLightPerSecond(int lightLoss)
     {
         int maxLightLevelLoss = 300;
-        while (maxLightLevelLoss >= 0)
+        while (maxLightLevelLoss > 0)
         {
-            maxLightLevelLoss--;
-            PlayerChangeLightLevel(-1);
+            maxLightLevelLoss -= lightLoss;
+            PlayerChangeLightLevel(-lightLoss);
             yield return new WaitForSeconds(1f);
         }
     }

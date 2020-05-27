@@ -3,6 +3,7 @@ using Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility;
+using Random = UnityEngine.Random;
 
 namespace Resources.ProceduralGeneration.Components.Teleporter
 {
@@ -16,7 +17,7 @@ namespace Resources.ProceduralGeneration.Components.Teleporter
 
                 SceneManager.sceneLoaded += (scene, mode) =>
                 {
-                    if (GameManager.Generator != null && scene.name == "Dungeon") GameManager.Generator.Generate();
+                    if (GameManager.Generator != null && scene.name == "Dungeon") GameManager.Generator.Generate(Random.Range(10, 21));
                 };
             }
         }

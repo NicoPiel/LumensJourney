@@ -103,6 +103,29 @@ namespace Resources.ProceduralGeneration.Core
             onDungeonGenerated?.Invoke();
             return true;
         }
+        
+        public bool Generate(int numberOfRooms)
+        {
+            if ((minWidth > maxWidth)
+                || (minHeight > maxHeight)
+                || (minSpacingX > maxSpacingX)
+                || (minSpacingY > maxSpacingY))
+            {
+                Debug.LogError(
+                    "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
+                return false;
+            }
+
+            _dungeon = CreateDungeonObject();
+
+            RoomNumber = numberOfRooms;
+            GenerateRooms(RoomNumber);
+
+            PlacePlayer();
+            
+            onDungeonGenerated?.Invoke();
+            return true;
+        }
 
         private void GenerateRooms(int numberOfRooms)
         {

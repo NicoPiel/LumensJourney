@@ -25,6 +25,8 @@ namespace Utility
         [Range(1, 50)]
         public int smoothing = 5;
 
+        public bool enabled;
+
         // Continuous average calculation via FIFO queue
         // Saves us iterating every time we update, we just change by the delta
         Queue<float> smoothQueue;
@@ -46,11 +48,12 @@ namespace Utility
             // External or internal light?
             if (light == null) {
                 light = GetComponent<Light2D>();
+                enabled = true;
             }
         }
 
         void Update() {
-            if (light == null)
+            if (light == null || !enabled)
                 return;
 
             // pop off an item if too big
