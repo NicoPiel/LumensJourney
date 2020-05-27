@@ -1,8 +1,6 @@
-﻿using System;
-using ProceduralGeneration.Core;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace ProceduralGeneration
+namespace Resources.ProceduralGeneration.Core
 {
     public class Decorator : MonoBehaviour
     {
@@ -19,7 +17,7 @@ namespace ProceduralGeneration
             {
                 Rect firstRoom = _generator.GetRooms()[0];
 
-                var pickUp = (GameObject) Instantiate(Resources.Load("PickUps/Prefab/PickUp"),
+                var pickUp = (GameObject) Instantiate(UnityEngine.Resources.Load("PickUps/Prefab/PickUp"),
                     new Vector3(firstRoom.x + firstRoom.width / 2, firstRoom.y + firstRoom.height / 2),
                     Quaternion.identity,
                     _generator.GetParent().transform);

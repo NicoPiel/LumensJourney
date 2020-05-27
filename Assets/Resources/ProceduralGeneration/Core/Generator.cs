@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Core;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
-namespace ProceduralGeneration.Core
+namespace Resources.ProceduralGeneration.Core
 {
     [BurstCompile]
     public class Generator : MonoBehaviour
@@ -19,41 +19,53 @@ namespace ProceduralGeneration.Core
         [Range(1, 30)] public int RoomNumber;
 
         [Space] 
-        [Range(5, 30)] public int minWidth;
-        [Range(5, 30)] public int maxWidth;
+        [SerializeField]
+        [Range(5, 30)] private int minWidth;
+        [SerializeField]
+        [Range(5, 30)] private int maxWidth;
         
         [Space] 
-        [Range(5, 30)] public int minHeight;
-        [Range(5, 30)] public int maxHeight;
+        [SerializeField]
+        [Range(5, 30)] private int minHeight;
+        [SerializeField]
+        [Range(5, 30)] private int maxHeight;
+
+        [Space] 
+        [SerializeField]
+        [Range(4, 40)] private int minSpacingX;
+        [SerializeField]
+        [Range(4, 40)] private int maxSpacingX;
         
         [Space] 
-        [Range(4, 40)] public int minSpacingX;
-        [Range(4, 40)] public int maxSpacingX;
-        
-        [Space] 
-        [Range(-80, 0)] public int minSpacingY;
-        [Range(0, 80)] public int maxSpacingY;
+        [SerializeField]
+        [Range(-80, 0)] private int minSpacingY;
+        [SerializeField]
+        [Range(0, 80)] private int maxSpacingY;
 
         [Header("Tileset")]
         [Tooltip("Determines the likelihood with which the standard floor tile will spawn.")]
-        [Range(0, 100)] public int stdLikelihood;
+        [SerializeField]
+        [Range(0, 100)] private int stdLikelihood;
 
-        [SerializeField] public GameObject standardFloorTile;
-        [SerializeField] public List<GameObject> otherFloorTiles;
+        [SerializeField] private GameObject standardFloorTile;
+        [SerializeField] private List<GameObject> otherFloorTiles;
 
         [Space]
 
         // Wall tiles
         [SerializeField]
-        public GameObject wallTile;
-        public GameObject wallTileTopDown;
+        private GameObject wallTile;
+        [SerializeField]
+        private GameObject wallTileTopDown;
 
-        [Space] [Header("Doors")] [SerializeField]
-        public List<int[]> leftDoors;
+        [Space] 
+        [Header("Doors")]
+        private List<int[]> _leftDoors;
 
-        [SerializeField] public List<int[]> rightDoors;
-        [SerializeField] public Dictionary<int[], int[]> doorRelations;
-        [Space] private List<Rect> _rooms;
+        private List<int[]> _rightDoors;
+        private Dictionary<int[], int[]> _doorRelations;
+        [Space] 
+        private List<Rect> _rooms;
 
         private GameObject _dungeon;
         
@@ -83,8 +95,6 @@ namespace ProceduralGeneration.Core
 
             GenerateRooms(RoomNumber);
 
-            InstantiatePlayer();
-            
             onDungeonGenerated?.Invoke();
             return true;
         }
@@ -97,9 +107,9 @@ namespace ProceduralGeneration.Core
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
-            rightDoors = new List<int[]>();
-            leftDoors = new List<int[]>();
-            doorRelations = new Dictionary<int[], int[]>();
+            _rightDoors = new List<int[]>();
+            _leftDoors = new List<int[]>();
+            _doorRelations = new Dictionary<int[], int[]>();
 
             for (var i = 0; i < numberOfRooms; i++)
             {
@@ -177,7 +187,7 @@ namespace ProceduralGeneration.Core
                                 if (_rooms.Count > 1)
                                 {
                                     PlaceTile(standardFloorTile, x, y, dungeon);
-                                    leftDoors.Add(new[] {xMin, doorLeft});
+                                    _leftDoors.Add(new[] {xMin, doorLeft});
                                 }
                                 else
                                 {
@@ -197,7 +207,7 @@ namespace ProceduralGeneration.Core
                                 if (_rooms.Count < numberOfRooms)
                                 {
                                     PlaceTile(standardFloorTile, x, y, dungeon);
-                                    rightDoors.Add(new[] {xMax, doorRight});
+                                    _rightDoors.Add(new[] {xMax, doorRight});
                                 }
                                 else
                                 {
@@ -224,9 +234,9 @@ namespace ProceduralGeneration.Core
                         room.y + Random.Range(minSpacingY, maxSpacingY));
             }
 
-            for (var i = 0; i < rightDoors.Count; i++)
+            for (var i = 0; i < _rightDoors.Count; i++)
             {
-                doorRelations.Add(rightDoors[i], leftDoors[i]);
+                _doorRelations.Add(_rightDoors[i], _leftDoors[i]);
             }
 
             GenerateCorridors(dungeon);
@@ -236,7 +246,7 @@ namespace ProceduralGeneration.Core
         {
             Debug.Log("Generating corridors..");
 
-            foreach (var doorRelation in doorRelations)
+            foreach (var doorRelation in _doorRelations)
             {
                 var leftDoorX = doorRelation.Key[0];
                 var leftDoorY = doorRelation.Key[1];
@@ -433,25 +443,6 @@ namespace ProceduralGeneration.Core
         private GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
-        }
-
-        private GameObject InstantiatePlayer()
-        {
-            GameObject spawner = GameObject.Find("RoomSpawner");
-            Destroy(GameObject.Find("RoomSpawner(Clone)"));
-            
-            GameObject player = GameObject.Find("Player(Clone)");
-            Destroy(GameObject.Find("Player"));
-
-            if (player != null)
-            {
-                Destroy(player);
-            }
-
-            player = (GameObject) Instantiate(Resources.Load("Player/Player"),
-                new Vector3(_rooms[0].x + 1, _rooms[0].y + 1, 0), Quaternion.identity, gameObject.transform);
-
-            return player;
         }
 
         private GameObject GetRandomTile(IReadOnlyList<GameObject> tileCollection)

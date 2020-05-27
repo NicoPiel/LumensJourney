@@ -6,7 +6,7 @@ namespace Utility
 {
     public class Methods : MonoBehaviour
     {
-        public static IEnumerator LoadYourAsyncScene(string sceneName)
+        public static IEnumerator LoadYourSceneAsync(string sceneName)
         {
             Debug.Log($"Loading scene {sceneName}");
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
@@ -17,7 +17,7 @@ namespace Utility
             }
         }
         
-        public static IEnumerator LoadYourAsyncScene(int sceneNumber)
+        public static IEnumerator LoadYourSceneAsync(int sceneNumber)
         {
             Debug.Log($"Loading scene {sceneNumber}");
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNumber);

@@ -1,5 +1,6 @@
-﻿using ProceduralGeneration.Core;
-using UnityEditor.U2D.Animation;
+﻿using Resources.ProceduralGeneration.Core;
+using Unity.Mathematics;
+using UnityEditor.Experimental.RestService;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -13,12 +14,13 @@ namespace Core
     public class GameManager : MonoBehaviour
     {
         // Events
-        public UnityEvent newGameStarted;
-        
+        public UnityEvent onNewGameStarted;
+        public UnityEvent onNewLevel;
+
         private static GameManager _instance;
-        private Generator _generator;
-        [SerializeField]
-        private GameObject player;
+        public static Generator Generator { get; set; }
+
+        public static GameObject Player { get; set; }
 
         private GameObject _canvas;
         private Camera _camera;
@@ -32,15 +34,17 @@ namespace Core
         {
             DontDestroyOnLoad(this);
             _instance = this;
-            
-            _menuSound = Resources.Load<AudioClip>("Audio/Clicks/click3");
-            
+
+            _menuSound = UnityEngine.Resources.Load<AudioClip>("Audio/Clicks/click3");
+
             // Events
-            newGameStarted = new UnityEvent();
+            onNewGameStarted = new UnityEvent();
+            onNewLevel = new UnityEvent();
         }
 
         private void Update()
         {
+            // Pause Menu
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (_ingame)
@@ -64,48 +68,79 @@ namespace Core
 
         private void NewGame()
         {
-            StartCoroutine(Methods.LoadYourAsyncScene("PCGTestScene"));
-            
+            StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
+
             SceneManager.sceneLoaded += (scene, loadSceneMode) =>
             {
-                _generator = GameObject.FindWithTag("Generator")?.GetComponent<Generator>();
-
-                if (_generator != null)
+                if (scene.name == "Hub")
                 {
-                    _generator.onDungeonGenerated.AddListener(() =>
+                    Generator = LoadDungeonGenerator().GetComponent<Generator>();
+                    Player = InstantiatePlayer();
+                    
+                    _canvas = GameObject.Find("PauseMenu");
+                    _canvas.gameObject.SetActive(false);
+                
+                    Generator.onDungeonGenerated.AddListener(() =>
                     {
-                        player = GameObject.FindWithTag("Player");
-
+                        PlacePlayer();
+                        
                         _camera = Camera.main;
-                        _canvas = GameObject.Find("PauseMenu");
-                        _canvas.gameObject.SetActive(false);
+                        //_canvas = GameObject.Find("PauseMenu");
+                        //_canvas.gameObject.SetActive(false);
 
                         _ingame = true;
                     });
-
-                    _generator.Generate();
                 }
             };
-            
-            newGameStarted?.Invoke();
+
+            onNewGameStarted?.Invoke();
+        }
+
+        private static GameObject LoadDungeonGenerator()
+        {
+            GameObject generator = GameObject.FindWithTag("Generator");
+
+            if (generator == null)
+            {
+                generator = Instantiate(UnityEngine.Resources.Load<GameObject>("ProceduralGeneration/DungeonGenerator"), new Vector3(0, 0, 0), quaternion.identity);
+                generator.name = "DungeonGenerator";
+            }
+
+            return generator;
         }
 
         private void OnPlayerLightLevelChanged()
         {
             if (_ingame)
             {
-                var playerLight = player.transform.Find("PlayerLight").gameObject.GetComponent<Light2D>();
-                var playerScript = player.GetComponent<PlayerScript>();
-                
+                var playerLight = Player.transform.Find("PlayerLight").gameObject.GetComponent<Light2D>();
+                var playerScript = Player.GetComponent<PlayerScript>();
+
                 playerLight.pointLightOuterRadius = 6 * playerScript.GetPlayerLightLevel() + 2;
-                
+
                 ChromaticAberration chrom;
                 _camera.GetComponent<Volume>().profile.TryGet(out chrom);
 
                 chrom.intensity.value *= playerScript.GetPlayerLightLevel();
             }
         }
+
+        private GameObject InstantiatePlayer()
+        {
+            GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("UI/PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            pauseMenu.name = "PauseMenu";
+            GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI/PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            playerUi.name = "PlayerUI";
+            GameObject player = Instantiate(UnityEngine.Resources.Load<GameObject>("Player/Player"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            player.name = "Player";
+            return player;
+        }
         
+        private void PlacePlayer()
+        {
+            Player.transform.position = new Vector3(2, 2, 0);
+        }
+
         private void Pause()
         {
             Time.timeScale = 0.0f;
@@ -113,15 +148,17 @@ namespace Core
             _camera.GetComponent<AudioListener>().enabled = false;
             _paused = true;
         }
-        
-        private void Resume() {
+
+        private void Resume()
+        {
             Time.timeScale = 1.0f;
             _canvas.SetActive(false);
             _camera.GetComponent<AudioListener>().enabled = true;
             _paused = false;
         }
-        
-        public void ResumeOnClick() {
+
+        public void ResumeOnClick()
+        {
             Time.timeScale = 1.0f;
             _canvas = GameObject.Find("PauseMenu");
             if (_canvas != null) _canvas.SetActive(false);
@@ -136,14 +173,10 @@ namespace Core
             audioSource.clip = _menuSound;
             audioSource.Play();
         }
-        
+
         public void Quit()
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
+            StartCoroutine(Methods.LoadYourSceneAsync("MainMenu"));
         }
     }
 }

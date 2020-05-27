@@ -27,14 +27,14 @@ public class ItemBarScript : MonoBehaviour
         float y = -32f;
         foreach(var item in inv.Items)
         {
-            var obj = Resources.Load<GameObject>("ItemBar/Prefabs/ItemIcon");
+            var obj = UnityEngine.Resources.Load<GameObject>("ItemBar/Prefabs/ItemIcon");
             if (obj == null)
             {
                 Debug.Log("Object could not be loaded");
             }
             
             var newItem = Instantiate(obj);
-            newItem.GetComponentInChildren<RawImage>().texture = Resources.Load<Texture>("Items/Tiles/" + item.ItemName);
+            newItem.GetComponentInChildren<RawImage>().texture = UnityEngine.Resources.Load<Texture>("Items/Tiles/" + item.ItemName);
             newItem.GetComponent<RectTransform>().SetParent(transform);
             newItem.GetComponent<RectTransform>().anchoredPosition =  new Vector3(x, y, 0);
             x += 47f;

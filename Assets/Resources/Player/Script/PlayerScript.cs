@@ -138,12 +138,12 @@ public class PlayerScript : MonoBehaviour
     {
         for( int i = 1; i <= 8; i++ )
         {
-            _audioClips.Add("woosh"+i, Resources.Load<AudioClip>("Audio/Wooshes/woosh"+i));
+            _audioClips.Add("woosh"+i, UnityEngine.Resources.Load<AudioClip>("Audio/Wooshes/woosh"+i));
         }
 
         for (int i = 0; i <= 2; i++)
         {
-            _audioClips.Add("footstep0"+i, Resources.Load<AudioClip>("Audio/Footsteps/footstep0"+i));
+            _audioClips.Add("footstep0"+i, UnityEngine.Resources.Load<AudioClip>("Audio/Footsteps/footstep0"+i));
         }
     }
 

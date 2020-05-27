@@ -17,7 +17,7 @@ public class PickUpScript : MonoBehaviour
     {
         _item = GameItem.ConstructItem(itemName);
         SpriteRenderer re = transform.Find("Item")?.GetComponent<SpriteRenderer>();
-        re.sprite = Resources.Load<Sprite>("Items/Tiles/" + _item.ItemName);
+        re.sprite = UnityEngine.Resources.Load<Sprite>("Items/Tiles/" + _item.ItemName);
     }
 
     public void Start()

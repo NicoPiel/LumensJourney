@@ -16,20 +16,11 @@ namespace MainMenu
         {
             GameManager.NewGame_Static();
         }
-        
-        public void Quit()
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
 
         public void PlayMenuSound()
         {
             var audioSource = GetComponent<AudioSource>();
-            audioSource.clip = Resources.Load<AudioClip>("Audio/Clicks/click3");
+            audioSource.clip = UnityEngine.Resources.Load<AudioClip>("Audio/Clicks/click3");
             audioSource.Play();
         }
 
@@ -46,6 +37,15 @@ namespace MainMenu
             croppedTexture.Apply();
 
             return croppedTexture;
+        }
+        
+        public void Quit()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }

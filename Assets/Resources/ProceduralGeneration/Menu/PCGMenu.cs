@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using ProceduralGeneration.Core;
+using Resources.ProceduralGeneration.Core;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;

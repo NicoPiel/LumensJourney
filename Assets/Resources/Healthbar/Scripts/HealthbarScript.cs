@@ -12,7 +12,7 @@ public class HealthbarScript : MonoBehaviour
         foreach (Transform child in transform) {
             GameObject.Destroy(child.gameObject);
         }
-        var obj = Resources.Load<GameObject>("Healthbar/Prefab/Heart");
+        var obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/Heart");
         if (obj == null)
         {
             Debug.Log("Heart not found");
