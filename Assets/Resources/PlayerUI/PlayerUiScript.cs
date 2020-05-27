@@ -16,13 +16,13 @@ namespace Resources.PlayerUI
         void Start()
         {
             var hb = Instantiate(healthbar, transform);
-            hb.GetComponent<RectTransform>().anchoredPosition = new Vector3(-675, 470, 0);
+            hb.GetComponent<RectTransform>().anchoredPosition = new Vector3(300, -80, 0);
 
             var ib = Instantiate(itembar, transform);
             ib.GetComponent<RectTransform>().anchoredPosition = new Vector3(-760, 400, 0);
 
             var lb = Instantiate(lightbar, transform);
-            lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(40, -980, 0);
+            lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(40, 90, 0);
         }
 
         // Update is called once per frame

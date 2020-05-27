@@ -25,7 +25,7 @@ namespace Resources.Healthbar.Scripts
                 var newHeart = Instantiate(obj);
                 newHeart.GetComponent<RectTransform>().SetParent(this.transform);
                 newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
-                x += 50;
+                x += 90;
             }
             obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/EmptyHeart");
             for (int i = maxHealth - currentHealth; i != 0; i--)
@@ -33,7 +33,7 @@ namespace Resources.Healthbar.Scripts
                 var newHeart = Instantiate(obj);
                 newHeart.GetComponent<RectTransform>().SetParent(this.transform);
                 newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
-                x += 50;
+                x += 90;
             }
         
         }
