@@ -8,10 +8,8 @@ public class Player {
     public Dictionary<string, int> playerstats { get; set; }
     public Inventory Inventory { get; set;}
     
-    public float LightLevel { get; set; }
-    
     // Start is called before the first frame update
-    public Player(string playername, int maxHealth = 20, int attackDamage = 5, int defense = 5)
+    public Player(string playername, int maxHealth = 5, int attackDamage = 5, int defense = 5)
     {
         Playername = playername;
         Inventory = new Inventory();

@@ -19,7 +19,8 @@ public class PlayerScript : MonoBehaviour
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
 
-    
+    public UnityEvent onPlayerTakeDamage;
+    public UnityEvent onItemAddedToPlayerInventory;
 
 
     public Dictionary<string, AudioClip> _audioClips;
@@ -29,11 +30,13 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        
+        SetUpEvents();
         healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _audioClips = new Dictionary<String, AudioClip>();
-        healthBarScript.ChangeHealthBar(2, 0);
+        healthBarScript.ChangeHealthBar(5, 5);
         hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
         hitCollider.gameObject.SetActive(false);
         _animator.SetBool(StateExit, false);
@@ -42,6 +45,12 @@ public class PlayerScript : MonoBehaviour
 
         AddAudioClips();
 
+    }
+
+    private void SetUpEvents()
+    {
+        onPlayerTakeDamage = new UnityEvent();
+        onItemAddedToPlayerInventory = new UnityEvent();
     }
 
     // Update is called once per frame
@@ -145,6 +154,13 @@ public class PlayerScript : MonoBehaviour
         {
             _audioClips.Add("footstep0"+i, UnityEngine.Resources.Load<AudioClip>("Audio/Footsteps/footstep0"+i));
         }
+    }
+
+    public void PlayerTakeDamage(int damage)
+    {
+        _player.playerstats["CurrentHealth"] -= damage;
+        healthBarScript.ChangeHealthBar(_player.playerstats["CurrentHealth"], _player.playerstats["MaxHealth"]);
+        onPlayerTakeDamage.Invoke();
     }
 
     public float GetPlayerLightLevel()

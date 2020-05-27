@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthbarScript : MonoBehaviour
 {
@@ -20,6 +21,14 @@ public class HealthbarScript : MonoBehaviour
         float x = 25;
         float y= -29;
         for (int i = currentHealth; i != 0; i--)
+        {
+            var newHeart = Instantiate(obj);
+            newHeart.GetComponent<RectTransform>().SetParent(this.transform);
+            newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
+            x += 50;
+        }
+        obj = UnityEngine.Resources.Load<GameObject>("Healthbar/Prefab/EmptyHeart");
+        for (int i = maxHealth - currentHealth; i != 0; i--)
         {
             var newHeart = Instantiate(obj);
             newHeart.GetComponent<RectTransform>().SetParent(this.transform);
