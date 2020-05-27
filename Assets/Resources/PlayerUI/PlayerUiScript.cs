@@ -20,9 +20,9 @@ namespace Resources.PlayerUI
             var ib = Instantiate(itembar, transform);
             ib.GetComponent<RectTransform>().anchoredPosition = new Vector3(-760, 400, 0);
 
-            var lb = Instantiate(lightbar, transform);
-            lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(-920, -440, 0);
-        }
+        var lb = Instantiate(lightbar, transform);
+        lb.GetComponent<RectTransform>().anchoredPosition = new Vector3(42, -450, 0);
+    }
 
         // Update is called once per frame
         void Update()
