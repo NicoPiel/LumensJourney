@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour
 {
+    public int lightLoss;
     public float speed;
     private Rigidbody2D _playerRigidbody2D;
     private Vector3 _change;
@@ -19,6 +20,7 @@ public class PlayerScript : MonoBehaviour
     private Animator _animator;
     private Player _player = new Player("Pacolos");
     public HealthbarScript healthBarScript;
+    public LightBarScript lightBar;
     public BoxCollider2D hitCollider;
     private static readonly int StateExit = Animator.StringToHash("StateExit");
     
@@ -37,6 +39,7 @@ public class PlayerScript : MonoBehaviour
         
         SetUpEvents();
         healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
+        lightBar = GameObject.Find("Lightbar(Clone)").GetComponent<LightBarScript>();
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _audioClips = new Dictionary<String, AudioClip>();
@@ -49,7 +52,7 @@ public class PlayerScript : MonoBehaviour
 
         AddAudioClips();
         
-        GameManager.Generator.onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(2)); });
+        GameManager.Generator.onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(lightLoss)); });
 
     }
     
@@ -165,6 +168,7 @@ public class PlayerScript : MonoBehaviour
     public void PlayerChangeLightLevel(int lightlevel)
     {
         _player.playerstats["CurrentLightLevel"] += lightlevel;
+        lightBar.ChangeProgress(_player.playerstats["CurrentLightLevel"], _player.playerstats["MaxLightLevel"]);
         onPlayerLightLevelChanged.Invoke();
         Debug.Log($"Light level changed to {GetPlayerLightLevel()*100}%.");
     }

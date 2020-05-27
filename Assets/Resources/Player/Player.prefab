@@ -227,6 +227,7 @@ MonoBehaviour:
   minIntensity: 0.8
   maxIntensity: 1
   smoothing: 5
+  enabled: 0
 --- !u!1 &8759012663102982383
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,9 +352,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48752469687184438633f6e73138948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightLoss: 2
   speed: 5
   healthBarScript: {fileID: 0}
+  lightBar: {fileID: 0}
   hitCollider: {fileID: 0}
+  onPlayerTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  onItemAddedToPlayerInventory:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerLightLevelChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!50 &8759012663102982376
 Rigidbody2D:
   serializedVersion: 4
