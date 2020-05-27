@@ -136,7 +136,7 @@ namespace Core
             pauseMenu.name = "PauseMenu";
             GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI/PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             playerUi.name = "PlayerUI";
-            GameObject player = Instantiate(UnityEngine.Resources.Load<GameObject>("Player/Player"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            GameObject player = Instantiate(UnityEngine.Resources.Load<GameObject>("Player/Player"), new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             return player;
         }
