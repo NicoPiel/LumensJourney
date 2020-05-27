@@ -22,7 +22,7 @@ namespace MainMenu
         public void PlayMenuSound()
         {
             var audioSource = GetComponent<AudioSource>();
-            audioSource.clip = UnityEngine.Resources.Load<AudioClip>("Audio/Clicks/click3");
+            audioSource.clip = UnityEngine.Resources.Load<AudioClip>("Clicks/click3");
             audioSource.Play();
         }
 

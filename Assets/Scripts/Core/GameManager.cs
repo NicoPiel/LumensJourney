@@ -39,7 +39,7 @@ namespace Core
             DontDestroyOnLoad(this);
             _instance = this;
 
-            _menuSound = UnityEngine.Resources.Load<AudioClip>("Audio/Clicks/click3");
+            _menuSound = UnityEngine.Resources.Load<AudioClip>("Clicks/click3");
 
             // Events
             onNewGameStarted = new UnityEvent();
@@ -77,7 +77,8 @@ namespace Core
             StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
             generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
 
-            player = InstantiatePlayer();
+            InstantiateGenerator();
+            InstantiatePlayer();
 
             _canvas = GameObject.Find("PauseMenu");
             _canvas.gameObject.SetActive(false);
@@ -138,16 +139,20 @@ namespace Core
 
             StartCoroutine(FadeLevelTextInAndOut());
         }
+        
+        private void InstantiateGenerator()
+        {
+            generator.name = "DungeonGenerator";
+        }
 
-        private GameObject InstantiatePlayer()
+        private void InstantiatePlayer()
         {
             GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             pauseMenu.name = "PauseMenu";
             GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             playerUi.name = "PlayerUI";
-            Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
+            player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
-            return player;
         }
 
         private void Pause()
@@ -204,17 +209,17 @@ namespace Core
             StartCoroutine(Methods.LoadYourSceneAsync("MainMenu"));
         }
 
-        public GameObject GetPlayer()
+        public static GameObject GetPlayer()
         {
             return _instance.player;
         }
 
-        public Generator GetGenerator()
+        public static Generator GetGenerator()
         {
             return _instance.generator;
         }
 
-        public static GameManager GetGameManager_Static()
+        public static GameManager GetGameManager()
         {
             return _instance;
         }

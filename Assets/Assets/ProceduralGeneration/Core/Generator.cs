@@ -467,7 +467,8 @@ namespace Assets.ProceduralGeneration.Core
 
         private void PlacePlayer()
         {
-            GameManager.GetGameManager_Static().GetPlayer().transform.position = new Vector3(_rooms[0].x + 2, _rooms[0].y + 2, 0);
+            Rect firstRoom = _rooms[0];
+            GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
         }
 
         private void PlaceTeleporter()
@@ -475,7 +476,7 @@ namespace Assets.ProceduralGeneration.Core
             Rect lastRoom = _rooms[_rooms.Count - 1];
             
             Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"), 
-                new Vector3(lastRoom.x + lastRoom.width/2, lastRoom.y + lastRoom.height/2, 0), 
+                new Vector3(lastRoom.x + Random.Range(0, (int) lastRoom.width), lastRoom.y + Random.Range(0, (int) lastRoom.height), 0), 
                 Quaternion.identity, 
                 _dungeon.transform);
         }

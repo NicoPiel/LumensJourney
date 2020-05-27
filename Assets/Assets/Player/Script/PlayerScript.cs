@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Healthbar.Scripts;
 using Assets.Items.Scripts;
-using Assets.LightBar.Scripts;
 using Core;
+using Resources.LightBar.Scripts;
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,7 +21,7 @@ namespace Assets.Player.Script
         private Vector3 _change;
         private AudioSource _audioSource;
         private Animator _animator;
-        private global::Assets.Player.Script.Player _player = new global::Assets.Player.Script.Player("Pacolos");
+        private Player _player = new Player("Pacolos");
         public HealthbarScript healthBarScript;
         public LightBarScript lightBar;
         public BoxCollider2D hitCollider;
@@ -55,7 +55,7 @@ namespace Assets.Player.Script
 
             AddAudioClips();
         
-            GameManager.GetGameManager_Static().GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(lightLoss)); });
+            GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(lightLoss)); });
 
         }
     

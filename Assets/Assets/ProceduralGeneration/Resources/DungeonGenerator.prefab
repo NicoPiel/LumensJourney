@@ -59,7 +59,7 @@ MonoBehaviour:
   onDungeonGenerated:
     m_PersistentCalls:
       m_Calls: []
-  RoomNumber: 10
+  RoomNumber: 11
   minWidth: 5
   maxWidth: 30
   minHeight: 5
