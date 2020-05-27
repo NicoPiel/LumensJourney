@@ -18,7 +18,6 @@ namespace Resources.ProceduralGeneration.Components.Teleporter
                 {
                     if (GameManager.Generator != null && scene.name == "Dungeon") GameManager.Generator.Generate();
                 };
-                
             }
         }
     }

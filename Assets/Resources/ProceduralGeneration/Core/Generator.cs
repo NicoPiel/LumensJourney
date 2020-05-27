@@ -4,6 +4,9 @@ using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
 
 namespace Resources.ProceduralGeneration.Core
@@ -95,6 +98,8 @@ namespace Resources.ProceduralGeneration.Core
 
             GenerateRooms(RoomNumber);
 
+            PlacePlayer();
+            
             onDungeonGenerated?.Invoke();
             return true;
         }
@@ -443,6 +448,23 @@ namespace Resources.ProceduralGeneration.Core
         private GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
+        }
+
+        private void PlacePlayer()
+        {
+            GameManager.Player.transform.position = new Vector3(_rooms[0].x + 2, _rooms[0].y + 2, 0);
+            
+            
+        }
+
+        private void PlaceTeleporter()
+        {
+            Rect lastRoom = _rooms[_rooms.Count - 1];
+            
+            Instantiate(UnityEngine.Resources.Load("ProceduralGeneration/Components/Teleporter/Teleporter"), 
+                new Vector3(lastRoom.x + lastRoom.width/2, lastRoom.y + lastRoom.height/2, 0), 
+                Quaternion.identity, 
+                _dungeon.transform);
         }
 
         private GameObject GetRandomTile(IReadOnlyList<GameObject> tileCollection)

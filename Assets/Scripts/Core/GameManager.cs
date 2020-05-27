@@ -1,6 +1,5 @@
 ﻿using Resources.ProceduralGeneration.Core;
 using Unity.Mathematics;
-using UnityEditor.Experimental.RestService;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -16,6 +15,7 @@ namespace Core
         // Events
         public UnityEvent onNewGameStarted;
         public UnityEvent onNewLevel;
+
 
         private static GameManager _instance;
         public static Generator Generator { get; set; }
@@ -76,14 +76,12 @@ namespace Core
                 {
                     Generator = LoadDungeonGenerator().GetComponent<Generator>();
                     Player = InstantiatePlayer();
-                    
+
                     _canvas = GameObject.Find("PauseMenu");
                     _canvas.gameObject.SetActive(false);
-                
+
                     Generator.onDungeonGenerated.AddListener(() =>
                     {
-                        PlacePlayer();
-                        
                         _camera = Camera.main;
                         //_canvas = GameObject.Find("PauseMenu");
                         //_canvas.gameObject.SetActive(false);
@@ -111,17 +109,24 @@ namespace Core
 
         private void OnPlayerLightLevelChanged()
         {
-            if (_ingame)
+            if (_ingame && Camera.main != null && Player != null)
             {
-                var playerLight = Player.transform.Find("PlayerLight").gameObject.GetComponent<Light2D>();
                 var playerScript = Player.GetComponent<PlayerScript>();
-
+                
+                var playerLight = Player.transform.Find("PlayerLight").GetComponent<Light2D>();
+                playerLight.intensity = 1;
                 playerLight.pointLightOuterRadius = 6 * playerScript.GetPlayerLightLevel() + 2;
 
-                ChromaticAberration chrom;
-                _camera.GetComponent<Volume>().profile.TryGet(out chrom);
+                var volume = _camera.GetComponent<Volume>();
 
-                chrom.intensity.value *= playerScript.GetPlayerLightLevel();
+                ChromaticAberration chromaticAberration;
+                LensDistortion lensDistortion;
+
+                volume.profile.TryGet(out chromaticAberration);
+                volume.profile.TryGet(out lensDistortion);
+
+                chromaticAberration.intensity.value *= playerScript.GetPlayerLightLevel();
+                lensDistortion.intensity.value = 0.1f;
             }
         }
 
@@ -134,11 +139,6 @@ namespace Core
             GameObject player = Instantiate(UnityEngine.Resources.Load<GameObject>("Player/Player"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             return player;
-        }
-        
-        private void PlacePlayer()
-        {
-            Player.transform.position = new Vector3(2, 2, 0);
         }
 
         private void Pause()
