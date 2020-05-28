@@ -25,9 +25,10 @@ namespace Core
         private static GameManager _instance;
         [SerializeField] private Generator generator;
         [SerializeField] private GameObject player;
-
+        [SerializeField] private SaveSystem saveSystem;
         private GameObject _canvas;
         private Camera _camera;
+        
 
         private AudioClip _menuSound;
 
@@ -217,6 +218,10 @@ namespace Core
         public static Generator GetGenerator()
         {
             return _instance.generator;
+        }
+        public static SaveSystem GetSaveSystem()
+        {
+            return _instance.saveSystem;
         }
 
         public static GameManager GetGameManager()

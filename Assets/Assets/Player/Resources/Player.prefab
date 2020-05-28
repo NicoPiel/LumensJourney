@@ -356,6 +356,7 @@ MonoBehaviour:
   speed: 5
   healthBarScript: {fileID: 0}
   lightBar: {fileID: 0}
+  lightShardScript: {fileID: 0}
   hitCollider: {fileID: 0}
   onPlayerTakeDamage:
     m_PersistentCalls:
@@ -364,6 +365,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onPlayerLightLevelChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerLightShardsChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!50 &8759012663102982376
