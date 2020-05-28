@@ -1,69 +1,81 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Assets.Player.Script;
 using Core;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class SaveSystem : MonoBehaviour
+namespace Assets.SaveSystem
 {
-    private string _saveFilePath;
-    #region Stuff to save
-
-    private PlayerScript _playerScript;
-    
-    #endregion
-    public void Awake()
+    public class SaveSystem : MonoBehaviour
     {
-        _saveFilePath = Application.persistentDataPath + "/save.json";
-        _playerScript = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
-        GameManager.GetGenerator().onDungeonGenerated.AddListener(OnDungeonGenerated);
-    }
+        private string _saveFilePath;
 
-    public void LoadSave()
-    {
-        if (File.Exists(_saveFilePath))
+        #region Stuff to save
+
+        private PlayerScript _playerScript;
+
+        #endregion
+
+        public void Awake()
         {
-            Save saveToLoad = JsonUtility.FromJson<Save>(_saveFilePath);
-            LoadSaveGameObject(saveToLoad);
+            _saveFilePath = Application.persistentDataPath + "/save.json";
         }
-    }
 
-    public void CreateSave()
-    {
-        Save save = CreateSaveGameObject();
-        string json = JsonUtility.ToJson(save);
-        System.IO.File.WriteAllText(_saveFilePath, json);
+        private void Start()
+        {
+            GameManager.GetGenerator().onDungeonGenerated.AddListener(OnDungeonGenerated);
+            GameManager.GetGameManager().onGameLoaded.AddListener(LoadSave);
+            GameManager.GetGameManager().onNewGameStarted.AddListener(CreateSave);
+        }
+
+        public void LoadSave()
+        {
+            _playerScript = GameManager.GetPlayer().GetComponent<PlayerScript>();
+
+            if (File.Exists(_saveFilePath))
+            {
+                var saveToLoad = JsonUtility.FromJson<Save>(_saveFilePath);
+                LoadSaveGameObject(saveToLoad);
+            }
+        }
+
+        public void CreateSave()
+        {
+            Save save = CreateSaveGameObject();
+            var json = JsonUtility.ToJson(save);
+            System.IO.File.WriteAllText(_saveFilePath, json);
+            
+            Debug.Log(json);
+            
+            Debug.Log($"Saved to {_saveFilePath}");
+        }
+
+        private Save CreateSaveGameObject()
+        {
+            _playerScript = GameManager.GetPlayer().GetComponent<PlayerScript>();
+
+            var save = new Save
+            {
+                LightShards = _playerScript.GetLightShardAmount(),
+                SmithProgress = 0 //TODO
+            };
+
+            return save;
+        }
+
+        private void LoadSaveGameObject(Save load)
+        {
+            _playerScript.PlayerChangeLightShards(load.LightShards);
+        }
         
-        
-        
-    }
+        private void OnApplicationQuit()
+        {
+            CreateSave();
+        }
 
-    public Save CreateSaveGameObject()
-    {
-        Save save = new Save();
-
-        save._lightShards = _playerScript.GetLightShardAmount();
-        save._smithProgress = 0; //TODO
-        
-        return save;
-    }
-
-    public void LoadSaveGameObject(Save load)
-    {
-        _playerScript.PlayerChangeLightShards(load._lightShards);
-    }
-
-    
-    
-    public void OnApplicationQuit()
-    {
-        CreateSave();
-    }
-
-    public void OnDungeonGenerated()
-    {
-        CreateSave();
+        private void OnDungeonGenerated()
+        {
+            CreateSave();
+        }
     }
 }

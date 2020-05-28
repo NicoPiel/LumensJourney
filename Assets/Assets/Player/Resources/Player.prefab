@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 207446325670364412}
   - component: {fileID: 6477083747456279462}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HitCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1583132736632995586}
   - component: {fileID: 8469469857768525125}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 6204403411881304901}
   - component: {fileID: 726157911917083250}
   - component: {fileID: 1994238304237913774}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ MonoBehaviour:
   minIntensity: 0.8
   maxIntensity: 1
   smoothing: 5
-  enabled: 0
+  effectEnabled: 0
 --- !u!1 &8759012663102982383
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 8759012663102982376}
   - component: {fileID: 8759012663102982379}
   - component: {fileID: 703940065}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -511,6 +511,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8759012663102982378}
     m_Modifications:
+    - target: {fileID: 3502084309814808410, guid: 0811453d2595e394c88f84b5c12f1011,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 5143543684868819601, guid: 0811453d2595e394c88f84b5c12f1011,
         type: 3}
       propertyPath: m_LookAt
@@ -580,6 +585,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CM vcam1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6552369732720257668, guid: 0811453d2595e394c88f84b5c12f1011,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0811453d2595e394c88f84b5c12f1011, type: 3}
@@ -660,6 +670,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 8432739011070566284, guid: 0147cd3c6c44c524d9d7ac03322484cd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0147cd3c6c44c524d9d7ac03322484cd, type: 3}
@@ -744,7 +759,7 @@ PrefabInstance:
     - target: {fileID: 8261058255892383977, guid: 2e57ab0ea758cb541b62bc312e120111,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e57ab0ea758cb541b62bc312e120111, type: 3}

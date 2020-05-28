@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Player.Script;
-using UnityEngine;
-
-[System.Serializable]
-public class Save
+﻿namespace Assets.SaveSystem
 {
-    public int _lightShards {get; set;}
-    public int _smithProgress {get; set;}
-    // Start is called before the first frame update
-    public Save()
+    [System.Serializable]
+    public class Save
     {
-        _lightShards = 0;
-        _smithProgress = 0;
+        public int LightShards {get; set;}
+        public int SmithProgress {get; set;}
+    
+        public Save()
+        {
+            LightShards = 0;
+            SmithProgress = 0;
+        }
     }
 }

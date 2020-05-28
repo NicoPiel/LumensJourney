@@ -54,10 +54,8 @@ namespace Assets.ProceduralGeneration.Core
         [Space]
 
         // Wall tiles
-        [SerializeField]
-        private GameObject wallTile;
-        [SerializeField]
-        private GameObject wallTileTopDown;
+        [SerializeField] private GameObject wallTile;
+        [SerializeField] private GameObject wallTileTopDown;
 
         [Space] 
         [Header("Doors")]

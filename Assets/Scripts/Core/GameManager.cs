@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Assets.Player.Script;
 using Assets.ProceduralGeneration.Core;
+using Assets.SaveSystem;
 using TMPro;
 using Unity.Burst;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace Core
     {
         // Events
         public UnityEvent onNewGameStarted;
+        public UnityEvent onGameLoaded;
+        public UnityEvent onPlayerSpawned;
         public UnityEvent onNewLevel;
 
         public int CurrentLevel { get; set; }
@@ -75,6 +78,26 @@ namespace Core
 
         private void NewGame()
         {
+            Setup();
+
+            onNewGameStarted?.Invoke();
+        }
+
+        public static void LoadGame_Static()
+        {
+            _instance.LoadGame();
+        }
+
+        private void LoadGame()
+        {
+            Setup();
+
+            saveSystem.LoadSave();
+            onGameLoaded.Invoke();
+        }
+
+        private void Setup()
+        {
             StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
             generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
 
@@ -83,7 +106,7 @@ namespace Core
 
             _canvas = GameObject.Find("PauseMenu");
             _canvas.gameObject.SetActive(false);
-
+            
             SceneManager.sceneLoaded += (scene, mode) =>
             {
                 if (scene.name == "Dungeon")
@@ -91,10 +114,8 @@ namespace Core
                     player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
                 }
             };
-
+            
             _ingame = true;
-
-            onNewGameStarted?.Invoke();
         }
 
         private void OnPlayerLightLevelChanged()
@@ -120,7 +141,7 @@ namespace Core
             chromaticAberration.intensity.value = 0.5f * playerScript.GetPlayerLightLevel();
             lensDistortion.intensity.value = 0.1f;
 
-            player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = true;
+            player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().effectEnabled = true;
         }
 
         private void OnDungeonGenerated()
@@ -154,6 +175,7 @@ namespace Core
             playerUi.name = "PlayerUI";
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
+            onPlayerSpawned.Invoke();
         }
 
         private void Pause()

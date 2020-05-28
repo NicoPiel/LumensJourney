@@ -328,3 +328,4 @@ MonoBehaviour:
   minIntensity: 1
   maxIntensity: 3
   smoothing: 30
+  effectEnabled: 1

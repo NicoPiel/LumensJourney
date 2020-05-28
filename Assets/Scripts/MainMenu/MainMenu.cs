@@ -19,6 +19,11 @@ namespace MainMenu
             GameManager.NewGame_Static();
         }
 
+        public void LoadGame()
+        {
+            GameManager.LoadGame_Static();
+        }
+
         public void PlayMenuSound()
         {
             var audioSource = GetComponent<AudioSource>();

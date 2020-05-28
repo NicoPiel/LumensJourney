@@ -32,7 +32,7 @@ namespace Scenes.Hub
                 chromaticAberration.intensity.value = 0;
                 lensDistortion.intensity.value = 0;
 
-                player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().enabled = false;
+                player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().effectEnabled = false;
             }
         }
     }
