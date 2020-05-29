@@ -70,8 +70,7 @@ namespace Assets.ProceduralGeneration.Core
         private List<Rect> _rooms;
 
         [SerializeField] private GameObject dungeonObject;
-        private List<NavMeshSurface> _tilesSurfaces;
-        
+
         public bool Generated { get; set; }
 
         private void Awake()
@@ -82,11 +81,6 @@ namespace Assets.ProceduralGeneration.Core
             
             onDungeonGenerated.AddListener(OnDungeonGenerated);
             onDungeonChanged.AddListener(OnDungeonChanged);
-        }
-
-        private void Start()
-        {
-            _tilesSurfaces = new List<NavMeshSurface>();
         }
 
         public bool Generate(int numberOfRooms)
