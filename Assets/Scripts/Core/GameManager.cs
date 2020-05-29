@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets.Player.Script;
+using Assets.PlayerUI.Scripts;
 using Assets.ProceduralGeneration.Core;
 using Assets.SaveSystem;
 using TMPro;
@@ -152,7 +153,7 @@ namespace Core
 
             CurrentLevel += 1;
 
-            var text = transform.Find("PlayerUI")?.Find("LevelTooltip")?.GetComponent<TMP_Text>();
+            var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
             if (text != null)
             {
                 text.text = $"Level {CurrentLevel}";
@@ -171,8 +172,8 @@ namespace Core
         {
             GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             pauseMenu.name = "PauseMenu";
-            GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-            playerUi.name = "PlayerUI";
+            //GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            //playerUi.name = "PlayerUI";
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             onPlayerSpawned.Invoke();
@@ -217,7 +218,7 @@ namespace Core
 
         private IEnumerator FadeLevelTextInAndOut()
         {
-            var text = transform.Find("PlayerUI")?.Find("LevelTooltip")?.GetComponent<TMP_Text>();
+            var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
 
             StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
             yield return new WaitForSeconds(3f);

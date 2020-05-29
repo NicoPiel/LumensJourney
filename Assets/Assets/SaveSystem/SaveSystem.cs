@@ -34,7 +34,7 @@ namespace Assets.SaveSystem
 
             if (File.Exists(_saveFilePath))
             {
-                var saveToLoad = JsonUtility.FromJson<Save>(_saveFilePath);
+                var saveToLoad = JsonUtility.FromJson<Save>(System.IO.File.ReadAllText(_saveFilePath));
                 LoadSaveGameObject(saveToLoad);
             }
         }
@@ -56,8 +56,8 @@ namespace Assets.SaveSystem
 
             var save = new Save
             {
-                LightShards = _playerScript.GetLightShardAmount(),
-                SmithProgress = 0 //TODO
+                lightShard = _playerScript.GetLightShardAmount(),
+                smithProgress = 0 //TODO
             };
 
             return save;
@@ -65,7 +65,7 @@ namespace Assets.SaveSystem
 
         private void LoadSaveGameObject(Save load)
         {
-            _playerScript.PlayerChangeLightShards(load.LightShards);
+            _playerScript.PlayerSetLightShards(load.lightShard);
         }
         
         private void OnApplicationQuit()

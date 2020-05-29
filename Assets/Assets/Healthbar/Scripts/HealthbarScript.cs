@@ -9,7 +9,6 @@ namespace Assets.Healthbar.Scripts
         // Start is called before the first frame update
         public void ChangeHealthBar(int currentHealth, int maxHealth)
         {
-            Destroy(GameObject.Find("Healthbar"));
             foreach (Transform child in transform) {
                 Destroy(child.gameObject);
             }
@@ -25,7 +24,7 @@ namespace Assets.Healthbar.Scripts
                 var newHeart = Instantiate(obj);
                 newHeart.GetComponent<RectTransform>().SetParent(this.transform);
                 newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
-                x += 90;
+                x += 100;
             }
             obj = UnityEngine.Resources.Load<GameObject>("EmptyHeart");
             for (int i = maxHealth - currentHealth; i != 0; i--)
@@ -33,7 +32,7 @@ namespace Assets.Healthbar.Scripts
                 var newHeart = Instantiate(obj);
                 newHeart.GetComponent<RectTransform>().SetParent(this.transform);
                 newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x,y,0);
-                x += 90;
+                x += 100;
             }
         
         }

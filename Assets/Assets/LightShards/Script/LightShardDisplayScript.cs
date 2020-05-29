@@ -8,7 +8,7 @@ public class LightShardDisplayScript : MonoBehaviour
 {
     private TMP_Text _textbox;
 
-    public void Start()
+    public void Awake()
     {
         _textbox = gameObject.GetComponentInChildren<TMP_Text>();
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Healthbar.Scripts;
 using Assets.Items.Scripts;
+using Assets.PlayerUI.Scripts;
 using Core;
 using Resources.LightBar.Scripts;
 using Unity.Burst;
@@ -39,13 +40,16 @@ namespace Assets.Player.Script
 
 
         // Start is called before the first frame update
+        private void Awake()
+        {
+            SetUpEvents();
+        }
+
         private void Start()
         {
-        
-            SetUpEvents();
-            healthBarScript = GameObject.Find("Healthbar(Clone)").GetComponent<HealthbarScript>();
-            lightBar = GameObject.Find("Lightbar(Clone)").GetComponent<LightBarScript>();
-            lightShardScript = GameObject.Find("LightShardCounter(Clone)").GetComponent<LightShardDisplayScript>();
+            healthBarScript = PlayerUiScript.GetPlayerUiScript().GetHealthBarScript();
+            lightBar = PlayerUiScript.GetPlayerUiScript().GetLightBarScript();
+            lightShardScript = PlayerUiScript.GetPlayerUiScript().GetLightShardDisplayScript();
             _playerRigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _audioClips = new Dictionary<String, AudioClip>();
@@ -60,6 +64,7 @@ namespace Assets.Player.Script
         
             GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond(lightLoss)); });
         }
+        
     
 
         private void SetUpEvents()
@@ -208,8 +213,14 @@ namespace Assets.Player.Script
         public void PlayerChangeLightShards(int lightShards)
         {
             _player.Inventory.Lightshard += lightShards;
-            lightShardScript.UpdateLightShardDisplay(_player.Inventory.Lightshard);
+            PlayerUiScript.GetPlayerUiScript().GetLightShardDisplayScript().UpdateLightShardDisplay(_player.Inventory.Lightshard);
             onPlayerLightLevelChanged.Invoke();
+        }
+
+        public void PlayerSetLightShards(int lightShards)
+        {
+            _player.Inventory.Lightshard = lightShards;
+            PlayerUiScript.GetPlayerUiScript().GetLightShardDisplayScript().UpdateLightShardDisplay(_player.Inventory.Lightshard);
         }
 
         private IEnumerator LoseLightPerSecond(int lightLoss)

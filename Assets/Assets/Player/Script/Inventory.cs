@@ -14,7 +14,8 @@ namespace Assets.Player.Script
         public Inventory()
         {
             Items = new List<GameItem>();
-  
+            Lightshard = 0;
+
         }
         public void AddItem(GameItem item)
         {
