@@ -1,38 +1,49 @@
-﻿using System;
-using Core;
+﻿using Core;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Assets.Enemies.Scripts
 {
     public class Enemy : MonoBehaviour
     {
-        
+        [Header("AI settings")]
         public float detectionRadius;
+        public float speed;
+        [Space] 
+        [Header("Combat settings")] 
+        public int damage;
 
-        private NavMeshAgent _navMeshAgent;
         private DetectionRadius _detectionRadius;
-        
+        private InnerRadius _innerRadius;
+        private Rigidbody2D _rigidbody;
+
         private void Start()
         {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
-
-            _navMeshAgent.updatePosition = false;
-            _navMeshAgent.updateUpAxis = false;
-
-            _detectionRadius = transform.Find("DetectionRadius").gameObject.GetComponent<DetectionRadius>();
+            _detectionRadius = GetComponentInChildren<DetectionRadius>();
+            _innerRadius = GetComponentInChildren<InnerRadius>();
+            
             _detectionRadius.onDetected.AddListener(MoveToPlayer);
+            _detectionRadius.onLostSight.AddListener(StopMoving);
+            
             _detectionRadius.GetComponent<CircleCollider2D>().radius = detectionRadius;
+            _rigidbody = GetComponent<Rigidbody2D>();
         }
 
         private void MoveToPlayer()
         {
-            if (_navMeshAgent.isOnNavMesh)
+            if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())
             {
-                _navMeshAgent.SetDestination(GameManager.GetPlayer().transform.position);
-                Debug.Log("Moving..");
+                _rigidbody.velocity = (GameManager.GetPlayer().transform.position - transform.position).normalized * speed * Time.deltaTime;
+                Debug.Log("Moving to player..");
             }
-            else Debug.Log("No nav mesh..");
+            else
+            {
+                _rigidbody.velocity = new Vector2(0,0);
+            }
+        }
+
+        private void StopMoving()
+        {
+            _rigidbody.velocity = new Vector2(0,0);
         }
     }
 }

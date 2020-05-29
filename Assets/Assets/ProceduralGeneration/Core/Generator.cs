@@ -416,20 +416,14 @@ namespace Assets.ProceduralGeneration.Core
             }
         }
 
-        private void BakeNavMesh()
-        {
-            dungeonObject.GetComponent<Dungeon>().BakeNavMesh();
-        }
-
         private void OnDungeonGenerated()
         {
-            BakeNavMesh();
             Generated = true;
         }
 
         private void OnDungeonChanged()
         {
-            BakeNavMesh();
+            
         }
 
         private static GameObject CreateDungeonObject()
