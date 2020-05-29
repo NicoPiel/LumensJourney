@@ -27,9 +27,12 @@ namespace Assets.Enemies.Scripts
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            onDetected.Invoke();
+            if (other.CompareTag("Player")) onDetected.Invoke();
         }
-        
-        
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (other.CompareTag("Player")) onDetected.Invoke();
+        }
     }
 }

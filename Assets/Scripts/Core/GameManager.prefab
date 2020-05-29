@@ -49,6 +49,12 @@ MonoBehaviour:
   onNewGameStarted:
     m_PersistentCalls:
       m_Calls: []
+  onGameLoaded:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerSpawned:
+    m_PersistentCalls:
+      m_Calls: []
   onNewLevel:
     m_PersistentCalls:
       m_Calls: []
@@ -203,6 +209,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 845780113571387581}
     m_Modifications:
+    - target: {fileID: 8925199393286143425, guid: afda22f19a060a444b273483af8ae529,
+        type: 3}
+      propertyPath: dungeonObject
+      value: 
+      objectReference: {fileID: 4268848368043036379, guid: 1d304b881526cf84289b32deac033774,
+        type: 3}
     - target: {fileID: 8925199393286143426, guid: afda22f19a060a444b273483af8ae529,
         type: 3}
       propertyPath: m_Name

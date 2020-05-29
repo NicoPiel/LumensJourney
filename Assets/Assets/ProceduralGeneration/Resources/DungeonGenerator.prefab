@@ -59,7 +59,10 @@ MonoBehaviour:
   onDungeonGenerated:
     m_PersistentCalls:
       m_Calls: []
-  RoomNumber: 14
+  onDungeonChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  RoomNumber: 11
   minWidth: 5
   maxWidth: 30
   minHeight: 5
@@ -80,3 +83,4 @@ MonoBehaviour:
     type: 3}
   wallTileTopDown: {fileID: 1083720996130883523, guid: ad16b169c3a812c4081b3b9351ba69b4,
     type: 3}
+  dungeonObject: {fileID: 0}

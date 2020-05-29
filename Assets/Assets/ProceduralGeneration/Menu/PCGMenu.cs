@@ -22,7 +22,7 @@ namespace Assets.ProceduralGeneration.Menu
                 var generator = GameObject.FindWithTag("Generator").GetComponent<Generator>();
                 
                 stopwatch.Restart();
-                if (generator.Generate())
+                if (generator.Generate(generator.RoomNumber))
                 {
                     stopwatch.Stop();
                     Debug.Log($"Generated dungeon in {stopwatch.ElapsedMilliseconds}ms.");

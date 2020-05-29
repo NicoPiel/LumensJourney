@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
@@ -14,6 +16,7 @@ namespace Assets.ProceduralGeneration.Core
         // Events
 
         public UnityEvent onDungeonGenerated;
+        public UnityEvent onDungeonChanged;
     
         [Header("Room Settings")] 
         [Range(1, 30)] public int RoomNumber;
@@ -66,7 +69,8 @@ namespace Assets.ProceduralGeneration.Core
         [Space] 
         private List<Rect> _rooms;
 
-        private GameObject _dungeon;
+        [SerializeField] private GameObject dungeonObject;
+        private List<NavMeshSurface> _tilesSurfaces;
         
         public bool Generated { get; set; }
 
@@ -74,36 +78,21 @@ namespace Assets.ProceduralGeneration.Core
         {
             DontDestroyOnLoad(this);
             onDungeonGenerated = new UnityEvent();
+            onDungeonChanged = new UnityEvent();
             
             onDungeonGenerated.AddListener(OnDungeonGenerated);
+            onDungeonChanged.AddListener(OnDungeonChanged);
         }
 
-        public bool Generate()
+        private void Start()
         {
-            if ((minWidth > maxWidth)
-                || (minHeight > maxHeight)
-                || (minSpacingX > maxSpacingX)
-                || (minSpacingY > maxSpacingY))
-            {
-                Debug.LogError(
-                    "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
-                return false;
-            }
-
-            _dungeon = CreateDungeonObject();
-
-            GenerateRooms(RoomNumber);
-
-            PlacePlayer();
-            
-            PlaceTeleporter();
-            
-            onDungeonGenerated?.Invoke();
-            return true;
+            _tilesSurfaces = new List<NavMeshSurface>();
         }
-        
+
         public bool Generate(int numberOfRooms)
         {
+            Generated = false;
+            
             if ((minWidth > maxWidth)
                 || (minHeight > maxHeight)
                 || (minSpacingX > maxSpacingX)
@@ -114,15 +103,14 @@ namespace Assets.ProceduralGeneration.Core
                 return false;
             }
 
-            _dungeon = CreateDungeonObject();
+            dungeonObject = CreateDungeonObject();
 
             RoomNumber = numberOfRooms;
             GenerateRooms(RoomNumber);
 
             PlacePlayer();
-            
             PlaceTeleporter();
-            
+
             onDungeonGenerated?.Invoke();
             return true;
         }
@@ -131,7 +119,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             Debug.Log("Generating rooms..");
 
-            GameObject dungeon = _dungeon;
+            GameObject dungeon = this.dungeonObject;
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
@@ -428,9 +416,20 @@ namespace Assets.ProceduralGeneration.Core
             }
         }
 
+        private void BakeNavMesh()
+        {
+            dungeonObject.GetComponent<Dungeon>().BakeNavMesh();
+        }
+
         private void OnDungeonGenerated()
         {
+            BakeNavMesh();
             Generated = true;
+        }
+
+        private void OnDungeonChanged()
+        {
+            BakeNavMesh();
         }
 
         private static GameObject CreateDungeonObject()
@@ -440,9 +439,9 @@ namespace Assets.ProceduralGeneration.Core
 
             if (dungeon != null) Destroy(dungeon);
 
-            dungeon = new GameObject {name = "Dungeon"};
+            dungeon = UnityEngine.Resources.Load<GameObject>("DungeonParent");
 
-            return Instantiate(dungeon, new Vector3(0, 0, 0), Quaternion.identity);
+            return Instantiate(dungeon, new Vector3(0, 0, 0), Quaternion.Euler(0,0,0));
         }
 
         private static GameObject CreateRoomSpawner()
@@ -460,6 +459,7 @@ namespace Assets.ProceduralGeneration.Core
 
         private GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
+            //_tilesSurfaces.Add(tile.GetComponent<NavMeshSurface>());
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
         }
 
@@ -476,19 +476,18 @@ namespace Assets.ProceduralGeneration.Core
             Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"), 
                 new Vector3(lastRoom.x + Random.Range(0, (int) lastRoom.width), lastRoom.y + Random.Range(0, (int) lastRoom.height), 0), 
                 Quaternion.identity, 
-                _dungeon.transform);
+                dungeonObject.transform);
         }
 
         private GameObject GetRandomTile(IReadOnlyList<GameObject> tileCollection)
         {
             var random = Random.Range((stdLikelihood + 1) - 100, stdLikelihood);
-
             return random > 0 ? standardFloorTile : tileCollection[Random.Range(0, tileCollection.Count)];
         }
 
         public GameObject GetParent()
         {
-            return _dungeon;
+            return dungeonObject;
         }
 
         public List<Rect> GetRooms()

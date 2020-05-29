@@ -21,6 +21,11 @@ namespace Assets.ProceduralGeneration.Core
                 Rect firstRoom = _generator.GetRooms()[0];
 
                 var pickUp = (GameObject) Instantiate(UnityEngine.Resources.Load("PickUp"),
+                    new Vector3(firstRoom.x + firstRoom.width / 2 + 1, firstRoom.y + firstRoom.height / 2 + 1),
+                    Quaternion.identity,
+                    _generator.GetParent().transform);
+                
+                var slime = (GameObject) Instantiate(UnityEngine.Resources.Load("Slime"),
                     new Vector3(firstRoom.x + firstRoom.width / 2, firstRoom.y + firstRoom.height / 2),
                     Quaternion.identity,
                     _generator.GetParent().transform);

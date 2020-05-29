@@ -45,14 +45,25 @@ namespace Utility
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Tooltip.ShowTooltip_Static("Press E");
-            _entered = true;
+            if (other.CompareTag("Player"))
+            {
+                Tooltip.ShowTooltip_Static("Press E");
+                _entered = true;
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            Tooltip.HideTooltip_Static();
-            _entered = false;
+            if (other.CompareTag("Player"))
+            {
+                Tooltip.HideTooltip_Static();
+                _entered = false;
+            }
+        }
+
+        private void OnDisable()
+        {
+            GameManager.GetGenerator().onDungeonChanged.Invoke();
         }
     }
 }
