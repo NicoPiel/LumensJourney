@@ -48,3 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48aaa1d3d6a317b46879fe8a41eb76b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heart: {fileID: 4955654443234629947, guid: ed9b891ce9c6c844dbcfdb57ab07720d, type: 3}
+  newHeart: {fileID: 4955654443234629947, guid: fca1e99221be42945bd0c3da689faf97,
+    type: 3}

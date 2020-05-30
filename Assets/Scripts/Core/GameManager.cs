@@ -32,6 +32,7 @@ namespace Core
         [SerializeField] private SaveSystem saveSystem;
         private GameObject _canvas;
         private Camera _camera;
+        private PlayerScript _playerScript;
         
 
         private AudioClip _menuSound;
@@ -175,6 +176,7 @@ namespace Core
             //GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             //playerUi.name = "PlayerUI";
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
+            _playerScript = player.GetComponent<PlayerScript>();
             player.name = "Player";
             onPlayerSpawned.Invoke();
         }
@@ -245,6 +247,11 @@ namespace Core
         public static SaveSystem GetSaveSystem()
         {
             return _instance.saveSystem;
+        }
+
+        public static PlayerScript GetPlayerScript()
+        {
+            return _instance._playerScript;
         }
 
         public static GameManager GetGameManager()

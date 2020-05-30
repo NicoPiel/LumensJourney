@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using TMPro;
 using Unity.Burst;
 using UnityEngine;
@@ -12,9 +13,7 @@ namespace Resources.LightBar.Scripts
         // Start is called before the first frame update
         private Slider _slider;
         private TMP_Text _tmpText;
-
-        private int _targetValue;
-        private int speed;
+        
         
         void Start()
         {
@@ -22,14 +21,17 @@ namespace Resources.LightBar.Scripts
             _tmpText.text = "100%";
             _slider = gameObject.GetComponent<Slider>();
             _slider.value = 1000;
-            speed = 10;
+            
+            GameManager.GetPlayerScript().onPlayerLightLevelChanged.AddListener(ChangeProgress);
         }
         
-        public void ChangeProgress(int lightChange, int maxlvl)
+        private void ChangeProgress()
         {
-            _slider.maxValue = maxlvl;
-            _slider.value = lightChange;
-            float temp = ((float) lightChange / maxlvl); // 980/1000
+            var playerMaxLightValue = GameManager.GetPlayerScript().GetPlayerMaxLightValue();
+            var playerCurrentLightValue  = GameManager.GetPlayerScript().GetPlayerCurrentLightValue();
+            _slider.maxValue = playerMaxLightValue;
+            _slider.value = playerCurrentLightValue;
+            var temp = ((float) playerCurrentLightValue / playerMaxLightValue); // 980/1000
             
             
             _tmpText.text = Math.Ceiling(temp * 100d) + "%";
