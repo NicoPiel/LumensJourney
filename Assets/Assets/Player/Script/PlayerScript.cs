@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Healthbar.Scripts;
 using Assets.Items.Scripts;
-using Assets.PlayerUI.Scripts;
 using Core;
-using Resources.LightBar.Scripts;
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.Events;
@@ -84,11 +81,11 @@ namespace Assets.Player.Script
                 PlayerChangeLightShards(-50);
             }
 
-            if (Input.GetKeyDown(KeyCode.I))
+            if (Input.GetKeyDown(KeyCode.V))
             {
                 PlayerTakeDamage(1);
             }
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 PlayerTakeHeal(1);
             }
