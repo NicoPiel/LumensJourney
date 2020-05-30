@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Core;
 using UnityEngine;
 
@@ -34,22 +33,36 @@ namespace Assets.Enemies.Scripts
         {
             Vector3 enemyPosition = transform.position;
             Vector3 playerPosition = GameManager.GetPlayer().transform.position;
-            Vector2 playerDirection = (playerPosition - enemyPosition);
+            Vector2 vectorToPlayer = playerPosition - enemyPosition;
+            Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
+            var distanceToPlayer = vectorToPlayer.magnitude;
 
-            var lineOfSight = new Ray(enemyPosition, playerPosition);
-            var raycastHitInfo = new RaycastHit2D[1];
-
-            _collider.Raycast(playerDirection.normalized, raycastHitInfo, playerDirection.magnitude);
+            var filter = new ContactFilter2D()
+            {
+                layerMask = LayerMask.GetMask("Player"),
+                useLayerMask = true,
+                useTriggers = false,
+                
+            };
+            
+            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer, LayerMask.GetMask("Player"));
+            Debug.DrawRay(enemyPosition, vectorToPlayer);
 
             if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())
             {
                 Debug.Log("Detected player..");
                 
-                if (raycastHitInfo[0].collider.gameObject.CompareTag("Player"))
+                if (raycastHitInfo)
                 {
-                    _rigidbody.velocity = playerDirection.normalized * speed * Time.deltaTime;
-                    Debug.Log("Can see player..");
-                    Debug.Log("Moving to player..");
+                    Debug.Log("Can see something..");
+                    Debug.Log(raycastHitInfo.transform.gameObject.tag);
+                    
+                    if (raycastHitInfo.transform.gameObject.CompareTag("Player"))
+                    {
+                        Debug.Log("Can see Player..");
+                        _rigidbody.velocity = playerDirection * speed * Time.deltaTime;
+                        Debug.Log("Moving to player..");
+                    }
                 }
             }
             else
