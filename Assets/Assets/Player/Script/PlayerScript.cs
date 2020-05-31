@@ -33,6 +33,7 @@ namespace Assets.Player.Script
         public UnityEvent onPlayerLightLevelChanged;
         public UnityEvent onPlayerLightShardsChanged;
         public UnityEvent onPlayerLifeChanged;
+        public UnityEvent onPlayerDied;
 
         #endregion
 
@@ -72,6 +73,7 @@ namespace Assets.Player.Script
             onPlayerLightShardsChanged = new UnityEvent();
             onPlayerTakeHeal = new UnityEvent();
             onPlayerLifeChanged = new UnityEvent();
+            onPlayerDied =  new UnityEvent();
         }
 
         // Update is called once per frame
@@ -191,6 +193,7 @@ namespace Assets.Player.Script
 
         private void KillPlayer()
         {
+            onPlayerDied.Invoke();
             Debug.Log("The player died.");
         }
 
