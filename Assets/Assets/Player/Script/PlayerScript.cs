@@ -24,7 +24,7 @@ namespace Assets.Player.Script
         private Player _player = new Player("Pacolos");
         public BoxCollider2D hitCollider;
         private static readonly int StateExit = Animator.StringToHash("StateExit");
-        private static readonly int IdleDown = Animator.StringToHash("IdleDown");
+
         #region UnityEvents
 
         public UnityEvent onPlayerTakeDamage;
@@ -50,16 +50,10 @@ namespace Assets.Player.Script
 
         private void Start()
         {
-            // TODO Get PlayerUIScript
-            
-            healthBarScript = PlayerUiScript.GetPlayerUiScript().GetHealthBarScript();
-            lightBar = PlayerUiScript.GetPlayerUiScript().GetLightBarScript();
-            lightShardScript = PlayerUiScript.GetPlayerUiScript().GetLightShardDisplayScript();
-            _playerCollider = GetComponent<CapsuleCollider2D>();
             _playerRigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _audioClips = new Dictionary<String, AudioClip>();
-            healthBarScript.ChangeHealthBar(5, 5);
+            _playerCollider = GetComponent<CapsuleCollider2D>();
             hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
             hitCollider.gameObject.SetActive(false);
             _animator.SetBool(StateExit, false);
@@ -145,7 +139,7 @@ namespace Assets.Player.Script
         private void SetStateExit()
         {
             if (!_animator.GetBool(StateExit)) return;
-            
+
             hitCollider.gameObject.SetActive(false);
             var layerIndex = _animator.GetLayerIndex("Player");
             _animator.SetBool(StateExit, false);
@@ -162,21 +156,43 @@ namespace Assets.Player.Script
             _audioSource.Play();
         }
 
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Enemy"))
-            {
-                
-            }
-        }
-
         public void AddToInventory(GameItem item)
         {
             _player.Inventory.AddItem(item);
         }
+        
+        public Collider2D GetCollider()
+        {
+            return _playerCollider;
+        }
+
+        public Rigidbody2D GetRigidbody()
+        {
+            return _playerRigidbody2D;
+        }
 
         #region PlayerDamage
+        
+        public void PlayerTakeDamage(int damage)
+        {
+            var remainingHealth = _player.playerstats["CurrentHealth"] -= damage;
+
+            if (remainingHealth >= 0)
+            {
+                _player.playerstats["CurrentHealth"] = remainingHealth;
+                PlayerChangeLightLevel(-damage*10);
+                onPlayerTakeDamage.Invoke();
+            }
+            else
+            {
+                KillPlayer();
+            }
+        }
+
+        private void KillPlayer()
+        {
+            Debug.Log("The player died.");
+        }
 
         public void PlayerTakeHeal(int heal)
         {
@@ -193,6 +209,12 @@ namespace Assets.Player.Script
         {
             return _player.playerstats["MaxHealth"];
         }
+        
+        public int GetPlayerDamage()
+        {
+            return playerDamage;
+        }
+        
         #endregion
 
         #region Sounds
@@ -236,43 +258,6 @@ namespace Assets.Player.Script
             _player.playerstats["CurrentLightLevel"] += lightlevel;
             if (_player.playerstats["CurrentLightLevel"] < 0) _player.playerstats["CurrentLightLevel"] = 0;
             onPlayerLightLevelChanged.Invoke();
-        }
-
-        public int GetPlayerDamage()
-        {
-            return playerDamage;
-        }
-
-        public void PlayerTakeDamage(int damage)
-        {
-            var remainingHealth = _player.playerstats["CurrentHealth"] -= damage;
-
-            if (remainingHealth >= 0)
-            {
-                _player.playerstats["CurrentHealth"] = remainingHealth;
-                healthBarScript.ChangeHealthBar(_player.playerstats["CurrentHealth"], _player.playerstats["MaxHealth"]);
-                PlayerChangeLightLevel(-damage*10);
-                onPlayerTakeDamage.Invoke();
-            }
-            else
-            {
-                KillPlayer();
-            }
-        }
-
-        private void KillPlayer()
-        {
-            Debug.Log("The player died.");
-        }
-
-        public Collider2D GetCollider()
-        {
-            return _playerCollider;
-        }
-
-        public Rigidbody2D GetRigidbody()
-        {
-            return _playerRigidbody2D;
         }
 
         //Getter

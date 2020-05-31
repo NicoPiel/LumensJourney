@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.ItemBar;
 using Assets.Items.Scripts;
 using Assets.UI.ItemBar.Scripts;
 using Unity.Burst;

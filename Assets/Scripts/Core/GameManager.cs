@@ -35,8 +35,7 @@ namespace Core
         [SerializeField] private SaveSystem saveSystem;
         private GameObject _canvas;
         private Camera _camera;
-        private PlayerScript _playerScript;
-        
+
 
         private AudioClip _menuSound;
 
@@ -182,7 +181,6 @@ namespace Core
             GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             pauseMenu.name = "PauseMenu";
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
-            _playerScript = player.GetComponent<PlayerScript>();
             player.name = "Player";
             if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
             if (player != null) playerScript = player.GetComponent<PlayerScript>();
@@ -275,11 +273,6 @@ namespace Core
         public static Camera GetMainCamera()
         {
             return _instance._camera;
-        }
-
-        public static PlayerScript GetPlayerScript()
-        {
-            return _instance._playerScript;
         }
 
         public static GameManager GetGameManager()
