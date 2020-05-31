@@ -12,7 +12,6 @@ namespace Assets.Healthbar.Scripts
     public class HealthbarScript : MonoBehaviour
     {
         public GameObject heart;
-        public GameObject newHeart;
         public Sprite fullHeart;
         public Sprite emptyHeart;
         private Dictionary<int, Image> hearts;
@@ -23,45 +22,11 @@ namespace Assets.Healthbar.Scripts
         {
             Debug.Log("HealthBarLoaded");
             hearts = new Dictionary<int, Image>();
-            GameManager.GetPlayerScript().onPlayerLifeChanged.AddListener(ChangeHearts);
             ChangeMaxHearts();
             ChangeHearts();
-        }
-
-        // Start is called before the first frame update
-        private async void ChangeHealthBar()
-        {
-            var currentHealth = GameManager.GetPlayerScript().GetPlayerCurrentHealth();
-            var maxHealth = GameManager.GetPlayerScript().GetPlayerMaxHealth();
-
-            foreach (Transform child in transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            var obj = heart;
-
-            float x = 0;
-            float y = 0;
-
-            for (int i = currentHealth; i != 0; i--)
-            {
-                var newHeart = Instantiate(obj);
-                newHeart.GetComponent<RectTransform>().SetParent(this.transform);
-                newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x, y, 0);
-                x += 100;
-            }
-
-            obj = newHeart;
-            for (int i = maxHealth - currentHealth; i != 0; i--)
-            {
-                var newHeart = Instantiate(obj);
-                newHeart.GetComponent<RectTransform>().SetParent(this.transform);
-                newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(x, y, 0);
-                x += 100;
-            }
-
-            await Task.Yield();
+            
+            GameManager.GetPlayerScript().onPlayerLifeChanged.AddListener(ChangeHearts);
+            
         }
 
         private void ChangeMaxHearts()
