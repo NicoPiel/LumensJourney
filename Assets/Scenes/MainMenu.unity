@@ -559,34 +559,9 @@ PrefabInstance:
       objectReference: {fileID: 707370888}
     - target: {fileID: 6166553472082707238, guid: df57545ed388ed94db282a66eecb899f,
         type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6166553472082707238, guid: df57545ed388ed94db282a66eecb899f,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6166553472082707238, guid: df57545ed388ed94db282a66eecb899f,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6166553472082707238, guid: df57545ed388ed94db282a66eecb899f,
-        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 707370888}
-    - target: {fileID: 6166553472082707238, guid: df57545ed388ed94db282a66eecb899f,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 6166553472082707238, guid: df57545ed388ed94db282a66eecb899f,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 6166553472633757262, guid: df57545ed388ed94db282a66eecb899f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -597,11 +572,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 707370888}
-    - target: {fileID: 6166553473702676885, guid: df57545ed388ed94db282a66eecb899f,
-        type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6166553473702676887, guid: df57545ed388ed94db282a66eecb899f,
         type: 3}
       propertyPath: m_Name

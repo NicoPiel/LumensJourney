@@ -15,6 +15,7 @@ namespace Assets.Player.Script
     {
         public int lightLoss;
         public float speed;
+        private CapsuleCollider2D _playerCollider;
         private Rigidbody2D _playerRigidbody2D;
         private Vector3 _change;
         private AudioSource _audioSource;
@@ -22,7 +23,7 @@ namespace Assets.Player.Script
         private Player _player = new Player("Pacolos");
         public BoxCollider2D hitCollider;
         private static readonly int StateExit = Animator.StringToHash("StateExit");
-
+        private static readonly int IdleDown = Animator.StringToHash("IdleDown");
         #region UnityEvents
 
         public UnityEvent onPlayerTakeDamage;
@@ -36,6 +37,9 @@ namespace Assets.Player.Script
 
         public Dictionary<string, AudioClip> _audioClips;
 
+        public Dictionary<string, AudioClip> audioClips;
+
+        [SerializeField] private int playerDamage;
 
         // Start is called before the first frame update
         private void Awake()
@@ -45,9 +49,16 @@ namespace Assets.Player.Script
 
         private void Start()
         {
+            // TODO Get PlayerUIScript
+            
+            healthBarScript = PlayerUiScript.GetPlayerUiScript().GetHealthBarScript();
+            lightBar = PlayerUiScript.GetPlayerUiScript().GetLightBarScript();
+            lightShardScript = PlayerUiScript.GetPlayerUiScript().GetLightShardDisplayScript();
+            _playerCollider = GetComponent<CapsuleCollider2D>();
             _playerRigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _audioClips = new Dictionary<String, AudioClip>();
+            healthBarScript.ChangeHealthBar(5, 5);
             hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
             hitCollider.gameObject.SetActive(false);
             _animator.SetBool(StateExit, false);
@@ -90,53 +101,27 @@ namespace Assets.Player.Script
                 PlayerTakeHeal(1);
             }
 
+
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                hitCollider.transform.eulerAngles = new Vector3(0, 0, 180);
-                hitCollider.size = new Vector2(2, 1);
-                hitCollider.offset = new Vector2(0, -1);
-                hitCollider.gameObject.SetActive(true);
-                _animator.SetBool(StateExit, false);
-                _animator.Play("SwingUp");
+                HitInDirection(180, new Vector2(2, 1), new Vector2(0, -1f), "SwingUp");
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                hitCollider.transform.eulerAngles = new Vector3(0, 0, 90);
-                hitCollider.size = new Vector2(1, 1.5f);
-                hitCollider.offset = new Vector2(0, -1);
-                hitCollider.gameObject.SetActive(true);
-                _animator.SetBool(StateExit, false);
-                _animator.Play("SwingRight");
+                HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                hitCollider.transform.eulerAngles = new Vector3(0, 0, 0);
-                hitCollider.size = new Vector2(2, 1);
-                hitCollider.offset = new Vector2(0, -0.5f);
-                hitCollider.gameObject.SetActive(true);
-                _animator.SetBool(StateExit, false);
-                _animator.Play("SwingDown");
+                HitInDirection(0, new Vector2(2, 1), new Vector2(0, -0.5f), "SwingDown");
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                hitCollider.transform.eulerAngles = new Vector3(0, 0, 270);
-                hitCollider.size = new Vector2(1, 1.5f);
-                hitCollider.offset = new Vector2(0, -1);
-                hitCollider.gameObject.SetActive(true);
-                _animator.SetBool(StateExit, false);
-                _animator.Play("SwingLeft");
+                HitInDirection(270, new Vector2(1, 1), new Vector2(-0.5f, -1f), "SwingLeft");
             }
             else
             {
                 _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
                 _change.Normalize();
-            }
-
-            if (_animator.GetBool(StateExit))
-            {
-                hitCollider.gameObject.SetActive(false);
-                _animator.SetBool(StateExit, false);
-                Debug.Log("State Exit");
             }
         }
 
@@ -145,18 +130,44 @@ namespace Assets.Player.Script
             MoveCharacter();
         }
 
+        private void HitInDirection(float rotation, Vector2 size, Vector2 offset, string stateName)
+        {
+            hitCollider.transform.eulerAngles = new Vector3(0, 0, rotation);
+            hitCollider.size = size;
+            hitCollider.offset = offset;
+            hitCollider.gameObject.SetActive(true);
+
+            _animator.SetBool(StateExit, true);
+            _animator.Play(stateName);
+        }
+
+        private void SetStateExit()
+        {
+            if (!_animator.GetBool(StateExit)) return;
+            
+            hitCollider.gameObject.SetActive(false);
+            var layerIndex = _animator.GetLayerIndex("Player");
+            _animator.SetBool(StateExit, false);
+        }
+
         private void MoveCharacter()
         {
             _animator.SetFloat("Horizontal", _change.x);
             _animator.SetFloat("Vertical", _change.y);
             _animator.SetFloat("Speed", _change.magnitude);
             _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
+            var rnd = Random.Range(1, 8);
+            _audioSource.clip = audioClips["woosh" + rnd];
+            _audioSource.Play();
         }
 
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log("Collider hit.");
+            if (other.CompareTag("Enemy"))
+            {
+                
+            }
         }
 
         public void AddToInventory(GameItem item)
@@ -165,11 +176,6 @@ namespace Assets.Player.Script
         }
 
         #region PlayerDamage
-        public void PlayerTakeDamage(int damage)
-        {
-            _player.playerstats["CurrentHealth"] -= damage;
-            onPlayerLifeChanged.Invoke();
-        }
 
         public void PlayerTakeHeal(int heal)
         {
@@ -208,12 +214,14 @@ namespace Assets.Player.Script
         {
             for (int i = 1; i <= 8; i++)
             {
-                _audioClips.Add("woosh" + i, UnityEngine.Resources.Load<AudioClip>("Wooshes/woosh" + i));
+                _audioClips.Add("woosh" + i, Resources.Load<AudioClip>("Wooshes/woosh" + i));
+                audioClips.Add("woosh" + i, Resources.Load<AudioClip>("Wooshes/woosh" + i));
             }
 
             for (int i = 0; i <= 2; i++)
             {
-                _audioClips.Add("footstep0" + i, UnityEngine.Resources.Load<AudioClip>("Footsteps/footstep0" + i));
+                _audioClips.Add("footstep0" + i, Resources.Load<AudioClip>("Footsteps/footstep0" + i));
+                audioClips.Add("footstep0" + i, Resources.Load<AudioClip>("Footsteps/footstep0" + i));
             }
         }
 
@@ -229,6 +237,42 @@ namespace Assets.Player.Script
             onPlayerLightLevelChanged.Invoke();
         }
 
+        public int GetPlayerDamage()
+        {
+            return playerDamage;
+        }
+
+        public void PlayerTakeDamage(int damage)
+        {
+            var remainingHealth = _player.playerstats["CurrentHealth"] -= damage;
+
+            if (remainingHealth >= 0)
+            {
+                _player.playerstats["CurrentHealth"] = remainingHealth;
+                healthBarScript.ChangeHealthBar(_player.playerstats["CurrentHealth"], _player.playerstats["MaxHealth"]);
+                PlayerChangeLightLevel(-damage*10);
+                onPlayerTakeDamage.Invoke();
+            }
+            else
+            {
+                KillPlayer();
+            }
+        }
+
+        private void KillPlayer()
+        {
+            Debug.Log("The player died.");
+        }
+
+        public Collider2D GetCollider()
+        {
+            return _playerCollider;
+        }
+
+        public Rigidbody2D GetRigidbody()
+        {
+            return _playerRigidbody2D;
+        }
 
         //Getter
         public float GetPlayerLightLevel()
