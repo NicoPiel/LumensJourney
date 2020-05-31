@@ -37,9 +37,8 @@ namespace Assets.Player.Script
 
         #endregion
 
-        public Dictionary<string, AudioClip> _audioClips;
-
-        public Dictionary<string, AudioClip> audioClips;
+        private Dictionary<string, AudioClip> _audioClips;
+        
 
         [SerializeField] private int playerDamage;
 
@@ -133,8 +132,10 @@ namespace Assets.Player.Script
             hitCollider.size = size;
             hitCollider.offset = offset;
             hitCollider.gameObject.SetActive(true);
-
+            var rnd = Random.Range(1, 8);
+            _audioSource.clip = _audioClips["woosh" + rnd];
             _animator.SetBool(StateExit, true);
+            _audioSource.Play();
             _animator.Play(stateName);
         }
 
@@ -153,9 +154,6 @@ namespace Assets.Player.Script
             _animator.SetFloat("Vertical", _change.y);
             _animator.SetFloat("Speed", _change.magnitude);
             _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
-            var rnd = Random.Range(1, 8);
-            _audioSource.clip = audioClips["woosh" + rnd];
-            _audioSource.Play();
         }
 
         public void AddToInventory(GameItem item)
@@ -241,13 +239,11 @@ namespace Assets.Player.Script
             for (int i = 1; i <= 8; i++)
             {
                 _audioClips.Add("woosh" + i, Resources.Load<AudioClip>("Wooshes/woosh" + i));
-                audioClips.Add("woosh" + i, Resources.Load<AudioClip>("Wooshes/woosh" + i));
             }
 
             for (int i = 0; i <= 2; i++)
             {
                 _audioClips.Add("footstep0" + i, Resources.Load<AudioClip>("Footsteps/footstep0" + i));
-                audioClips.Add("footstep0" + i, Resources.Load<AudioClip>("Footsteps/footstep0" + i));
             }
         }
 
