@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 7887039867708435442}
   - component: {fileID: -4526695622498527851}
   - component: {fileID: 3250610744479858231}
+  - component: {fileID: 359570173015442694}
   m_Layer: 0
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,8 +148,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 7
+  innerRadius: 0.85
   speed: 50
-  damage: 10
+  health: 2
+  damage: 1
+  screenShakeMagnitude: 1
+--- !u!114 &359570173015442694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5111081116285643832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_RawSignal: {fileID: 11400000, guid: 2230e667d9a3a8f4883cdb016d9c575f, type: 2}
+    m_AmplitudeGain: 0.5
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 1000
 --- !u!1 &6556234126300392822
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,9 +239,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.1}
   serializedVersion: 2
-  m_Radius: 1.5
+  m_Radius: 1
 --- !u!114 &8808417019805977548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +254,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf5da694bc355ef44b90a989ca6bf78f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onPlayerWalkIntoRange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7626735855576669149
 GameObject:
   m_ObjectHideFlags: 0

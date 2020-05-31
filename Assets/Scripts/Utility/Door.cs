@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Assets.Player.Script;
+using Cinemachine;
 using Core;
 using Unity.Burst;
 using UnityEngine;
@@ -10,7 +11,10 @@ namespace Utility
     [BurstCompile]
     public class Door : MonoBehaviour
     {
+        [SerializeField] private float screenShakeMagnitude;
         [SerializeField] private int lightlevelChange;
+
+        private CinemachineImpulseSource _impulseSource;
         
         private PlayerScript _player;
         private AudioSource _doorSound;
@@ -21,6 +25,7 @@ namespace Utility
         {
             _player = GameManager.GetPlayer().GetComponent<PlayerScript>();
             _doorSound = GetComponent<AudioSource>();
+            _impulseSource = GetComponent<CinemachineImpulseSource>();
         }
 
         private void Update()
@@ -39,7 +44,14 @@ namespace Utility
         {
             _doorSound.Play();
             _player.PlayerChangeLightLevel(lightlevelChange);
-            
+
+            var clipLength = _doorSound.clip.length / 2;
+
+            _impulseSource.m_ImpulseDefinition.m_TimeEnvelope.m_AttackTime = clipLength/4;
+            _impulseSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = clipLength/2;
+            _impulseSource.m_ImpulseDefinition.m_TimeEnvelope.m_DecayTime = clipLength/4;
+            _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
+
             while (_doorSound.isPlaying)
             {
                 await Task.Yield();

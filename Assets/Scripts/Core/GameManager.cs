@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Assets.Player.Script;
 using Assets.PlayerUI.Scripts;
 using Assets.ProceduralGeneration.Core;
@@ -29,6 +30,8 @@ namespace Core
         private static GameManager _instance;
         [SerializeField] private Generator generator;
         [SerializeField] private GameObject player;
+        [SerializeField] private PlayerScript playerScript;
+        [SerializeField] private Camera mainCamera;
         [SerializeField] private SaveSystem saveSystem;
         private GameObject _canvas;
         private Camera _camera;
@@ -51,6 +54,11 @@ namespace Core
             onNewLevel = new UnityEvent();
 
             CurrentLevel = 0;
+        }
+
+        private void Start()
+        {
+            onPlayerSpawned.AddListener(OnPlayerSpawned);
         }
 
         private void Update()
@@ -104,7 +112,7 @@ namespace Core
 
             InstantiateGenerator();
             InstantiatePlayer();
-
+            
             _canvas = GameObject.Find("PauseMenu");
             _canvas.gameObject.SetActive(false);
             
@@ -121,11 +129,7 @@ namespace Core
 
         private void OnPlayerLightLevelChanged()
         {
-            Debug.Log("Light change event Game Manager.");
-
             if (!_ingame || Camera.main == null || player == null) return;
-
-            var playerScript = player.GetComponent<PlayerScript>();
 
             var playerLight = player.transform.Find("PlayerLight").GetComponent<Light2D>();
             playerLight.intensity = 1;
@@ -139,7 +143,7 @@ namespace Core
             volume.profile.TryGet(out chromaticAberration);
             volume.profile.TryGet(out lensDistortion);
 
-            chromaticAberration.intensity.value = 0.5f * playerScript.GetPlayerLightLevel();
+            chromaticAberration.intensity.value = 0.7f * playerScript.GetPlayerLightLevel();
             lensDistortion.intensity.value = 0.1f;
 
             player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().effectEnabled = true;
@@ -147,7 +151,6 @@ namespace Core
 
         private void OnDungeonGenerated()
         {
-            _camera = Camera.main;
             _canvas = transform.Find("PauseMenu").gameObject;
             _canvas.gameObject.SetActive(false);
 
@@ -162,6 +165,11 @@ namespace Core
 
             StartCoroutine(FadeLevelTextInAndOut());
         }
+
+        private void OnPlayerSpawned()
+        {
+            _camera = GetPlayer().transform.Find("MainCamera").GetComponent<Camera>();
+        }
         
         private void InstantiateGenerator()
         {
@@ -172,10 +180,10 @@ namespace Core
         {
             GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             pauseMenu.name = "PauseMenu";
-            //GameObject playerUi = Instantiate(UnityEngine.Resources.Load<GameObject>("PlayerUI"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-            //playerUi.name = "PlayerUI";
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
+            if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
+            if (player != null) playerScript = player.GetComponent<PlayerScript>();
             onPlayerSpawned.Invoke();
         }
 
@@ -183,8 +191,11 @@ namespace Core
         {
             Time.timeScale = 0.0f;
             _canvas = transform.Find("PauseMenu").gameObject;
-            if (_canvas != null) _canvas.SetActive(true);
-            _camera = Camera.main;
+            if (_canvas != null)
+            {
+                _canvas.SetActive(true);
+                GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(false);
+            }
             if (_camera != null) _camera.GetComponent<AudioListener>().enabled = false;
             _paused = true;
         }
@@ -193,8 +204,11 @@ namespace Core
         {
             Time.timeScale = 1.0f;
             _canvas = transform.Find("PauseMenu").gameObject;
-            if (_canvas != null) _canvas.SetActive(false);
-            _camera = Camera.main;
+            if (_canvas != null)
+            {
+                _canvas.SetActive(false);
+                GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(true);
+            }
             if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
             _paused = false;
         }
@@ -203,8 +217,11 @@ namespace Core
         {
             Time.timeScale = 1.0f;
             _canvas = transform.Find("PauseMenu").gameObject;
-            if (_canvas != null) _canvas.SetActive(false);
-            _camera = Camera.main;
+            if (_canvas != null)
+            {
+                _canvas.SetActive(false);
+                GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(true);
+            }
             if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
             _paused = false;
         }
@@ -238,13 +255,24 @@ namespace Core
             return _instance.player;
         }
 
+        public static PlayerScript GetPlayerScript()
+        {
+            return _instance.playerScript;
+        }
+
         public static Generator GetGenerator()
         {
             return _instance.generator;
         }
+        
         public static SaveSystem GetSaveSystem()
         {
             return _instance.saveSystem;
+        }
+
+        public static Camera GetMainCamera()
+        {
+            return _instance._camera;
         }
 
         public static GameManager GetGameManager()
