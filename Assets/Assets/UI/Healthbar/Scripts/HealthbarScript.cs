@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Core;
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Healthbar.Scripts
+namespace Assets.UI.Healthbar.Scripts
 {
     [BurstCompile]
     public class HealthbarScript : MonoBehaviour

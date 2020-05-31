@@ -1,7 +1,8 @@
 ﻿using System;
-using Assets.Healthbar.Scripts;
-using Assets.ItemBar.Scripts;
-using Resources.LightBar.Scripts;
+using Assets.UI.Healthbar.Scripts;
+using Assets.UI.ItemBar.Scripts;
+using Assets.UI.LightBar.Scripts;
+using Assets.UI.LightShards.Script;
 using Unity.Burst;
 using UnityEditor;
 using UnityEditorInternal;

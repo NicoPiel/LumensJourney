@@ -3,7 +3,7 @@ using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.ItemBar.Scripts
+namespace Assets.UI.ItemBar.Scripts
 {
     [BurstCompile]
     public class ItemBarScript : MonoBehaviour

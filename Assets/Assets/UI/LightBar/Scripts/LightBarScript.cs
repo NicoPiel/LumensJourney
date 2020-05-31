@@ -5,7 +5,7 @@ using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Resources.LightBar.Scripts
+namespace Assets.UI.LightBar.Scripts
 {
     [BurstCompile]
     public class LightBarScript : MonoBehaviour

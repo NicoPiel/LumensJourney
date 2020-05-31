@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Items.Scripts;
+using Assets.PlayerUI.Scripts;
 using Core;
 using Unity.Burst;
 using UnityEngine;
