@@ -1,15 +1,11 @@
-﻿using System;
-using Assets.UI.Healthbar.Scripts;
+﻿using Assets.UI.Healthbar.Scripts;
 using Assets.UI.ItemBar.Scripts;
 using Assets.UI.LightBar.Scripts;
 using Assets.UI.LightShards.Script;
 using Unity.Burst;
-using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
-using Utility;
 
-namespace Assets.PlayerUI.Scripts
+namespace Assets.UI.PlayerUI.Scripts
 {
     [BurstCompile]
     public class PlayerUiScript : MonoBehaviour

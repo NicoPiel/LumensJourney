@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Items.Scripts;
-using Assets.PlayerUI.Scripts;
 using Core;
 using Unity.Burst;
 using UnityEngine;
@@ -185,6 +184,7 @@ namespace Assets.Player.Script
             }
             else
             {
+                _player.playerstats["CurrentHealth"] = 0;
                 KillPlayer();
             }
         }

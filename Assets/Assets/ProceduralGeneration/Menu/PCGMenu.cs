@@ -29,19 +29,6 @@ namespace Assets.ProceduralGeneration.Menu
                 }
                 stopwatch.Stop();
             }
-            
-            if (GUILayout.Button("Decorate") && Application.isPlaying)
-            {
-                var decorator = FindObjectOfType<Decorator>();
-                
-                stopwatch.Restart();
-                if (decorator.Decorate())
-                {
-                    stopwatch.Stop();
-                    Debug.Log($"Decorated dungeon in {stopwatch.ElapsedMilliseconds}ms.");
-                }
-                stopwatch.Stop();
-            }
         }
     }
 }

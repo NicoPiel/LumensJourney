@@ -1,4 +1,4 @@
-﻿using Assets.PickUps.Scripts;
+﻿using Core;
 using Unity.Burst;
 using UnityEngine;
 
@@ -11,32 +11,67 @@ namespace Assets.ProceduralGeneration.Core
 
         private void Start()
         {
-            _generator = GetComponent<Generator>();
+            _generator = GameManager.GetGenerator();
+            _generator.onDungeonGenerated.AddListener(Decorate);
         }
 
-        public bool Decorate()
+        private void Decorate()
         {
-            if (_generator.Generated)
+            GameObject enemyDecorator = CreateEnemyDecorator();
+            
+            foreach (Rect room in _generator.GetRooms())
             {
-                Rect firstRoom = _generator.GetRooms()[0];
+                Spawn("Slime", 
+                    GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax), 
+                    enemyDecorator.transform);
 
-                var pickUp = (GameObject) Instantiate(UnityEngine.Resources.Load("PickUp"),
-                    new Vector3(firstRoom.x + firstRoom.width / 2 + 1, firstRoom.y + firstRoom.height / 2 + 1),
-                    Quaternion.identity,
-                    _generator.GetParent().transform);
-                
-                var slime = (GameObject) Instantiate(UnityEngine.Resources.Load("Slime"),
-                    new Vector3(firstRoom.x + firstRoom.width / 2, firstRoom.y + firstRoom.height / 2),
-                    Quaternion.identity,
-                    _generator.GetParent().transform);
+                var numberOfEnemies = room.width * room.height / 20;
 
-                pickUp.GetComponent<PickUpScript>().SetPickUpItem("Red Potion");
-                
-                return true;
+                for (int i = 0; i < numberOfEnemies; i++)
+                {
+                    if (GetProbability(10))
+                    {
+                        Spawn("Slime", 
+                            GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax), 
+                            enemyDecorator.transform);
+                    }
+                }
             }
+            
+            Debug.Log("Dungeon decorated.");
+        }
 
-            return false;
+        private GameObject Spawn (string resourcesPath, Vector2 position, Transform parent)
+        {
+            return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath), 
+                new Vector3(position.x, position.y, 0),
+                Quaternion.identity,
+                parent);
+        }
+
+        private Vector2 GetRandomPosition(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary) 
+        {
+            return new Vector2(Random.Range(leftXBoundary, rightXBoundary), Random.Range(leftYBoundary, rightYBoundary));
+        }
+
+        private GameObject CreateEnemyDecorator()
+        {
+            GameObject decorator = GameObject.Find("Enemies(Clone)");
+            Destroy(GameObject.Find("Enemies"));
+
+            if (decorator != null) Destroy(decorator);
+
+            decorator = new GameObject()
+            {
+                name = "Enemies",
+            };
+
+            return Instantiate(decorator, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+
+        private bool GetProbability(float pInPercent)
+        {
+            return Random.Range(0f, 1f) <= pInPercent / 100;
         }
     }
 }
-

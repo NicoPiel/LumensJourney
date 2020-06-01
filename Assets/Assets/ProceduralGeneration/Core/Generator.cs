@@ -4,7 +4,6 @@ using Core;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
@@ -78,7 +77,10 @@ namespace Assets.ProceduralGeneration.Core
             DontDestroyOnLoad(this);
             onDungeonGenerated = new UnityEvent();
             onDungeonChanged = new UnityEvent();
-            
+        }
+
+        private void Start()
+        {
             onDungeonGenerated.AddListener(OnDungeonGenerated);
             onDungeonChanged.AddListener(OnDungeonChanged);
         }
@@ -429,7 +431,7 @@ namespace Assets.ProceduralGeneration.Core
 
             dungeon = UnityEngine.Resources.Load<GameObject>("DungeonParent");
 
-            return Instantiate(dungeon, new Vector3(0, 0, 0), Quaternion.Euler(0,0,0));
+            return Instantiate(dungeon, new Vector3(0, 0, 0), Quaternion.identity);
         }
 
         private static GameObject CreateRoomSpawner()

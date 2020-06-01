@@ -1,5 +1,4 @@
-﻿using System;
-using Assets.Player.Script;
+﻿using Assets.Player.Script;
 using Cinemachine;
 using Core;
 using UnityEngine;
@@ -117,6 +116,8 @@ namespace Assets.Enemies.Scripts
             if (health > 0) return;
             
             Debug.Log($"{gameObject.name} died.");
+            GameManager.GetPlayerScript().PlayerChangeLightLevel(health*10);
+            GameManager.GetPlayerScript().PlayerChangeLightShards(health*10);
             Destroy(gameObject);
         }
 

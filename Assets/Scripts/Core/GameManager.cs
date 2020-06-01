@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Assets.Player.Script;
-using Assets.PlayerUI.Scripts;
 using Assets.ProceduralGeneration.Core;
 using Assets.SaveSystem;
+using Assets.UI.PlayerUI.Scripts;
 using TMPro;
 using Unity.Burst;
 using UnityEngine;
@@ -47,7 +46,7 @@ namespace Core
             DontDestroyOnLoad(this);
             _instance = this;
 
-            _menuSound = UnityEngine.Resources.Load<AudioClip>("Clicks/click3");
+            _menuSound = Resources.Load<AudioClip>("Clicks/click3");
 
             // Events
             onNewGameStarted = new UnityEvent();
@@ -178,7 +177,7 @@ namespace Core
 
         private void InstantiatePlayer()
         {
-            GameObject pauseMenu = Instantiate(UnityEngine.Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            GameObject pauseMenu = Instantiate(Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
             pauseMenu.name = "PauseMenu";
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
