@@ -176,11 +176,12 @@ namespace Assets.Player.Script
         {
             var remainingHealth = _player.playerstats["CurrentHealth"] -= damage;
 
-            if (remainingHealth >= 0)
+            if (remainingHealth > 0)
             {
                 _player.playerstats["CurrentHealth"] = remainingHealth;
                 PlayerChangeLightLevel(-damage*10);
                 onPlayerTakeDamage.Invoke();
+                onPlayerLifeChanged.Invoke();
             }
             else
             {

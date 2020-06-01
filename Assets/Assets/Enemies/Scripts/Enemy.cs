@@ -42,12 +42,12 @@ namespace Assets.Enemies.Scripts
         private void MoveToPlayer()
         {
             Vector3 enemyPosition = transform.position;
-            Vector3 playerPosition = GameManager.GetPlayer().transform.position;
+            Vector3 playerPosition = GameManager.GetPlayer().transform.position + (Vector3) GameManager.GetPlayerScript().GetCollider().offset;
             Vector2 vectorToPlayer = playerPosition - enemyPosition;
             Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
             var distanceToPlayer = vectorToPlayer.magnitude;
 
-            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer, LayerMask.GetMask("PlayerObject"));
+            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer, LayerMask.GetMask("Player"));
             Debug.DrawRay(enemyPosition, vectorToPlayer);
 
             if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())

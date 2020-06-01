@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 7
-  innerRadius: 0.85
-  speed: 50
+  innerRadius: 0.75
+  speed: 60
   health: 2
   damage: 1
   screenShakeMagnitude: 1
