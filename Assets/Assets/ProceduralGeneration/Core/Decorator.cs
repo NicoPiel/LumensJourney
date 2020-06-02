@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Assets.ProceduralGeneration.Core
 {
+    /// <summary>
+    /// The PCG's
+    /// </summary>
     [BurstCompile]
     public class Decorator : MonoBehaviour
     {
@@ -15,6 +18,9 @@ namespace Assets.ProceduralGeneration.Core
             _generator.onDungeonGenerated.AddListener(Decorate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void Decorate()
         {
             GameObject enemyDecorator = CreateEnemyDecorator();

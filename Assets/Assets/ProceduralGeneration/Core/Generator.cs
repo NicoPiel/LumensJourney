@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core;
 using Unity.Burst;
 using Unity.Mathematics;
@@ -9,14 +8,28 @@ using Random = UnityEngine.Random;
 
 namespace Assets.ProceduralGeneration.Core
 {
+    /// <summary>
+    /// The PCG's core GameObject. It builds and maintains the rooms, corridors and doors inside a level.
+    /// </summary>
     [BurstCompile]
     public class Generator : MonoBehaviour
     {
+        #region Events
         // Events
 
+        /// <summary>
+        /// Triggers when a dungeon level has been fully generated.
+        /// </summary>
         public UnityEvent onDungeonGenerated;
+        /// <summary>
+        /// Triggers when something in an existing dungeon changes (e.g. a door opens).
+        /// </summary>
         public UnityEvent onDungeonChanged;
-    
+        
+        #endregion
+        
+        #region Editor variables
+
         [Header("Room Settings")] 
         [Range(1, 30)] public int RoomNumber;
 
@@ -62,6 +75,8 @@ namespace Assets.ProceduralGeneration.Core
         [Space] 
         [Header("Doors")]
         private List<int[]> _leftDoors;
+        
+        #endregion
 
         private List<int[]> _rightDoors;
         private Dictionary<int[], int[]> _doorRelations;
@@ -70,6 +85,9 @@ namespace Assets.ProceduralGeneration.Core
 
         [SerializeField] private GameObject dungeonObject;
 
+        /// <summary>
+        /// True, if the dungeon has finished generating.
+        /// </summary>
         public bool Generated { get; set; }
 
         private void Awake()
@@ -85,6 +103,11 @@ namespace Assets.ProceduralGeneration.Core
             onDungeonChanged.AddListener(OnDungeonChanged);
         }
 
+        /// <summary>
+        /// Generates a new dungeon with the specified number of rooms.
+        /// </summary>
+        /// <param name="numberOfRooms">The number of rooms that should spawn.</param>
+        /// <returns>True, if everything went smoothly. Otherwise false.</returns>
         public bool Generate(int numberOfRooms)
         {
             Generated = false;
@@ -111,6 +134,10 @@ namespace Assets.ProceduralGeneration.Core
             return true;
         }
 
+        /// <summary>
+        /// Generates the specified number of rooms (only). 
+        /// </summary>
+        /// <param name="numberOfRooms">The number of rooms that should spawn.</param>
         private void GenerateRooms(int numberOfRooms)
         {
             Debug.Log("Generating rooms..");
@@ -231,6 +258,10 @@ namespace Assets.ProceduralGeneration.Core
             GenerateDoors(dungeon);
         }
 
+        /// <summary>
+        /// Generates corridors after the rooms have been built.
+        /// </summary>
+        /// <param name="dungeon">The parent GameObject</param>
         private void GenerateCorridors(GameObject dungeon)
         {
             Debug.Log("Generating corridors..");
@@ -399,6 +430,10 @@ namespace Assets.ProceduralGeneration.Core
             }
         }
 
+        /// <summary>
+        /// Generates door objects where rooms and corridors intersect.
+        /// </summary>
+        /// <param name="dungeon">The parent GameObject</param>
         private void GenerateDoors(GameObject dungeon)
         {
             foreach (var leftDoor in _leftDoors)
@@ -412,6 +447,9 @@ namespace Assets.ProceduralGeneration.Core
             }
         }
 
+        /// <summary>
+        /// Does work after the dungeon has been fully generated.
+        /// </summary>
         private void OnDungeonGenerated()
         {
             Generated = true;
@@ -422,10 +460,14 @@ namespace Assets.ProceduralGeneration.Core
             
         }
 
+        /// <summary>
+        /// Spawns the parent Dungeon object.
+        /// </summary>
+        /// <returns>The DungeonParent object</returns>
         private static GameObject CreateDungeonObject()
         {
-            GameObject dungeon = GameObject.Find("Dungeon(Clone)");
-            Destroy(GameObject.Find("Dungeon"));
+            GameObject dungeon = GameObject.Find("DungeonParent(Clone)");
+            Destroy(GameObject.Find("DungeonParent"));
 
             if (dungeon != null) Destroy(dungeon);
 
@@ -434,6 +476,10 @@ namespace Assets.ProceduralGeneration.Core
             return Instantiate(dungeon, new Vector3(0, 0, 0), Quaternion.identity);
         }
 
+        /// <summary>
+        /// Creates the invisible object, which rooms are built around.
+        /// </summary>
+        /// <returns>The Spawner object.</returns>
         private static GameObject CreateRoomSpawner()
         {
             GameObject spawner = GameObject.Find("RoomSpawner");
@@ -447,18 +493,32 @@ namespace Assets.ProceduralGeneration.Core
             return Instantiate(spawner);
         }
 
+        /// <summary>
+        /// Places a tile at the specified location and parent.
+        /// </summary>
+        /// <param name="tile">A tile resource.</param>
+        /// <param name="x">x position</param>
+        /// <param name="y">y position</param>
+        /// <param name="parent">The parent object</param>
+        /// <returns>The placed Tile</returns>
         private GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
             //_tilesSurfaces.Add(tile.GetComponent<NavMeshSurface>());
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
         }
 
+        /// <summary>
+        /// Sets the player's position to be in the left corner of the first room.
+        /// </summary>
         private void PlacePlayer()
         {
             Rect firstRoom = _rooms[0];
             GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
         }
 
+        /// <summary>
+        /// Places a teleporter object, which upon activation generates a new dungeon.
+        /// </summary>
         private void PlaceTeleporter()
         {
             Rect lastRoom = _rooms[_rooms.Count - 1];
@@ -469,18 +529,31 @@ namespace Assets.ProceduralGeneration.Core
                 dungeonObject.transform);
         }
 
+        /// <summary>
+        /// Gets a random GameObject from a pool of GameObjects using the Generator's stdLikelihood value.
+        /// </summary>
+        /// <param name="tileCollection"></param>
+        /// <returns></returns>
         private GameObject GetRandomTile(IReadOnlyList<GameObject> tileCollection)
         {
             var random = Random.Range((stdLikelihood + 1) - 100, stdLikelihood);
             return random > 0 ? standardFloorTile : tileCollection[Random.Range(0, tileCollection.Count)];
         }
 
+        /// <summary>
+        /// Returns the DungeonParent object
+        /// </summary>
+        /// <returns>The DungeonParent object</returns>
         public GameObject GetParent()
         {
             return dungeonObject;
         }
 
-        public List<Rect> GetRooms()
+        /// <summary>
+        /// Returns a list of rooms inside a level.
+        /// </summary>
+        /// <returns>A list of rooms.</returns>
+        public IEnumerable<Rect> GetRooms()
         {
             return this._rooms;
         }
