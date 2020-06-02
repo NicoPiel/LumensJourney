@@ -134,6 +134,7 @@ namespace Assets.Player.Script
             var rnd = Random.Range(1, 8);
             _audioSource.clip = _audioClips["woosh" + rnd];
             _animator.SetBool(StateExit, true);
+            
             _audioSource.Play();
             _animator.Play(stateName);
         }
@@ -180,6 +181,7 @@ namespace Assets.Player.Script
             {
                 _player.playerstats["CurrentHealth"] = remainingHealth;
                 PlayerChangeLightLevel(-damage*10);
+                onPlayerLifeChanged.Invoke();
                 onPlayerTakeDamage.Invoke();
                 onPlayerLifeChanged.Invoke();
             }

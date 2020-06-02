@@ -1,4 +1,5 @@
-﻿using Assets.UI.Healthbar.Scripts;
+﻿using System;
+using Assets.UI.Healthbar.Scripts;
 using Assets.UI.ItemBar.Scripts;
 using Assets.UI.LightBar.Scripts;
 using Assets.UI.LightShards.Script;
@@ -21,6 +22,8 @@ namespace Assets.UI.PlayerUI.Scripts
         public GameObject levelTooltip;
 
         private static PlayerUiScript _instance;
+        
+        
         // Start is called before the first frame update
 
         public void Awake()
@@ -53,6 +56,7 @@ namespace Assets.UI.PlayerUI.Scripts
             return levelTooltip;
         }
 
+        
         public static PlayerUiScript GetPlayerUiScript()
         {
             return _instance;

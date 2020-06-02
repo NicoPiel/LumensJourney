@@ -5,6 +5,7 @@ using Assets.SaveSystem;
 using Assets.UI.PlayerUI.Scripts;
 using TMPro;
 using Unity.Burst;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -32,6 +33,7 @@ namespace Core
         [SerializeField] private PlayerScript playerScript;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private SaveSystem saveSystem;
+        [SerializeField] private MenuManagerScript menuManagerScript;
         private GameObject _canvas;
         private Camera _camera;
 
@@ -57,6 +59,8 @@ namespace Core
 
         private void Start()
         {
+            menuManagerScript = GetComponentInChildren<MenuManagerScript>();
+            
             onPlayerSpawned.AddListener(OnPlayerSpawned);
         }
 
@@ -269,6 +273,10 @@ namespace Core
             return _instance.saveSystem;
         }
 
+        public static MenuManagerScript GetMenuManagerScript()
+        {
+            return _instance.menuManagerScript;
+        }
         public static Camera GetMainCamera()
         {
             return _instance._camera;

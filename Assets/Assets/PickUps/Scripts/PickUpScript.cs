@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Assets.Items.Scripts;
 using Assets.Player.Script;
+using Core;
 using Unity.Burst;
 using UnityEngine;
 using Utility;
@@ -23,7 +24,7 @@ namespace Assets.PickUps.Scripts
 
         public void Start()
         {
-            _player = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
+            _player = GameManager.GetPlayerScript();
         }
 
         public void Update()
