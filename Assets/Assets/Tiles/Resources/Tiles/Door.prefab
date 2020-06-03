@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e270b9cfe0870f648919a0f9589444a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenShakeMagnitude: 1
+  screenShakeMagnitude: 0.3
   lightlevelChange: -20
 --- !u!82 &946654779296939434
 AudioSource:

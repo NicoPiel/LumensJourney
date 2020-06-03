@@ -1,12 +1,17 @@
-﻿using Assets.Player.Script;
+﻿using System;
+using System.Threading.Tasks;
+using Assets.Player.Script;
 using Cinemachine;
 using Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Enemies.Scripts
 {
     public class Enemy : MonoBehaviour
     {
+        public UnityEvent onDeath;
+        
         [Header("AI settings")] 
         public float detectionRadius;
         public float innerRadius;
@@ -21,6 +26,12 @@ namespace Assets.Enemies.Scripts
         private InnerRadius _innerRadius;
         private BoxCollider2D _collider;
         private Rigidbody2D _rigidbody;
+        private ParticleSystem _particleSystem;
+
+        private void Awake()
+        {
+            onDeath = new UnityEvent();
+        }
 
         private void Start()
         {
@@ -33,10 +44,14 @@ namespace Assets.Enemies.Scripts
             _detectionRadius.onLostSight.AddListener(StopMoving);
             
             _innerRadius.onPlayerWalkIntoRange.AddListener(OnPlayerWalkIntoRange);
+            _innerRadius.onHit.AddListener(OnHit);
 
             _detectionRadius.GetComponent<CircleCollider2D>().radius = detectionRadius;
             _innerRadius.GetComponent<CircleCollider2D>().radius = innerRadius;
             _rigidbody = GetComponent<Rigidbody2D>();
+            _particleSystem = GetComponent<ParticleSystem>();
+            
+            onDeath.AddListener(OnDeath);
         }
 
         private void MoveToPlayer()
@@ -82,6 +97,11 @@ namespace Assets.Enemies.Scripts
             GetComponent<CinemachineImpulseSource>().GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }
 
+        private void OnHit()
+        {
+            _particleSystem.Play();
+        }
+
         public void TakeDamage(int damageTaken)
         {
             health -= damageTaken;
@@ -97,6 +117,12 @@ namespace Assets.Enemies.Scripts
             Debug.Log($"{gameObject.name} died.");
             GameManager.GetPlayerScript().PlayerChangeLightLevel(health*10);
             GameManager.GetPlayerScript().PlayerChangeLightShards(health*10);
+            onDeath.Invoke();
+        }
+
+        private void OnDeath()
+        {
+            _particleSystem.Play();
             Destroy(gameObject);
         }
 

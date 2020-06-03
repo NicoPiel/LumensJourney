@@ -8,6 +8,7 @@ namespace Assets.Enemies.Scripts
     public class InnerRadius : MonoBehaviour
     {
         public UnityEvent onPlayerWalkIntoRange;
+        public UnityEvent onHit;
         
         private Enemy _parent;
 
@@ -16,6 +17,7 @@ namespace Assets.Enemies.Scripts
         private void Awake()
         {
             onPlayerWalkIntoRange = new UnityEvent();
+            onHit = new UnityEvent();
         }
 
         private void Start()
@@ -39,8 +41,10 @@ namespace Assets.Enemies.Scripts
                 
                 Vector3 moveDirection =  _parent.GetRigidBody().transform.position - playerScipt.transform.position;
                 _parent.GetRigidBody().AddForce( moveDirection.normalized * -500f);
+
+                Debug.Log($"{_parent.gameObject.name} was hit by the player.");
                 
-                Debug.Log($"{gameObject.name} was hit by the player.");
+                onHit.Invoke();
             }
         }
 
