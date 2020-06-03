@@ -92,7 +92,7 @@ namespace Assets.Enemies.Scripts
             playerScipt.PlayerTakeDamage(damage);
                 
             Vector3 moveDirection = playerRigidbody.transform.position - this.transform.position;
-            playerRigidbody.AddForce( moveDirection.normalized * -500f, ForceMode2D.Force);
+            playerRigidbody.AddForce( moveDirection.normalized * 500f, ForceMode2D.Force);
                 
             GetComponent<CinemachineImpulseSource>().GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }
