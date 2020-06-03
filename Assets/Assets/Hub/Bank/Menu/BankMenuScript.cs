@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core;
 using TMPro;
@@ -12,5 +13,10 @@ public class BankMenuScript : MonoBehaviour
     {
         shardsOnPlayer.text = GameManager.GetPlayerScript().GetLightShardAmount().ToString();
         shardsInBank.text = "0";
+    }
+
+    private void OnEnable()
+    { 
+        shardsOnPlayer.text = GameManager.GetPlayerScript().GetLightShardAmount().ToString();
     }
 }

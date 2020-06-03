@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Player.Script;
+using Assets.SaveSystem;
 using Assets.UI.PlayerUI.Scripts;
 using Core;
 using UnityEngine;
@@ -10,8 +11,8 @@ public class BankScript : MonoBehaviour
 {
     private BoxCollider2D _interactCollider2D;
     private bool _entered;
-
     private bool _menuOpen;
+    private int storedLightShards;
 
     // Start is called before the first frame update
     void Start()
@@ -62,5 +63,10 @@ public class BankScript : MonoBehaviour
             Tooltip.HideTooltip_Static();
             _entered = false;
         }
+    }
+
+    private int GetStoredLightShards()
+    {
+        return storedLightShards;
     }
 }

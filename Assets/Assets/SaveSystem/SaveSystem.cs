@@ -57,6 +57,7 @@ namespace Assets.SaveSystem
             var save = new Save
             {
                 lightShard = _playerScript.GetLightShardAmount(),
+                bankedLightShards = 0,
                 smithProgress = 0 //TODO
             };
 
