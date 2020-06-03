@@ -9,6 +9,7 @@ namespace Assets.SaveSystem
     public class SaveSystem : MonoBehaviour
     {
         private string _saveFilePath;
+        public int BankedShards { get; set; }
 
         #region Stuff to save
 
@@ -19,10 +20,12 @@ namespace Assets.SaveSystem
         public void Awake()
         {
             _saveFilePath = Application.persistentDataPath + "/save.json";
+            
         }
 
         private void Start()
         {
+            BankedShards = 0;
             GameManager.GetGenerator().onDungeonGenerated.AddListener(OnDungeonGenerated);
             GameManager.GetGameManager().onGameLoaded.AddListener(LoadSave);
             GameManager.GetGameManager().onNewGameStarted.AddListener(CreateSave);
@@ -57,7 +60,7 @@ namespace Assets.SaveSystem
             var save = new Save
             {
                 lightShard = _playerScript.GetLightShardAmount(),
-                bankedLightShards = 0,
+                bankedLightShards = BankedShards,
                 smithProgress = 0 //TODO
             };
 
@@ -67,6 +70,7 @@ namespace Assets.SaveSystem
         private void LoadSaveGameObject(Save load)
         {
             _playerScript.PlayerSetLightShards(load.lightShard);
+            BankedShards = load.bankedLightShards;
         }
         
         private void OnApplicationQuit()

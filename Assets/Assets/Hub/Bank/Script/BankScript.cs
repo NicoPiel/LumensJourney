@@ -5,6 +5,7 @@ using Assets.SaveSystem;
 using Assets.UI.PlayerUI.Scripts;
 using Core;
 using UnityEngine;
+using UnityEngine.Events;
 using Utility;
 
 public class BankScript : MonoBehaviour
@@ -14,12 +15,18 @@ public class BankScript : MonoBehaviour
     private bool _menuOpen;
     private int storedLightShards;
 
+    public UnityEvent onLightShardsStoredInBank;
+
     // Start is called before the first frame update
     void Start()
     {
+        
         _interactCollider2D = transform.GetComponentInChildren<BoxCollider2D>();
         _entered = false;
         _menuOpen = false;
+        
+        storedLightShards = GameManager.GetSaveSystem().BankedShards;
+        onLightShardsStoredInBank = new UnityEvent();
     }
 
     public void Update()
@@ -65,7 +72,18 @@ public class BankScript : MonoBehaviour
         }
     }
 
-    private int GetStoredLightShards()
+    public void StoreAllLightShardsInBank()
+    {
+        storedLightShards += GameManager.GetPlayerScript().GetLightShardAmount();
+        GameManager.GetPlayerScript().PlayerSetLightShards(0);
+        GameManager.GetSaveSystem().BankedShards = storedLightShards;
+        
+        onLightShardsStoredInBank.Invoke();
+        
+        GameManager.GetSaveSystem().CreateSave();
+    }
+
+    public int GetStoredLightShards()
     {
         return storedLightShards;
     }
