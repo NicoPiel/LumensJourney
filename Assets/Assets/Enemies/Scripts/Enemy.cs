@@ -52,18 +52,12 @@ namespace Assets.Enemies.Scripts
 
             if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())
             {
-                Debug.Log("Detected player..");
-
                 if (raycastHitInfo)
                 {
-                    Debug.Log("Can see something..");
                     Debug.Log(raycastHitInfo.transform.gameObject.tag);
-
                     if (raycastHitInfo.transform.gameObject.CompareTag("Player"))
                     {
-                        Debug.Log("Can see Player..");
                         _rigidbody.velocity = playerDirection * speed * Time.deltaTime;
-                        Debug.Log("Moving to player..");
                     }
                 }
             }
