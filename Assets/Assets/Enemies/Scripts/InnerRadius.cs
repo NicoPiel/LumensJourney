@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Assets.Player.Script;
+using Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +29,18 @@ namespace Assets.Enemies.Scripts
             {
                 _inInner = true;
                 onPlayerWalkIntoRange.Invoke();
+            }
+            
+            if (other.Equals(GameManager.GetPlayerScript().hitCollider))
+            {
+                PlayerScript playerScipt = GameManager.GetPlayerScript();
+
+                _parent.TakeDamage(playerScipt.GetPlayerDamage());
+                
+                Vector3 moveDirection =  _parent.GetRigidBody().transform.position - playerScipt.transform.position;
+                _parent.GetRigidBody().AddForce( moveDirection.normalized * -500f);
+                
+                Debug.Log($"{gameObject.name} was hit by the player.");
             }
         }
 

@@ -82,21 +82,6 @@ namespace Assets.Enemies.Scripts
             GetComponent<CinemachineImpulseSource>().GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
-        {
-            if (other.collider.Equals(GameManager.GetPlayerScript().hitCollider))
-            {
-                PlayerScript playerScipt = GameManager.GetPlayerScript();
-
-                TakeDamage(playerScipt.GetPlayerDamage());
-                
-                Vector3 moveDirection =  _rigidbody.transform.position - playerScipt.transform.position;
-                _rigidbody.AddForce( moveDirection.normalized * -500f);
-                
-                Debug.Log($"{gameObject.name} was hit by the player.");
-            }
-        }
-
         public void TakeDamage(int damageTaken)
         {
             health -= damageTaken;
@@ -118,6 +103,11 @@ namespace Assets.Enemies.Scripts
         private void StopMoving()
         {
             _rigidbody.velocity = new Vector2(0, 0);
+        }
+
+        public Rigidbody2D GetRigidBody()
+        {
+            return _rigidbody;
         }
     }
 }

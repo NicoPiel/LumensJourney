@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Security.Cryptography;
 using Assets.Player.Script;
 using Assets.ProceduralGeneration.Core;
 using Assets.SaveSystem;
@@ -43,6 +44,9 @@ namespace Core
         private bool _ingame = false;
         private bool _paused = false;
 
+        /// <summary>
+        /// Setup events here.
+        /// </summary>
         private void Awake()
         {
             DontDestroyOnLoad(this);
@@ -57,13 +61,19 @@ namespace Core
             CurrentLevel = 0;
         }
 
+        /// <summary>
+        /// Add event listeners here.
+        /// </summary>
         private void Start()
         {
             menuManagerScript = GetComponentInChildren<MenuManagerScript>();
             
             onPlayerSpawned.AddListener(OnPlayerSpawned);
         }
-
+        
+        /// <summary>
+        /// Use this to listen for global input.
+        /// </summary>
         private void Update()
         {
             // Pause Menu
@@ -83,11 +93,18 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Uses the GameManager's singleton to start a new game.
+        /// <see cref="NewGame"/>
+        /// </summary>
         public static void NewGame_Static()
         {
             _instance.NewGame();
         }
 
+        /// <summary>
+        /// Starts a new game and invokes the onNewGameStarted event.
+        /// </summary>
         private void NewGame()
         {
             Setup();
@@ -95,11 +112,18 @@ namespace Core
             onNewGameStarted?.Invoke();
         }
 
+        /// <summary>
+        /// Uses the GameManager's singleton to load a game from file.
+        /// <see cref="LoadGame"/>
+        /// </summary>
         public static void LoadGame_Static()
         {
             _instance.LoadGame();
         }
 
+        /// <summary>
+        /// Loads a game from file using the <see cref="saveSystem"/>.
+        /// </summary>
         private void LoadGame()
         {
             Setup();
@@ -108,12 +132,15 @@ namespace Core
             onGameLoaded.Invoke();
         }
 
+        /// <summary>
+        /// Loads the Hub scene, then proceeds to instantiate the player.
+        /// Also adds listeners for events that are dungeon-specific.
+        /// </summary>
         private void Setup()
         {
             StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
-            generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
-
-            InstantiateGenerator();
+            
+            ModifyGenerator();
             InstantiatePlayer();
             
             _canvas = GameObject.Find("PauseMenu");
@@ -130,6 +157,9 @@ namespace Core
             _ingame = true;
         }
 
+        /// <summary>
+        /// Does work whenever the player loses or gains light.
+        /// </summary>
         private void OnPlayerLightLevelChanged()
         {
             if (!_ingame || Camera.main == null || player == null) return;
@@ -152,6 +182,9 @@ namespace Core
             player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().effectEnabled = true;
         }
 
+        /// <summary>
+        /// Does work whenever a new level is generated.
+        /// </summary>
         private void OnDungeonGenerated()
         {
             _canvas = transform.Find("PauseMenu").gameObject;
@@ -169,16 +202,28 @@ namespace Core
             StartCoroutine(FadeLevelTextInAndOut());
         }
 
+        /// <summary>
+        /// Does work when the player is spawned.
+        /// </summary>
         private void OnPlayerSpawned()
         {
             _camera = GetPlayer().transform.Find("MainCamera").GetComponent<Camera>();
         }
         
-        private void InstantiateGenerator()
+        /// <summary>
+        /// Modifies the generator's properties and adds listeners.
+        /// </summary>
+        private void ModifyGenerator()
         {
+            if (generator == null) return;
             generator.name = "DungeonGenerator";
+            generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
         }
 
+        /// <summary>
+        /// Instantiates player and related objects, such as some UI elements.
+        /// Also finds and sets the <see cref="playerScript"/>
+        /// </summary>
         private void InstantiatePlayer()
         {
             GameObject pauseMenu = Instantiate(Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
@@ -190,6 +235,9 @@ namespace Core
             onPlayerSpawned.Invoke();
         }
 
+        /// <summary>
+        /// Pauses the game and opens the pause menu.
+        /// </summary>
         private void Pause()
         {
             Time.timeScale = 0.0f;
@@ -203,6 +251,9 @@ namespace Core
             _paused = true;
         }
 
+        /// <summary>
+        /// Resumes the game and closes the pause menu.
+        /// </summary>
         private void Resume()
         {
             Time.timeScale = 1.0f;
@@ -216,6 +267,9 @@ namespace Core
             _paused = false;
         }
 
+        /// <summary>
+        /// Resumes the game when a button is clicked and closes the pause menu.
+        /// </summary>
         public void ResumeOnClick()
         {
             Time.timeScale = 1.0f;
@@ -229,6 +283,10 @@ namespace Core
             _paused = false;
         }
 
+        /// <summary>
+        /// Plays a menu sound.
+        /// Use this as an event function.
+        /// </summary>
         public void PlayMenuSound()
         {
             var audioSource = GetComponent<AudioSource>();
@@ -236,6 +294,10 @@ namespace Core
             audioSource.Play();
         }
 
+        /// <summary>
+        /// Uses an alpha effect to fade text (Level 1, 2, 3, etc) in and out.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator FadeLevelTextInAndOut()
         {
             var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
@@ -248,9 +310,25 @@ namespace Core
             if (text != null) text.gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Quits the application.
+        /// If in editor, ends play mode.
+        /// </summary>
         public void Quit()
         {
-            StartCoroutine(Methods.LoadYourSceneAsync("MainMenu"));
+            Time.timeScale = 1.0f;
+            _canvas = transform.Find("PauseMenu").gameObject;
+            
+            if (_canvas != null)
+            {
+                _canvas.SetActive(false);
+                Destroy(GetPlayer());
+            }
+            
+            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
+            _paused = false;
+            
+            SceneManager.LoadScene("MainMenu");
         }
 
         public static GameObject GetPlayer()
@@ -277,6 +355,7 @@ namespace Core
         {
             return _instance.menuManagerScript;
         }
+        
         public static Camera GetMainCamera()
         {
             return _instance._camera;
