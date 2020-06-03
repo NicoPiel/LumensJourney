@@ -1,24 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Player.Script;
+using Assets.SaveSystem;
 using Assets.UI.PlayerUI.Scripts;
 using Core;
 using UnityEngine;
+using UnityEngine.Events;
 using Utility;
 
 public class BankScript : MonoBehaviour
 {
     private BoxCollider2D _interactCollider2D;
     private bool _entered;
-
     private bool _menuOpen;
+    private int storedLightShards;
+
+    public UnityEvent onLightShardsStoredInBank;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         _interactCollider2D = transform.GetComponentInChildren<BoxCollider2D>();
         _entered = false;
         _menuOpen = false;
+        
+        storedLightShards = GameManager.GetSaveSystem().BankedShards;
+        onLightShardsStoredInBank = new UnityEvent();
     }
 
     public void Update()
@@ -62,5 +70,21 @@ public class BankScript : MonoBehaviour
             Tooltip.HideTooltip_Static();
             _entered = false;
         }
+    }
+
+    public void StoreAllLightShardsInBank()
+    {
+        storedLightShards += GameManager.GetPlayerScript().GetLightShardAmount();
+        GameManager.GetPlayerScript().PlayerSetLightShards(0);
+        GameManager.GetSaveSystem().BankedShards = storedLightShards;
+        
+        onLightShardsStoredInBank.Invoke();
+        
+        GameManager.GetSaveSystem().CreateSave();
+    }
+
+    public int GetStoredLightShards()
+    {
+        return storedLightShards;
     }
 }

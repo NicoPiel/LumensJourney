@@ -7,5 +7,6 @@ namespace Assets.SaveSystem
     {
         public int lightShard;
         public int smithProgress;
+        public int bankedLightShards;
     }
 }
