@@ -22,8 +22,7 @@ Wirst du sie jemals sehen?
 *Entwicklung mit*:\
   Client (Spiel) - > Unity (C#)\
   Versionsverlauf -> GitHub\
-  Organisation -> Nicht festgelegt (Issues, Trello oder Glo)\
+  Organisation -> Issues\
   Spieldaten -> XML, JSON\
-  Datenbank zur Datenspeicherung\
 \
 **Team: Pascal Staadt, René Reifen, Nico Piel**
