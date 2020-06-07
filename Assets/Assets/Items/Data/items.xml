@@ -25,6 +25,7 @@
     <item name="Red Potion">
         <Values>
             <value name="MaxHealth">10</value>
+            <value name="FireResistance">20</value>
         </Values>
     </item>
 </Items>

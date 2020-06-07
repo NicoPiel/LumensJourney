@@ -44,11 +44,11 @@ namespace Assets.Items.Scripts
         public static GameItem ConstructItem(string itemName)
         {
             GameItem item = new GameItem();
-            XElement root = XElement.Load("Assets/Resources/Items/Data/items.xml");
+            XElement rootNode = XElement.Load("Assets/Resources/Items/Data/items.xml");
             IEnumerable<XElement> items =
-                from el in root.Elements("item")
-                where (string) el.Attribute("name") == itemName
-                select el;
+                from xElement in rootNode.Elements("item")
+                where (string) xElement.Attribute("name") == itemName
+                select xElement;
 
         
             foreach (var itemData in items)

@@ -117,6 +117,16 @@ namespace Assets.Player.Script
             {
                 _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
                 _change.Normalize();
+                if (_change.x < 0 || _change.x > 0)
+                {
+                    _animator.SetFloat("LastHorizontal", _change.x);
+                    _animator.SetFloat("LastVertical", 0);
+                }
+                if (_change.y < 0 || _change.y > 0)
+                {
+                    _animator.SetFloat("LastVertical", _change.y);
+                    _animator.SetFloat("LastHorizontal", 0);
+                }
             }
         }
 
@@ -183,7 +193,6 @@ namespace Assets.Player.Script
                 PlayerChangeLightLevel(-damage*10);
                 onPlayerLifeChanged.Invoke();
                 onPlayerTakeDamage.Invoke();
-                onPlayerLifeChanged.Invoke();
             }
             else
             {
