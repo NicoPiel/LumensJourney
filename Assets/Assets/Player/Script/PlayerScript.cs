@@ -100,18 +100,27 @@ namespace Assets.Player.Script
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 HitInDirection(180, new Vector2(2, 1), new Vector2(0, -1f), "SwingUp");
+                _animator.SetFloat("LastHorizontal", 0);
+                _animator.SetFloat("LastVertical", 1);
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
+                _animator.SetFloat("LastHorizontal", 1);
+                _animator.SetFloat("LastVertical", 0);
+                
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 HitInDirection(0, new Vector2(2, 1), new Vector2(0, -0.5f), "SwingDown");
+                _animator.SetFloat("LastHorizontal", 0);
+                _animator.SetFloat("LastVertical", -1);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 HitInDirection(270, new Vector2(1, 1), new Vector2(-0.5f, -1f), "SwingLeft");
+                _animator.SetFloat("LastHorizontal", -1);
+                _animator.SetFloat("LastVertical", 0);
             }
             else
             {
