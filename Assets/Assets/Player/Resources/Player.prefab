@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightLoss: 2
-  speed: 5
+  speed: 4
   hitCollider: {fileID: 0}
   onPlayerTakeDamage:
     m_PersistentCalls:

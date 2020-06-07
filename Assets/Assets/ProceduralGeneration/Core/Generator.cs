@@ -142,7 +142,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             Debug.Log("Generating rooms..");
 
-            GameObject dungeon = this.dungeonObject;
+            GameObject dungeon = dungeonObject;
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
@@ -170,8 +170,14 @@ namespace Assets.ProceduralGeneration.Core
                 // Make random position for the doors
                 var doorLeft = Random.Range(yMin + 1, yMax - 1);
                 var doorRight = Random.Range(yMin + 1, yMax - 1);
-                
-                
+
+                var roomObject = new GameObject
+                {
+                    name = $"Room_{i}"
+                };
+                roomObject.transform.SetParent(dungeon.transform);
+                roomObject.transform.rotation = Quaternion.identity;
+                roomObject.transform.position = spawner.transform.position;
 
                 // Generate all room tiles
                 for (var x = xMin; x <= xMax; x++)
@@ -181,12 +187,12 @@ namespace Assets.ProceduralGeneration.Core
                         // Generate floor tiles
                         if (x > xMin && x < xMax && y > yMin && y < yMax - 1)
                         {
-                            PlaceTile(GetRandomTile(otherFloorTiles), x, y, dungeon);
+                            PlaceTile(GetRandomTile(), x, y, roomObject);
                         }
 
                         else if (x != xMin && x != xMax && y == yMax - 1)
                         {
-                            PlaceTile(wallTile, x, y, dungeon);
+                            PlaceTile(wallTile, x, y, roomObject);
                         }
 
                         // Erect vertical walls
@@ -195,18 +201,18 @@ namespace Assets.ProceduralGeneration.Core
                             // Generate bottom wall, and make room for a door
                             if (y != doorLeft)
                             {
-                                PlaceTile(wallTileTopDown, x, y, dungeon);
+                                PlaceTile(wallTileTopDown, x, y, roomObject);
                             }
                             else if (y == doorLeft)
                             {
                                 if (_rooms.Count > 1)
                                 {
-                                    PlaceTile(standardFloorTile, x, y, dungeon);
+                                    PlaceTile(standardFloorTile, x, y, roomObject);
                                     _leftDoors.Add(new[] {xMin, doorLeft});
                                 }
                                 else
                                 {
-                                    PlaceTile(wallTileTopDown, x, y, dungeon);
+                                    PlaceTile(wallTileTopDown, x, y, roomObject);
                                 }
                             }
                         }
@@ -215,18 +221,18 @@ namespace Assets.ProceduralGeneration.Core
                             // Generate top wall, and make room for a door
                             if (y != doorRight)
                             {
-                                PlaceTile(wallTileTopDown, x, y, dungeon);
+                                PlaceTile(wallTileTopDown, x, y, roomObject);
                             }
                             else if (y == doorRight)
                             {
                                 if (_rooms.Count < numberOfRooms)
                                 {
-                                    PlaceTile(standardFloorTile, x, y, dungeon);
+                                    PlaceTile(standardFloorTile, x, y, roomObject);
                                     _rightDoors.Add(new[] {xMax, doorRight});
                                 }
                                 else
                                 {
-                                    PlaceTile(wallTileTopDown, x, y, dungeon);
+                                    PlaceTile(wallTileTopDown, x, y, roomObject);
                                 }
                             }
                         }
@@ -234,11 +240,11 @@ namespace Assets.ProceduralGeneration.Core
                         // Erect horizontal walls
                         else if (y == yMin)
                         {
-                            PlaceTile(wallTileTopDown, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, roomObject);
                         }
                         else if (y == yMax)
                         {
-                            PlaceTile(wallTileTopDown, x, y, dungeon);
+                            PlaceTile(wallTileTopDown, x, y, roomObject);
                         }
                     }
                 }
@@ -261,8 +267,8 @@ namespace Assets.ProceduralGeneration.Core
         /// <summary>
         /// Generates corridors after the rooms have been built.
         /// </summary>
-        /// <param name="dungeon">The parent GameObject</param>
-        private void GenerateCorridors(GameObject dungeon)
+        /// <param name="parent">The parent GameObject</param>
+        private void GenerateCorridors(GameObject parent)
         {
             Debug.Log("Generating corridors..");
 
@@ -286,17 +292,17 @@ namespace Assets.ProceduralGeneration.Core
                         if (x < middle - 1)
                         {
                             // Place a wall directly above the corridor
-                            PlaceTile(wallTile, x, leftDoorY + 1, dungeon);
+                            PlaceTile(wallTile, x, leftDoorY + 1, parent);
                             // Place a dark tile above that
-                            PlaceTile(wallTileTopDown, x, leftDoorY + 2, dungeon);
+                            PlaceTile(wallTileTopDown, x, leftDoorY + 2, parent);
                         }
 
                         // Place a dark tile directly below the corridor
-                        PlaceTile(wallTileTopDown, x, leftDoorY - 1, dungeon);
+                        PlaceTile(wallTileTopDown, x, leftDoorY - 1, parent);
                     }
 
                     // Place floor tile
-                    PlaceTile(standardFloorTile, x, leftDoorY, dungeon);
+                    PlaceTile(standardFloorTile, x, leftDoorY, parent);
 
                     xBuffer = x + 1;
                 }
@@ -304,13 +310,13 @@ namespace Assets.ProceduralGeneration.Core
                 if (height > 0)
                 {
                     // Place a corner tile
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, parent);
                     // Place two walls to complete the lower-right corner
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, parent);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, parent);
                     
                     
-                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, dungeon);
+                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, parent);
 
                     for (var y = leftDoorY + 1; y < rightDoorY; y++)
                     {
@@ -318,47 +324,47 @@ namespace Assets.ProceduralGeneration.Core
                         {
                             if (xBuffer > leftDoorX)
                             {
-                                PlaceTile(wallTileTopDown, xBuffer - 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer - 1, y, parent);
                             }
 
                             if (xBuffer < rightDoorX)
                             {
-                                PlaceTile(wallTileTopDown, xBuffer + 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer + 1, y, parent);
                             }
                         }
 
-                        PlaceTile(standardFloorTile, xBuffer, y, dungeon);
+                        PlaceTile(standardFloorTile, xBuffer, y, parent);
                     }
                     
                     // Place seven walls to complete the upper-left corner
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 2, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, parent);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, parent);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 2, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer, rightDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer, rightDoorY + 1, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, parent);
                 }
                 
                 else if (height < 0)
                 {
                     // Place walls to complete the upper-right corner
-                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, parent);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 1, parent);
                     
                     // Place a corner tile
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, parent);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, parent);
                     
-                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, dungeon);
+                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, parent);
 
                     for (var y = leftDoorY - 1; y > rightDoorY; y--)
                     {
@@ -366,46 +372,46 @@ namespace Assets.ProceduralGeneration.Core
                         {
                             if (xBuffer > leftDoorX)
                             {
-                                PlaceTile(wallTileTopDown, xBuffer - 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer - 1, y, parent);
                             }
 
                             if (xBuffer < rightDoorX)
                             {
-                                PlaceTile(wallTileTopDown, xBuffer + 1, y, dungeon);
+                                PlaceTile(wallTileTopDown, xBuffer + 1, y, parent);
                             }
                         }
 
-                        PlaceTile(standardFloorTile, xBuffer, y, dungeon);
+                        PlaceTile(standardFloorTile, xBuffer, y, parent);
                     }
                     
                     // Place walls to complete the lower-left corner
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY - 1, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY - 1, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY - 1, dungeon);
-                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, parent);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, parent);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY - 1, parent);
+                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY - 1, parent);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY - 1, parent);
+                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, parent);
                 }
                 
                 else if (height == 0)
                 {
                     // Place walls to complete a straight corridor
-                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, dungeon);
-                    PlaceTile(wallTile, xBuffer + 1, leftDoorY + 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, parent);
+                    PlaceTile(wallTile, xBuffer + 1, leftDoorY + 1, parent);
                     
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, dungeon);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, dungeon);
+                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, parent);
+                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, parent);
                 }
                 
                 // Get to the y of the right door
-                PlaceTile(standardFloorTile, xBuffer, rightDoorY, dungeon);
-                PlaceTile(standardFloorTile, xBuffer + 1, rightDoorY, dungeon);
+                PlaceTile(standardFloorTile, xBuffer, rightDoorY, parent);
+                PlaceTile(standardFloorTile, xBuffer + 1, rightDoorY, parent);
                 
                 for (var x = xBuffer + 2; x < rightDoorX; x++)
                 {
@@ -414,16 +420,16 @@ namespace Assets.ProceduralGeneration.Core
                         if (x > middle - 1)
                         {
                             // Place a wall directly above the corridor
-                            PlaceTile(wallTile, x, rightDoorY + 1, dungeon);
+                            PlaceTile(wallTile, x, rightDoorY + 1, parent);
                             // Place a dark tile above that
-                            PlaceTile(wallTileTopDown, x, rightDoorY + 2, dungeon);
+                            PlaceTile(wallTileTopDown, x, rightDoorY + 2, parent);
                         }
 
                         // Place a dark tile directly below the corridor
-                        PlaceTile(wallTileTopDown, x, rightDoorY - 1, dungeon);
+                        PlaceTile(wallTileTopDown, x, rightDoorY - 1, parent);
                     }
 
-                    PlaceTile(standardFloorTile, x, rightDoorY, dungeon);
+                    PlaceTile(standardFloorTile, x, rightDoorY, parent);
 
                     xBuffer += 1;
                 }
@@ -501,9 +507,8 @@ namespace Assets.ProceduralGeneration.Core
         /// <param name="y">y position</param>
         /// <param name="parent">The parent object</param>
         /// <returns>The placed Tile</returns>
-        private GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
+        public static GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
-            //_tilesSurfaces.Add(tile.GetComponent<NavMeshSurface>());
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
         }
 
@@ -532,12 +537,11 @@ namespace Assets.ProceduralGeneration.Core
         /// <summary>
         /// Gets a random GameObject from a pool of GameObjects using the Generator's stdLikelihood value.
         /// </summary>
-        /// <param name="tileCollection"></param>
         /// <returns></returns>
-        private GameObject GetRandomTile(IReadOnlyList<GameObject> tileCollection)
+        public GameObject GetRandomTile()
         {
             var random = Random.Range((stdLikelihood + 1) - 100, stdLikelihood);
-            return random > 0 ? standardFloorTile : tileCollection[Random.Range(0, tileCollection.Count)];
+            return random > 0 ? standardFloorTile : otherFloorTiles[Random.Range(0, otherFloorTiles.Count)];
         }
 
         /// <summary>
