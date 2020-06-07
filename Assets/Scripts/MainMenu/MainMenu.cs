@@ -15,16 +15,16 @@ namespace MainMenu
 
         private void Start()
         {
-            loadGameButton.SetActive(false);
-            newGameButton.SetActive(false);
             Cursor.SetCursor(SpriteToTexture(cursorSprite), Vector2.zero, CursorMode.Auto);
             if (File.Exists(Application.persistentDataPath + "/save.json"))
             {
                loadGameButton.SetActive(true);
+               newGameButton.SetActive(false);
             }
             else
             {
                 newGameButton.SetActive(true);
+                loadGameButton.SetActive(false);
             }
         }
         
