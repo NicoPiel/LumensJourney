@@ -1,6 +1,8 @@
-﻿using Core;
+﻿using System.IO;
+using Core;
 using Unity.Burst;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MainMenu
 {
@@ -8,10 +10,22 @@ namespace MainMenu
     public class MainMenu : MonoBehaviour
     {
         public Sprite cursorSprite;
+        public GameObject newGameButton;
+        public GameObject loadGameButton;
 
         private void Start()
         {
+            loadGameButton.SetActive(false);
+            newGameButton.SetActive(false);
             Cursor.SetCursor(SpriteToTexture(cursorSprite), Vector2.zero, CursorMode.Auto);
+            if (File.Exists(Application.persistentDataPath + "/save.json"))
+            {
+               loadGameButton.SetActive(true);
+            }
+            else
+            {
+                newGameButton.SetActive(true);
+            }
         }
         
         public void NewGame()
