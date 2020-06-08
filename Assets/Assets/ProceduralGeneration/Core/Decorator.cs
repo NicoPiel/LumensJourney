@@ -17,29 +17,27 @@ namespace Assets.ProceduralGeneration.Core
             _generator = GameManager.GetGenerator();
             _generator.onDungeonGenerated.AddListener(Decorate);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        
         private void Decorate()
         {
+            Debug.Log("Decorating..");
             GameObject enemyDecorator = CreateEnemyDecorator();
+
+            var spawnedRooms = _generator.GetSpawnedRooms();
             
-            foreach (Rect room in _generator.GetRooms())
+            if (spawnedRooms == null) return;
+            
+            foreach (Rect room in spawnedRooms)
             {
-                Spawn("Slime", 
-                    GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax), 
-                    enemyDecorator.transform);
+                SpawnRandomly("Slime", room, enemyDecorator.transform);
 
                 var numberOfEnemies = room.width * room.height / 20;
 
-                for (int i = 0; i < numberOfEnemies; i++)
+                for (var i = 0; i < numberOfEnemies; i++)
                 {
                     if (GetProbability(10))
                     {
-                        Spawn("Slime", 
-                            GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax), 
-                            enemyDecorator.transform);
+                        SpawnRandomly("Slime", room, enemyDecorator.transform);
                     }
                 }
             }
@@ -51,6 +49,14 @@ namespace Assets.ProceduralGeneration.Core
         {
             return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath), 
                 new Vector3(position.x, position.y, 0),
+                Quaternion.identity,
+                parent);
+        }
+        
+        private GameObject SpawnRandomly (string resourcesPath, Rect room, Transform parent)
+        {
+            return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath),
+                GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
                 Quaternion.identity,
                 parent);
         }

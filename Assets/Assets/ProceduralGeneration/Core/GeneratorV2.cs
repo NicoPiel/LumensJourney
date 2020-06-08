@@ -61,10 +61,9 @@ namespace Assets.ProceduralGeneration.Core
         #endregion
 
         #region Class-specific variables
-
-        private List<int[]> _rightDoors;
-        private Dictionary<int[], int[]> _doorRelations;
+        
         private List<Rect> _rooms;
+        private List<Rect> spawnedRooms;
 
         [SerializeField] private GameObject dungeonObject;
 
@@ -122,8 +121,7 @@ namespace Assets.ProceduralGeneration.Core
             return true;
         }
 
-
-        // TODO: Generate doors
+        
         /// <summary>
         /// Generates the specified number of rooms (only). 
         /// </summary>
@@ -136,7 +134,7 @@ namespace Assets.ProceduralGeneration.Core
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
-            var spawnedRooms = new List<Rect>();
+            spawnedRooms = new List<Rect>();
             var metadata = new Dictionary<int[], string>();
 
             for (var i = 0; i < numberOfRooms; i++)
@@ -277,7 +275,7 @@ namespace Assets.ProceduralGeneration.Core
                     spawnedRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
                     var probability = Random.Range(0, 4);
                     MoveSpawner(probability);
-                    Debug.Log("Generation didn't work, recalibrating.");
+                    //Debug.Log("Generation didn't work, recalibrating.");
                 }
 
                 // Places a teleporter object, which upon activation generates a new dungeon.
@@ -320,14 +318,14 @@ namespace Assets.ProceduralGeneration.Core
                     // Look for overlapping rooms
                     var overlaps = spawnedRooms.Where(r2 => rect.Overlaps(r2)).ToList();
 
-                    Debug.Log($"{r.ToString()} overlaps {overlaps.Count} rooms.");
+                    //Debug.Log($"{r.ToString()} overlaps {overlaps.Count} rooms.");
 
                     foreach (Rect overlap in overlaps)
                     {
                         var angleUpDown = Vector2.Angle(overlap.center - r.center, Vector2.up);
                         var angleLeftRight = Vector2.Angle(overlap.center - r.center, Vector2.left);
                         
-                        if ((angleUpDown < 20 || angleUpDown > 160) ^ (angleLeftRight < 20 || angleLeftRight > 160))
+                        if ((angleUpDown < 30 || angleUpDown > 150) ^ (angleLeftRight < 30 || angleLeftRight > 150))
                         {
                             var results = new RaycastHit2D[100];
                             var size = Physics2D.LinecastNonAlloc(
@@ -337,20 +335,20 @@ namespace Assets.ProceduralGeneration.Core
                                 LayerMask.GetMask("Walls"),
                                 0,
                                 0);
-                            Debug.Log($"Linecast hit {size} objects");
+                            //Debug.Log($"Linecast hit {size} objects");
 
                             if (size > 0)
                             {
-                                Debug.Log("Linecast hit something.");
+                                //Debug.Log("Linecast hit something.");
                                 foreach (RaycastHit2D result in results)
                                 {
                                     if (result.transform == null) continue;
 
-                                    Debug.Log("Detected walls.");
+                                    //Debug.Log("Detected walls.");
                                     GameObject hit = result.transform.gameObject;
                                     if (hit.CompareTag("Wall"))
                                     {
-                                        Debug.Log("Destroyed wall.");
+                                        //Debug.Log("Destroyed wall.");
                                         PlaceTile(GetRandomTile(), hit.transform.position, dungeon);
                                         Destroy(hit);
                                     }
@@ -398,6 +396,7 @@ namespace Assets.ProceduralGeneration.Core
 
         private void OnDungeonGenerated()
         {
+            Debug.Log("Dungeon generated event invoked.");
             Generated = true;
         }
 
@@ -508,6 +507,10 @@ namespace Assets.ProceduralGeneration.Core
             return this._rooms;
         }
 
+        public IEnumerable<Rect> GetSpawnedRooms()
+        {
+            return Generated ? spawnedRooms : null;
+        }
         #endregion
     }
 }

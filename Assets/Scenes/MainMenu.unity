@@ -127,6 +127,24 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6166553473719458178}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &504352020 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6029391063509343130, guid: d809ff8be5b6d694da04e14cf7f25865,
+    type: 3}
+  m_PrefabInstance: {fileID: 845780112907540052}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &504352021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504352020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821bcd23231608f409e4bd1fbe886b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &707370888 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2010919515996897247, guid: dbdb09408e6a96c47bd41dc81081ad8e,
@@ -353,14 +371,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 607724920, guid: d809ff8be5b6d694da04e14cf7f25865, type: 3}
-      propertyPath: m_Volume
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 607724920, guid: d809ff8be5b6d694da04e14cf7f25865, type: 3}
-      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 845780113571387580, guid: d809ff8be5b6d694da04e14cf7f25865,
         type: 3}
       propertyPath: m_Name

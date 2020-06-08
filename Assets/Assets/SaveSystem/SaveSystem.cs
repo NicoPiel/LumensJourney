@@ -48,7 +48,7 @@ namespace Assets.SaveSystem
             var json = JsonUtility.ToJson(save);
             System.IO.File.WriteAllText(_saveFilePath, json);
             
-            Debug.Log(json);
+            //Debug.Log(json);
             
             Debug.Log($"Saved to {_saveFilePath}");
         }
