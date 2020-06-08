@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Core;
 using Unity.Mathematics;
 using UnityEngine;
@@ -113,6 +115,8 @@ namespace Assets.ProceduralGeneration.Core
             return true;
         }
 
+        
+        // TODO: Generate doors
         /// <summary>
         /// Generates the specified number of rooms (only). 
         /// </summary>
@@ -125,12 +129,8 @@ namespace Assets.ProceduralGeneration.Core
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
-            _rightDoors = new List<int[]>();
-            _leftDoors = new List<int[]>();
-            _doorRelations = new Dictionary<int[], int[]>();
-
-            var spawnerBacktrace = new List<Vector2>(); 
-            var lastIterationDirection = string.Empty;
+            var spawnedRooms = new List<Rect>();
+            var metadata = new Dictionary<int[], string>();
 
             for (var i = 0; i < numberOfRooms; i++)
             {
@@ -142,31 +142,29 @@ namespace Assets.ProceduralGeneration.Core
                 _rooms.Add(room);
             }
 
-
             for (var i = 0; i < _rooms.Count; i++)
             {
-                Rect room = _rooms[i];
+                Rect currentRoom = _rooms[i];
+                Rect spawnedRoom;
 
                 Vector3 position = spawner.transform.position;
-                spawnerBacktrace.Add(position);
-                room.position = position;
+
+                if (spawnedRooms.Count > 0)
+                {
+                    spawnedRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
+
+                    var probability = Random.Range(0, 4);
+                    MoveSpawner(probability);
+                }
 
                 var xMin = (int) math.floor(position.x);
                 var xMax = (int) math.ceil(position.x + _rooms[i].width);
                 var yMin = (int) math.floor(position.y);
                 var yMax = (int) math.ceil(position.y + _rooms[i].height);
 
-                // Make random position for the doors
-                var doorLeft = Random.Range(yMin + 1, yMax - 1);
-                var doorRight = Random.Range(yMin + 1, yMax - 1);
+                GameObject roomObject = GenerateRoomObject();
 
-                var roomObject = new GameObject
-                {
-                    name = $"Room_{i}"
-                };
-                roomObject.transform.SetParent(dungeon.transform);
-                roomObject.transform.rotation = Quaternion.identity;
-                roomObject.transform.position = spawner.transform.position;
+                #region Generate tiles
 
                 // Generate all room tiles
                 for (var x = xMin; x <= xMax; x++)
@@ -188,42 +186,12 @@ namespace Assets.ProceduralGeneration.Core
                         else if (x == xMin && y > yMin && y < yMax)
                         {
                             // Generate bottom wall, and make room for a door
-                            if (y != doorLeft)
-                            {
-                                PlaceTile(wallTileTopDown, x, y, roomObject);
-                            }
-                            else if (y == doorLeft)
-                            {
-                                if (_rooms.Count > 1)
-                                {
-                                    PlaceTile(standardFloorTile, x, y, roomObject);
-                                    _leftDoors.Add(new[] {xMin, doorLeft});
-                                }
-                                else
-                                {
-                                    PlaceTile(wallTileTopDown, x, y, roomObject);
-                                }
-                            }
+                            PlaceTile(wallTileTopDown, x, y, roomObject);
                         }
                         else if (x == xMax && y > yMin && y < yMax)
                         {
                             // Generate top wall, and make room for a door
-                            if (y != doorRight)
-                            {
-                                PlaceTile(wallTileTopDown, x, y, roomObject);
-                            }
-                            else if (y == doorRight)
-                            {
-                                if (_rooms.Count < numberOfRooms)
-                                {
-                                    PlaceTile(standardFloorTile, x, y, roomObject);
-                                    _rightDoors.Add(new[] {xMax, doorRight});
-                                }
-                                else
-                                {
-                                    PlaceTile(wallTileTopDown, x, y, roomObject);
-                                }
-                            }
+                            PlaceTile(wallTileTopDown, x, y, roomObject);
                         }
 
                         // Erect horizontal walls
@@ -238,88 +206,95 @@ namespace Assets.ProceduralGeneration.Core
                     }
                 }
 
-                var probability = Random.Range(0f, 1f);
-                
-                MoveSpawner(probability);
+                #endregion
+
+                spawnedRooms.Add(currentRoom);
+
+                #region Local functions
 
                 // Local function moving the spawner according to the rules.
-                void MoveSpawner(float p)
+                void MoveSpawner(int p)
                 {
-                    if (p <= 0.25)
+                    for (var u = 0; u < 50; u++)
                     {
-                        if (lastIterationDirection != "down")
+                        switch (p)
                         {
-                            // Move spawner up
-                            spawner.transform.position = (i < (numberOfRooms - 1))
-                                ? new Vector2(position.x, position.y + room.height + _rooms[i + 1].height)
-                                : new Vector2(position.x, position.y + room.height * 2);
-                            lastIterationDirection = "up";
-                            Debug.Log("Moved up");
+                            case 0:
+                                // Move spawner up
+                                position = new Vector2(spawnedRoom.x, spawnedRoom.yMax + 1);
+                                break;
+                            case 1:
+                                // Move spawner down
+                                position = new Vector2(spawnedRoom.x, spawnedRoom.y - currentRoom.height - 1);
+                                break;
+                            case 2:
+                                // Move spawner left
+                                position = new Vector2(spawnedRoom.x - currentRoom.width - 1, spawnedRoom.y);
+                                break;
+                            case 3:
+                                // Move spawner right
+                                position = new Vector2(spawnedRoom.xMax + 1, spawnedRoom.y);
+                                break;
                         }
-                        else MoveSpawner(p + 0.25f);
+
+                        currentRoom.position = position;
+
+                        if (!IsTouchingAnotherRoom(currentRoom))
+                        {
+                            switch (p)
+                            {
+                                case 0:
+                                    Debug.Log($"Moved up from {spawnedRoom.ToString()}");
+                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "N");
+                                    break;
+                                case 1:
+                                    Debug.Log($"Moved down from {spawnedRoom.ToString()}");
+                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "S");
+                                    break;
+                                case 2:
+                                    Debug.Log($"Moved left from {spawnedRoom.ToString()}");
+                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "W");
+                                    break;
+                                case 3:
+                                    Debug.Log($"Moved right from {spawnedRoom.ToString()}");
+                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "E");
+                                    break;
+                            }
+
+                            return;
+                        }
+
+                        p = p < 3 ? p + 1 : 0;
                     }
 
-                    else if (p <= 0.5 && p > 0.25)
-                    {
-                        if (lastIterationDirection != "up")
-                        {
-                            // Move spawner down
-                            spawner.transform.position = (i < (numberOfRooms - 1))
-                                ? new Vector2(position.x, position.y - room.height - _rooms[i + 1].height)
-                                : new Vector2(position.x, position.y - room.height * 2);
-                            lastIterationDirection = "down";
-                            Debug.Log("Moved down");
-                        }
-                        else MoveSpawner(p + 0.25f);
-                    }
-
-                    else if (p <= 0.75 && p > 0.5)
-                    {
-                        if (lastIterationDirection != "right")
-                        {
-                            // Move spawner left
-                            spawner.transform.position = (i < (numberOfRooms - 1))
-                                ? new Vector2(position.x - room.width - _rooms[i + 1].width, position.y)
-                                : new Vector2(position.x - room.width * 2, position.y);
-                            lastIterationDirection = "left";
-                            Debug.Log("Moved left");
-                        }
-                        else MoveSpawner(p + 0.25f);
-                    }
-
-                    else if (p <= 1 && p > 0.75)
-                    {
-                        if (lastIterationDirection != "left")
-                        {
-                            // Move spawner right
-                            spawner.transform.position = (i < (numberOfRooms - 1))
-                                ? new Vector2(position.x + room.width + _rooms[i + 1].width, position.y)
-                                : new Vector2(position.x + room.width * 2, position.y);
-                            lastIterationDirection = "right";
-                            Debug.Log("Moved right");
-                        }
-                        else MoveSpawner(p + 0.25f);
-                    }
+                    spawnedRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
+                    var probability = Random.Range(0, 4);
+                    MoveSpawner(probability);
+                    Debug.Log("Generation didn't work, recalibrating.");
                 }
 
-                // TODO: Local function looking for adjacent former spawner positions.
-                bool SpawnerBacktrace()
+                bool IsTouchingAnotherRoom(Rect other)
                 {
-                    foreach (Vector2 backtracePosition in spawnerBacktrace)
-                    {
-                        
-                    }
-                    return false;
+                    return spawnedRooms.Any(r => r.Overlaps(other));
                 }
-            }
 
-            for (var i = 0; i < _rightDoors.Count; i++)
-            {
-                _doorRelations.Add(_rightDoors[i], _leftDoors[i]);
-            }
+                GameObject GenerateRoomObject()
+                {
+                    var newObject = new GameObject
+                    {
+                        name = $"Room_{i}: {currentRoom.width}x{currentRoom.height}",
+                        tag = "Room",
+                        layer = LayerMask.NameToLayer("Rooms")
+                    };
+                    newObject.transform.SetParent(dungeon.transform);
+                    newObject.transform.rotation = Quaternion.identity;
+                    newObject.transform.position = spawner.transform.position;
 
-            //GenerateCorridors(dungeon);
-            //GenerateDoors(dungeon);
+                    return newObject;
+                }
+
+                #endregion
+            }
         }
 
         private void OnDungeonGenerated()

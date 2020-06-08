@@ -7,6 +7,7 @@ TagManager:
   - Tooltip
   - Generator
   - Enemy
+  - Room
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - 
   - PostProcessing
   - Player
-  - 
+  - Rooms
   - 
   - 
   - 
@@ -43,4 +44,25 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Floor
+    uniqueID: 1187098273
+    locked: 0
+  - name: Walls
+    uniqueID: 3920444279
+    locked: 0
+  - name: Decoration
+    uniqueID: 2563152179
+    locked: 0
+  - name: Doors
+    uniqueID: 318741461
+    locked: 0
+  - name: Teleporter
+    uniqueID: 3685417289
+    locked: 0
+  - name: Player
+    uniqueID: 1633841345
+    locked: 0
+  - name: InFrontOfPlayer
+    uniqueID: 3726432155
     locked: 0
