@@ -10,7 +10,7 @@ namespace Assets.ProceduralGeneration.Core
     [BurstCompile]
     public class Decorator : MonoBehaviour
     {
-        private Generator _generator;
+        private GeneratorV2 _generator;
 
         private void Start()
         {

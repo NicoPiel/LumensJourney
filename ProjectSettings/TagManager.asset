@@ -8,6 +8,8 @@ TagManager:
   - Generator
   - Enemy
   - Room
+  - Wall
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - PostProcessing
   - Player
   - Rooms
-  - 
+  - Walls
   - 
   - 
   - 

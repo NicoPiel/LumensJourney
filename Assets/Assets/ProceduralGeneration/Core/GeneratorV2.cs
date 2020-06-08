@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Core;
 using Unity.Mathematics;
 using UnityEngine;
@@ -62,6 +60,8 @@ namespace Assets.ProceduralGeneration.Core
 
         #endregion
 
+        #region Class-specific variables
+
         private List<int[]> _rightDoors;
         private Dictionary<int[], int[]> _doorRelations;
         private List<Rect> _rooms;
@@ -72,6 +72,10 @@ namespace Assets.ProceduralGeneration.Core
         /// True, if the dungeon has finished generating.
         /// </summary>
         public bool Generated { get; set; }
+
+        #endregion
+
+        #region UnityEvent functions
 
         private void Awake()
         {
@@ -85,6 +89,10 @@ namespace Assets.ProceduralGeneration.Core
             onDungeonGenerated.AddListener(OnDungeonGenerated);
             onDungeonChanged.AddListener(OnDungeonChanged);
         }
+
+        #endregion
+
+        #region Generation
 
         /// <summary>
         /// Generates a new dungeon with the specified number of rooms.
@@ -114,7 +122,7 @@ namespace Assets.ProceduralGeneration.Core
             return true;
         }
 
-        
+
         // TODO: Generate doors
         /// <summary>
         /// Generates the specified number of rooms (only). 
@@ -243,20 +251,20 @@ namespace Assets.ProceduralGeneration.Core
                             switch (p)
                             {
                                 case 0:
-                                    Debug.Log($"Moved up from {spawnedRoom.ToString()}");
-                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "N");
+                                    //Debug.Log($"Moved up from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "N");
                                     break;
                                 case 1:
-                                    Debug.Log($"Moved down from {spawnedRoom.ToString()}");
-                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "S");
+                                    //Debug.Log($"Moved down from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "S");
                                     break;
                                 case 2:
-                                    Debug.Log($"Moved left from {spawnedRoom.ToString()}");
-                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "W");
+                                    //Debug.Log($"Moved left from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "W");
                                     break;
                                 case 3:
-                                    Debug.Log($"Moved right from {spawnedRoom.ToString()}");
-                                    metadata.Add(new [] {spawnedRooms.IndexOf(spawnedRoom), i}, "E");
+                                    //Debug.Log($"Moved right from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "E");
                                     break;
                             }
 
@@ -271,9 +279,9 @@ namespace Assets.ProceduralGeneration.Core
                     MoveSpawner(probability);
                     Debug.Log("Generation didn't work, recalibrating.");
                 }
-                
+
                 // Places a teleporter object, which upon activation generates a new dungeon.
-                
+
 
                 bool IsTouchingAnotherRoom(Rect other)
                 {
@@ -297,18 +305,71 @@ namespace Assets.ProceduralGeneration.Core
 
                 #endregion
             }
-            
+
             PlaceTeleporter();
-            
+            PlaceDoors();
+
+            #region Local functions
+
+            void PlaceDoors()
+            {
+                foreach (Rect r in spawnedRooms)
+                {
+                    // Increase the size of the room
+                    var rect = new Rect(new Vector2(r.x - 0.1f, r.y - 0.1f), new Vector2(r.width + 1.2f, r.height + 1.2f));
+                    // Look for overlapping rooms
+                    var overlaps = spawnedRooms.Where(r2 => rect.Overlaps(r2)).ToList();
+
+                    Debug.Log($"{r.ToString()} overlaps {overlaps.Count} rooms.");
+
+                    foreach (Rect overlap in overlaps)
+                    {
+                        var angleUpDown = Vector2.Angle(overlap.center - r.center, Vector2.up);
+                        var angleLeftRight = Vector2.Angle(overlap.center - r.center, Vector2.left);
+                        
+                        if ((angleUpDown < 20 || angleUpDown > 160) ^ (angleLeftRight < 20 || angleLeftRight > 160))
+                        {
+                            var results = new RaycastHit2D[100];
+                            var size = Physics2D.LinecastNonAlloc(
+                                r.center,
+                                overlap.center,
+                                results,
+                                LayerMask.GetMask("Walls"),
+                                0,
+                                0);
+                            Debug.Log($"Linecast hit {size} objects");
+
+                            if (size > 0)
+                            {
+                                Debug.Log("Linecast hit something.");
+                                foreach (RaycastHit2D result in results)
+                                {
+                                    if (result.transform == null) continue;
+
+                                    Debug.Log("Detected walls.");
+                                    GameObject hit = result.transform.gameObject;
+                                    if (hit.CompareTag("Wall"))
+                                    {
+                                        Debug.Log("Destroyed wall.");
+                                        PlaceTile(GetRandomTile(), hit.transform.position, dungeon);
+                                        Destroy(hit);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             void PlaceTeleporter()
             {
                 Rect firstRoom = spawnedRooms[0];
                 Rect lastRoom = Rect.zero;
-                var distance = new Vector2(0,0);
+                var distance = new Vector2(0, 0);
 
                 foreach (Rect r in spawnedRooms)
                 {
-                    if ((r.center - firstRoom.center).magnitude > distance.magnitude)
+                    if (Vector2.Distance(firstRoom.center, r.center) > distance.magnitude)
                     {
                         lastRoom = r;
                         distance = r.center - firstRoom.center;
@@ -327,7 +388,13 @@ namespace Assets.ProceduralGeneration.Core
                     Debug.LogError("Teleporter couldn't be placed.");
                 }
             }
+
+            #endregion
         }
+
+        #endregion
+
+        #region Event subscriptions
 
         private void OnDungeonGenerated()
         {
@@ -337,6 +404,10 @@ namespace Assets.ProceduralGeneration.Core
         private void OnDungeonChanged()
         {
         }
+
+        #endregion
+
+        #region Object creations
 
         /// <summary>
         /// Spawns the parent Dungeon object.
@@ -372,6 +443,19 @@ namespace Assets.ProceduralGeneration.Core
         }
 
         /// <summary>
+        /// Sets the player's position to be in the left corner of the first room.
+        /// </summary>
+        private void PlacePlayer()
+        {
+            Rect firstRoom = _rooms[0];
+            GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
+        }
+
+        #endregion
+
+        #region Utility
+
+        /// <summary>
         /// Places a tile at the specified location and parent.
         /// </summary>
         /// <param name="tile">A tile resource.</param>
@@ -379,23 +463,23 @@ namespace Assets.ProceduralGeneration.Core
         /// <param name="y">y position</param>
         /// <param name="parent">The parent object</param>
         /// <returns>The placed Tile</returns>
-        public static GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
+        private static GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
         }
-
+        
         /// <summary>
-        /// Sets the player's position to be in the left corner of the first room.
+        /// Places a tile at the specified location and parent.
         /// </summary>
-        private void PlacePlayer()
+        /// <param name="tile">A tile resource.</param>
+        /// <param name="pos">Position vector</param>
+        /// <param name="parent">The parent object</param>
+        /// <returns>The placed Tile</returns>
+        private static GameObject PlaceTile(GameObject tile, Vector2 pos, GameObject parent)
         {
-            Rect firstRoom = _rooms[0];
-            //GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
+            return Instantiate(tile, new Vector3(pos.x, pos.y, 0), Quaternion.identity, parent.transform);
         }
 
-        
-
-        #region Utility
         /// <summary>
         /// Gets a random GameObject from a pool of GameObjects using the Generator's stdLikelihood value.
         /// </summary>
@@ -423,6 +507,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             return this._rooms;
         }
+
         #endregion
     }
 }

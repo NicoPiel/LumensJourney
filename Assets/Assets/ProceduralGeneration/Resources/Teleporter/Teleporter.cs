@@ -18,9 +18,9 @@ namespace Assets.ProceduralGeneration.Resources.Teleporter
 
                 SceneManager.sceneLoaded += (scene, mode) =>
                 {
-                    Generator generator = GameManager.GetGenerator();
+                    GeneratorV2 generator = GameManager.GetGenerator();
                     
-                    if (generator != null && scene.name == "Dungeon") generator.Generate(Random.Range(10, 21));
+                    if (generator != null && scene.name == "Dungeon") generator.Generate(Random.Range(20, 30));
                 };
             }
         }

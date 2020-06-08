@@ -30,7 +30,7 @@ namespace Core
         public int CurrentLevel { get; set; }
 
         private static GameManager _instance;
-        [SerializeField] private Generator generator;
+        [SerializeField] private GeneratorV2 generator;
         [SerializeField] private GameObject player;
         [SerializeField] private PlayerScript playerScript;
         [SerializeField] private Camera mainCamera;
@@ -342,7 +342,7 @@ namespace Core
             return _instance.playerScript;
         }
 
-        public static Generator GetGenerator()
+        public static GeneratorV2 GetGenerator()
         {
             return _instance.generator;
         }
