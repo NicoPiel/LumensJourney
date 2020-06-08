@@ -109,7 +109,6 @@ namespace Assets.ProceduralGeneration.Core
             GenerateRooms(roomNumber);
 
             PlacePlayer();
-            PlaceTeleporter();
 
             onDungeonGenerated?.Invoke();
             return true;
@@ -272,6 +271,9 @@ namespace Assets.ProceduralGeneration.Core
                     MoveSpawner(probability);
                     Debug.Log("Generation didn't work, recalibrating.");
                 }
+                
+                // Places a teleporter object, which upon activation generates a new dungeon.
+                
 
                 bool IsTouchingAnotherRoom(Rect other)
                 {
@@ -294,6 +296,36 @@ namespace Assets.ProceduralGeneration.Core
                 }
 
                 #endregion
+            }
+            
+            PlaceTeleporter();
+            
+            void PlaceTeleporter()
+            {
+                Rect firstRoom = spawnedRooms[0];
+                Rect lastRoom = Rect.zero;
+                var distance = new Vector2(0,0);
+
+                foreach (Rect r in spawnedRooms)
+                {
+                    if ((r.center - firstRoom.center).magnitude > distance.magnitude)
+                    {
+                        lastRoom = r;
+                        distance = r.center - firstRoom.center;
+                    }
+                }
+
+                if (lastRoom != Rect.zero)
+                {
+                    Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"),
+                        new Vector3(lastRoom.x + Random.Range(1, (int) lastRoom.width), lastRoom.y + Random.Range(1, (int) lastRoom.height), 0),
+                        Quaternion.identity,
+                        dungeonObject.transform);
+                }
+                else
+                {
+                    Debug.LogError("Teleporter couldn't be placed.");
+                }
             }
         }
 
@@ -361,19 +393,9 @@ namespace Assets.ProceduralGeneration.Core
             //GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
         }
 
-        /// <summary>
-        /// Places a teleporter object, which upon activation generates a new dungeon.
-        /// </summary>
-        private void PlaceTeleporter()
-        {
-            Rect lastRoom = _rooms[_rooms.Count - 1];
+        
 
-            Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"),
-                new Vector3(lastRoom.x + Random.Range(0, (int) lastRoom.width), lastRoom.y + Random.Range(0, (int) lastRoom.height), 0),
-                Quaternion.identity,
-                dungeonObject.transform);
-        }
-
+        #region Utility
         /// <summary>
         /// Gets a random GameObject from a pool of GameObjects using the Generator's stdLikelihood value.
         /// </summary>
@@ -401,5 +423,6 @@ namespace Assets.ProceduralGeneration.Core
         {
             return this._rooms;
         }
+        #endregion
     }
 }
