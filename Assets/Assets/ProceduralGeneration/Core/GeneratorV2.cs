@@ -63,7 +63,7 @@ namespace Assets.ProceduralGeneration.Core
         #region Class-specific variables
         
         private List<Rect> _rooms;
-        private List<Rect> spawnedRooms;
+        private List<Rect> _spawnedRooms;
 
         [SerializeField] private GameObject dungeonObject;
 
@@ -134,7 +134,7 @@ namespace Assets.ProceduralGeneration.Core
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
-            spawnedRooms = new List<Rect>();
+            _spawnedRooms = new List<Rect>();
             var metadata = new Dictionary<int[], string>();
 
             for (var i = 0; i < numberOfRooms; i++)
@@ -154,9 +154,9 @@ namespace Assets.ProceduralGeneration.Core
 
                 Vector3 position = spawner.transform.position;
 
-                if (spawnedRooms.Count > 0)
+                if (_spawnedRooms.Count > 0)
                 {
-                    spawnedRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
+                    spawnedRoom = _spawnedRooms[Random.Range(0, _spawnedRooms.Count)];
 
                     var probability = Random.Range(0, 4);
                     MoveSpawner(probability);
@@ -213,7 +213,7 @@ namespace Assets.ProceduralGeneration.Core
 
                 #endregion
 
-                spawnedRooms.Add(currentRoom);
+                _spawnedRooms.Add(currentRoom);
 
                 #region Local functions
 
@@ -250,19 +250,19 @@ namespace Assets.ProceduralGeneration.Core
                             {
                                 case 0:
                                     //Debug.Log($"Moved up from {spawnedRoom.ToString()}");
-                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "N");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "N");
                                     break;
                                 case 1:
                                     //Debug.Log($"Moved down from {spawnedRoom.ToString()}");
-                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "S");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "S");
                                     break;
                                 case 2:
                                     //Debug.Log($"Moved left from {spawnedRoom.ToString()}");
-                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "W");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "W");
                                     break;
                                 case 3:
                                     //Debug.Log($"Moved right from {spawnedRoom.ToString()}");
-                                    metadata.Add(new[] {spawnedRooms.IndexOf(spawnedRoom), i}, "E");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "E");
                                     break;
                             }
 
@@ -272,7 +272,7 @@ namespace Assets.ProceduralGeneration.Core
                         p = p < 3 ? p + 1 : 0;
                     }
 
-                    spawnedRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
+                    spawnedRoom = _spawnedRooms[Random.Range(0, _spawnedRooms.Count)];
                     var probability = Random.Range(0, 4);
                     MoveSpawner(probability);
                     //Debug.Log("Generation didn't work, recalibrating.");
@@ -283,7 +283,7 @@ namespace Assets.ProceduralGeneration.Core
 
                 bool IsTouchingAnotherRoom(Rect other)
                 {
-                    return spawnedRooms.Any(r => r.Overlaps(other));
+                    return _spawnedRooms.Any(r => r.Overlaps(other));
                 }
 
                 GameObject GenerateRoomObject()
@@ -311,12 +311,12 @@ namespace Assets.ProceduralGeneration.Core
 
             void PlaceDoors()
             {
-                foreach (Rect r in spawnedRooms)
+                foreach (Rect r in _spawnedRooms)
                 {
                     // Increase the size of the room
                     var rect = new Rect(new Vector2(r.x - 0.1f, r.y - 0.1f), new Vector2(r.width + 1.2f, r.height + 1.2f));
                     // Look for overlapping rooms
-                    var overlaps = spawnedRooms.Where(r2 => rect.Overlaps(r2)).ToList();
+                    var overlaps = _spawnedRooms.Where(r2 => rect.Overlaps(r2)).ToList();
 
                     //Debug.Log($"{r.ToString()} overlaps {overlaps.Count} rooms.");
 
@@ -361,11 +361,11 @@ namespace Assets.ProceduralGeneration.Core
 
             void PlaceTeleporter()
             {
-                Rect firstRoom = spawnedRooms[0];
+                Rect firstRoom = _spawnedRooms[0];
                 Rect lastRoom = Rect.zero;
                 var distance = new Vector2(0, 0);
 
-                foreach (Rect r in spawnedRooms)
+                foreach (Rect r in _spawnedRooms)
                 {
                     if (Vector2.Distance(firstRoom.center, r.center) > distance.magnitude)
                     {
@@ -509,7 +509,7 @@ namespace Assets.ProceduralGeneration.Core
 
         public IEnumerable<Rect> GetSpawnedRooms()
         {
-            return Generated ? spawnedRooms : null;
+            return _spawnedRooms;
         }
         #endregion
     }
