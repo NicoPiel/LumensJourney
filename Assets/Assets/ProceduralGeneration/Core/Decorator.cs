@@ -1,4 +1,6 @@
-﻿using Core;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Core;
 using Unity.Burst;
 using UnityEngine;
 
@@ -10,6 +12,10 @@ namespace Assets.ProceduralGeneration.Core
     [BurstCompile]
     public class Decorator : MonoBehaviour
     {
+        public float spawnRateInPercent;
+
+        public List<GameObject> enemies;
+        
         private GeneratorV2 _generator;
 
         private void Start()
@@ -29,15 +35,16 @@ namespace Assets.ProceduralGeneration.Core
             
             foreach (Rect room in spawnedRooms)
             {
-                SpawnRandomly("Slime", room, enemyDecorator.transform);
-
-                var numberOfEnemies = room.width * room.height / 20;
-
+                Debug.Log($"Spawning enemies in {room.ToString()}");
+                SpawnRandomly(GetRandomEnemy(), room, enemyDecorator.transform);
+                
+                var numberOfEnemies = room.width * room.height / 10;
+                
                 for (var i = 0; i < numberOfEnemies; i++)
                 {
-                    if (GetProbability(10))
+                    if (GetProbability(spawnRateInPercent))
                     {
-                        SpawnRandomly("Slime", room, enemyDecorator.transform);
+                        SpawnRandomly(GetRandomEnemy(), room, enemyDecorator.transform);
                     }
                 }
             }
@@ -53,12 +60,33 @@ namespace Assets.ProceduralGeneration.Core
                 parent);
         }
         
+        private GameObject Spawn (GameObject prefab, Vector2 position, Transform parent)
+        {
+            return Instantiate(prefab, 
+                new Vector3(position.x, position.y, 0),
+                Quaternion.identity,
+                parent);
+        }
+        
         private GameObject SpawnRandomly (string resourcesPath, Rect room, Transform parent)
         {
             return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath),
                 GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
                 Quaternion.identity,
                 parent);
+        }
+        
+        private GameObject SpawnRandomly (GameObject prefab, Rect room, Transform parent)
+        {
+            return Instantiate(prefab,
+                GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                Quaternion.identity,
+                parent);
+        }
+
+        private GameObject GetRandomEnemy()
+        {
+            return enemies?[Random.Range(0, enemies.Count)];
         }
 
         private Vector2 GetRandomPosition(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary) 

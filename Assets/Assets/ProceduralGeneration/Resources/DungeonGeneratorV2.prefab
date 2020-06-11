@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1985767065388695034}
   - component: {fileID: 1985767065388695035}
+  - component: {fileID: 2041375325285382235}
   m_Layer: 0
   m_Name: DungeonGeneratorV2
   m_TagString: Generator
@@ -68,3 +69,18 @@ MonoBehaviour:
     type: 3}
   dungeonObject: {fileID: 4268848368043036379, guid: 1d304b881526cf84289b32deac033774,
     type: 3}
+--- !u!114 &2041375325285382235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985767065388695032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821bcd23231608f409e4bd1fbe886b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRateInPercent: 5
+  enemies:
+  - {fileID: 5111081116285643832, guid: 9c9867b4d76538b41837d399803eddf1, type: 3}
