@@ -16,6 +16,8 @@ namespace Assets.Enemies.Scripts
         public float detectionRadius;
         public float innerRadius;
         public float speed;
+        public int upDown;
+        public int leftRight;
         [Space] [Header("Combat settings")] public int health;
         public int damage;
         [Space]
@@ -75,12 +77,40 @@ namespace Assets.Enemies.Scripts
                     if (raycastHitInfo.transform.gameObject.CompareTag("Player"))
                     {
                         _rigidbody.velocity = playerDirection * speed * Time.deltaTime;
+
+                        if (Vector2.Angle(Vector2.up, playerDirection) < 90)
+                        {
+                            upDown = 1;
+                        }
+                        else if (Vector2.Angle(Vector2.up, playerDirection) > 90)
+                        {
+                            upDown = -1;
+                        }
+                        else if (Math.Abs(Vector2.Angle(Vector2.up, playerDirection) - 90) < 0.1)
+                        {
+                            upDown = 0;
+                        }
+                        
+                        if (Vector2.Angle(Vector2.right, playerDirection) < 90)
+                        {
+                            leftRight = 1;
+                        }
+                        else if (Vector2.Angle(Vector2.right, playerDirection) > 90)
+                        {
+                            leftRight = -1;
+                        }
+                        else if (Math.Abs(Vector2.Angle(Vector2.right, playerDirection) - 90) < 0.1)
+                        {
+                            leftRight = 0;
+                        }
                     }
                 }
             }
             else
             {
                 _rigidbody.velocity = new Vector2(0, 0);
+                upDown = 0;
+                leftRight = 0;
             }
         }
 
