@@ -62,7 +62,6 @@ namespace Assets.Player.Script
             _playerCollider = GetComponent<CapsuleCollider2D>();
             hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
             hitCollider.gameObject.SetActive(false);
-            _animator.SetBool(StateExit, false);
             _audioSource = GetComponent<AudioSource>();
 
             AddAudioClips();
