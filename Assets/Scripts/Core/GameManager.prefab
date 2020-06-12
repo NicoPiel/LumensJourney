@@ -159,7 +159,7 @@ Transform:
   m_Children:
   - {fileID: 6029391063509343128}
   - {fileID: 6457474360497163291}
-  - {fileID: 4860210884938766581}
+  - {fileID: 6281830894799739679}
   - {fileID: 607724919}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -466,6 +466,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8371654214052392240, guid: 591d74454f27ca748adcb31cb8698c7c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8452745551135975041, guid: 591d74454f27ca748adcb31cb8698c7c,
         type: 3}
       propertyPath: m_Name
@@ -473,9 +478,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 591d74454f27ca748adcb31cb8698c7c, type: 3}
---- !u!4 &4860210884938766581 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6949455277118811866, guid: 591d74454f27ca748adcb31cb8698c7c,
+--- !u!224 &6281830894799739679 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8371654214052392240, guid: 591d74454f27ca748adcb31cb8698c7c,
     type: 3}
   m_PrefabInstance: {fileID: 2523032623046096431}
   m_PrefabAsset: {fileID: 0}
@@ -566,6 +571,21 @@ PrefabInstance:
         type: 3}
       propertyPath: roomPerEnemy
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: enemySpawnRateInPercent
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: itemSpawnRateInPercent
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: maxItemsPerRoom
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f61b24f5298cc54daae4ebef9fd6f62, type: 3}

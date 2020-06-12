@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Items.Scripts;
+using Assets.PickUps.Scripts;
 using Core;
+using JetBrains.Annotations;
 using Unity.Burst;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.ProceduralGeneration.Core
 {
@@ -12,15 +17,23 @@ namespace Assets.ProceduralGeneration.Core
     {
         #region Public variables
 
-        public float spawnRateInPercent;
+        public float enemySpawnRateInPercent;
         public float roomPerEnemy;
         public List<GameObject> enemies;
+        
+        public float itemSpawnRateInPercent;
+        public int maxItemsPerRoom;
+        public List<GameObject> items;
+        
+        public int globalItemCount;
 
         #endregion
 
         #region Private variables
 
         private Generator _generator;
+
+        private int _levelItemCount;
 
         #endregion
 
@@ -30,6 +43,8 @@ namespace Assets.ProceduralGeneration.Core
         {
             _generator = GameManager.GetGenerator();
             _generator.onDungeonGenerated.AddListener(Decorate);
+
+            globalItemCount = 0;
         }
 
         #endregion
@@ -43,6 +58,8 @@ namespace Assets.ProceduralGeneration.Core
         {
             Debug.Log("Decorating..");
             GameObject enemyDecorator = CreateEnemyDecorator();
+            GameObject itemDecorator = CreateItemDecorator();
+            _levelItemCount = 0;
 
             var spawnedRooms = _generator.GetSpawnedRooms();
             
@@ -50,21 +67,44 @@ namespace Assets.ProceduralGeneration.Core
             
             foreach (Rect room in spawnedRooms)
             {
-                Debug.Log($"Spawning enemies in {room.ToString()}");
-                SpawnRandomly(GetRandomEnemy(), room, enemyDecorator.transform);
-                
-                var numberOfEnemies = room.width * room.height / roomPerEnemy;
-                
-                for (var i = 0; i < numberOfEnemies; i++)
-                {
-                    if (GetProbability(spawnRateInPercent))
-                    {
-                        SpawnRandomly(GetRandomEnemy(), room, enemyDecorator.transform);
-                    }
-                }
+                SpawnEnemies(room, enemyDecorator.transform);
+                SpawnItems(room, itemDecorator.transform);
             }
             
             Debug.Log("Dungeon decorated.");
+        }
+
+        private void SpawnEnemies(Rect room, [NotNull] Transform enemyDecorator)
+        {
+            if (enemyDecorator == null) throw new ArgumentNullException(nameof(enemyDecorator));
+            
+            Debug.Log($"Spawning enemies in {room.ToString()}");
+            SpawnRandomly(GetRandomEnemy(), room, enemyDecorator);
+                
+            var numberOfEnemies = room.width * room.height / roomPerEnemy;
+                
+            for (var i = 0; i < numberOfEnemies; i++)
+            {
+                if (GetProbability(enemySpawnRateInPercent))
+                {
+                    SpawnRandomly(GetRandomEnemy(), room, enemyDecorator);
+                }
+            }
+        }
+
+        private void SpawnItems(Rect room, [NotNull] Transform itemDecorator)
+        {
+            for (var i = 0; i < maxItemsPerRoom; i++)
+            {
+                if (GetProbability(itemSpawnRateInPercent))
+                {
+                    GameObject pickUp = SpawnRandomly("PickUp", room, itemDecorator);
+                    pickUp.GetComponent<PickUpScript>().SetPickUpItem(GetRandomItem().name);
+                    
+                    _levelItemCount++;
+                    globalItemCount++;
+                }
+            }
         }
 
         #endregion
@@ -114,6 +154,11 @@ namespace Assets.ProceduralGeneration.Core
         {
             return enemies?[Random.Range(0, enemies.Count)];
         }
+        
+        private GameObject GetRandomItem()
+        {
+            return items?[Random.Range(0, items.Count)];
+        }
 
         private Vector2 GetRandomPosition(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary) 
         {
@@ -130,6 +175,21 @@ namespace Assets.ProceduralGeneration.Core
             decorator = new GameObject()
             {
                 name = "Enemies",
+            };
+
+            return Instantiate(decorator, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+
+        private GameObject CreateItemDecorator()
+        {
+            GameObject decorator = GameObject.Find("Items(Clone)");
+            Destroy(GameObject.Find("Items"));
+
+            if (decorator != null) Destroy(decorator);
+
+            decorator = new GameObject()
+            {
+                name = "Items",
             };
 
             return Instantiate(decorator, new Vector3(0, 0, 0), Quaternion.identity);
