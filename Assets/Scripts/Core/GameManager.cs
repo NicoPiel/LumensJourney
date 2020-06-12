@@ -21,21 +21,38 @@ namespace Core
     [BurstCompile]
     public class GameManager : MonoBehaviour
     {
+        // Singleton instance of the game manager
+        private static GameManager _instance;
+        
+        #region Events
+
         // Events
         public UnityEvent onNewGameStarted;
         public UnityEvent onGameLoaded;
         public UnityEvent onPlayerSpawned;
         public UnityEvent onNewLevel;
 
-        public int CurrentLevel { get; set; }
+        #endregion
 
-        private static GameManager _instance;
+        #region Inspector variables
+
         [SerializeField] private GeneratorV2 generator;
         [SerializeField] private GameObject player;
         [SerializeField] private PlayerScript playerScript;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private SaveSystem saveSystem;
         [SerializeField] private MenuManagerScript menuManagerScript;
+
+        #endregion
+
+        #region Public variables
+
+        public int CurrentLevel { get; set; }
+
+        #endregion
+
+        #region Private variables
+
         private GameObject _canvas;
         private Camera _camera;
 
@@ -44,6 +61,10 @@ namespace Core
 
         private bool _ingame = false;
         private bool _paused = false;
+
+        #endregion
+
+        #region UnityEvent functions
 
         /// <summary>
         /// Setup events here.
@@ -94,6 +115,10 @@ namespace Core
             }
         }
 
+        #endregion
+
+        #region Static instance methods
+
         /// <summary>
         /// Uses the GameManager's singleton to start a new game.
         /// <see cref="NewGame"/>
@@ -102,6 +127,19 @@ namespace Core
         {
             _instance.NewGame();
         }
+        
+        /// <summary>
+        /// Uses the GameManager's singleton to load a game from file.
+        /// <see cref="LoadGame"/>
+        /// </summary>
+        public static void LoadGame_Static()
+        {
+            _instance.LoadGame();
+        }
+        
+        #endregion
+
+        #region Game setup
 
         /// <summary>
         /// Starts a new game and invokes the onNewGameStarted event.
@@ -111,15 +149,6 @@ namespace Core
             Setup();
 
             onNewGameStarted?.Invoke();
-        }
-
-        /// <summary>
-        /// Uses the GameManager's singleton to load a game from file.
-        /// <see cref="LoadGame"/>
-        /// </summary>
-        public static void LoadGame_Static()
-        {
-            _instance.LoadGame();
         }
 
         /// <summary>
@@ -157,6 +186,35 @@ namespace Core
             
             _ingame = true;
         }
+        
+        /// <summary>
+        /// Modifies the generator's properties and adds listeners.
+        /// </summary>
+        private void ModifyGenerator()
+        {
+            if (generator == null) return;
+            generator.name = "DungeonGenerator";
+            generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
+        }
+        
+        /// <summary>
+        /// Instantiates player and related objects, such as some UI elements.
+        /// Also finds and sets the <see cref="playerScript"/>
+        /// </summary>
+        private void InstantiatePlayer()
+        {
+            GameObject pauseMenu = Instantiate(Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
+            pauseMenu.name = "PauseMenu";
+            player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
+            player.name = "Player";
+            if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
+            if (player != null) playerScript = player.GetComponent<PlayerScript>();
+            onPlayerSpawned.Invoke();
+        }
+
+        #endregion
+
+        #region Event subscriptions
 
         /// <summary>
         /// Does work whenever the player loses or gains light.
@@ -210,31 +268,10 @@ namespace Core
         {
             _camera = GetPlayer().transform.Find("MainCamera").GetComponent<Camera>();
         }
-        
-        /// <summary>
-        /// Modifies the generator's properties and adds listeners.
-        /// </summary>
-        private void ModifyGenerator()
-        {
-            if (generator == null) return;
-            generator.name = "DungeonGenerator";
-            generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
-        }
 
-        /// <summary>
-        /// Instantiates player and related objects, such as some UI elements.
-        /// Also finds and sets the <see cref="playerScript"/>
-        /// </summary>
-        private void InstantiatePlayer()
-        {
-            GameObject pauseMenu = Instantiate(Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-            pauseMenu.name = "PauseMenu";
-            player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
-            player.name = "Player";
-            if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
-            if (player != null) playerScript = player.GetComponent<PlayerScript>();
-            onPlayerSpawned.Invoke();
-        }
+        #endregion
+
+        #region Pause menu
 
         /// <summary>
         /// Pauses the game and opens the pause menu.
@@ -284,6 +321,10 @@ namespace Core
             _paused = false;
         }
 
+        #endregion
+
+        #region Global sounds
+
         /// <summary>
         /// Plays a menu sound.
         /// Use this as an event function.
@@ -294,6 +335,10 @@ namespace Core
             audioSource.clip = _menuSound;
             audioSource.Play();
         }
+
+        #endregion
+        
+        #region Utility
 
         /// <summary>
         /// Uses an alpha effect to fade text (Level 1, 2, 3, etc) in and out.
@@ -311,26 +356,9 @@ namespace Core
             if (text != null) text.gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Quits the application.
-        /// If in editor, ends play mode.
-        /// </summary>
-        public void Quit()
-        {
-            Time.timeScale = 1.0f;
-            _canvas = transform.Find("PauseMenu").gameObject;
-            
-            if (_canvas != null)
-            {
-                _canvas.SetActive(false);
-                Destroy(GetPlayer());
-            }
-            
-            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
-            _paused = false;
-            
-            SceneManager.LoadScene("MainMenu");
-        }
+        #endregion
+
+        #region Getters
 
         public static GameObject GetPlayer()
         {
@@ -366,5 +394,32 @@ namespace Core
         {
             return _instance;
         }
+
+        #endregion
+
+        #region Quit
+
+        /// <summary>
+        /// Quits the application.
+        /// If in editor, ends play mode.
+        /// </summary>
+        public void Quit()
+        {
+            Time.timeScale = 1.0f;
+            _canvas = transform.Find("PauseMenu").gameObject;
+            
+            if (_canvas != null)
+            {
+                _canvas.SetActive(false);
+                Destroy(GetPlayer());
+            }
+            
+            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
+            _paused = false;
+            
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        #endregion
     }
 }
