@@ -16,8 +16,8 @@ namespace Assets.Enemies.Scripts
         public float detectionRadius;
         public float innerRadius;
         public float speed;
-        public int upDown;
-        public int leftRight;
+        public int vertical;
+        public int horizontal;
         [Space] [Header("Combat settings")] public int health;
         public int damage;
         [Space]
@@ -30,6 +30,7 @@ namespace Assets.Enemies.Scripts
         private Rigidbody2D _rigidbody;
         private ParticleSystem _particleSystem;
         private CinemachineImpulseSource _impulseSource;
+        private Animator _animator;
 
         private void Awake()
         {
@@ -39,6 +40,7 @@ namespace Assets.Enemies.Scripts
         private void Start()
         {
             _collider = GetComponent<BoxCollider2D>();
+            _animator = GetComponent<Animator>();
 
             _detectionRadius = GetComponentInChildren<DetectionRadius>();
             _innerRadius = GetComponentInChildren<InnerRadius>();
@@ -76,41 +78,16 @@ namespace Assets.Enemies.Scripts
                     Debug.Log(raycastHitInfo.transform.gameObject.tag);
                     if (raycastHitInfo.transform.gameObject.CompareTag("Player"))
                     {
+                        _animator.SetFloat("Vertical", playerDirection.y);
+                        _animator.SetFloat("Horizontal", playerDirection.x);
+                        _animator.SetFloat("Speed", playerDirection.magnitude);
                         _rigidbody.velocity = playerDirection * speed * Time.deltaTime;
-
-                        if (Vector2.Angle(Vector2.up, playerDirection) < 90)
-                        {
-                            upDown = 1;
-                        }
-                        else if (Vector2.Angle(Vector2.up, playerDirection) > 90)
-                        {
-                            upDown = -1;
-                        }
-                        else if (Math.Abs(Vector2.Angle(Vector2.up, playerDirection) - 90) < 0.1)
-                        {
-                            upDown = 0;
-                        }
-                        
-                        if (Vector2.Angle(Vector2.right, playerDirection) < 90)
-                        {
-                            leftRight = 1;
-                        }
-                        else if (Vector2.Angle(Vector2.right, playerDirection) > 90)
-                        {
-                            leftRight = -1;
-                        }
-                        else if (Math.Abs(Vector2.Angle(Vector2.right, playerDirection) - 90) < 0.1)
-                        {
-                            leftRight = 0;
-                        }
                     }
                 }
             }
             else
             {
                 _rigidbody.velocity = new Vector2(0, 0);
-                upDown = 0;
-                leftRight = 0;
             }
         }
 

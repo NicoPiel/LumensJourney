@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 359570173015442694}
   - component: {fileID: 2588251286757590390}
   - component: {fileID: 97151406753685796}
+  - component: {fileID: -8938598982718763847}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Enemy
@@ -155,6 +156,8 @@ MonoBehaviour:
   detectionRadius: 7
   innerRadius: 0.75
   speed: 80
+  vertical: 0
+  horizontal: 0
   health: 2
   damage: 1
   screenShakeMagnitude: 1
@@ -4979,6 +4982,25 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!95 &-8938598982718763847
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5111081116285643832}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6556234126300392822
 GameObject:
   m_ObjectHideFlags: 0
