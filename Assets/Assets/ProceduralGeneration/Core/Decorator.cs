@@ -88,7 +88,7 @@ namespace Assets.ProceduralGeneration.Core
                 
             var numberOfEnemies = room.width * room.height / roomPerEnemy;
                 
-            for (var i = 0; i < numberOfEnemies; i++)
+            for (var i = 1; i < numberOfEnemies; i++)
             {
                 if (GetProbability(enemySpawnRateInPercent))
                 {

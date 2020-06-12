@@ -15,7 +15,6 @@ namespace Assets.Player.Script
     {
         public int lightLoss;
         public float speed;
-
         private CapsuleCollider2D _playerCollider;
         private Rigidbody2D _playerRigidbody2D;
         private Vector3 _change;
@@ -42,11 +41,12 @@ namespace Assets.Player.Script
 
         [SerializeField] private int playerDamage;
         private static readonly int StateExit = Animator.StringToHash("StateExit");
+        private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
+        private static readonly int LastVertical = Animator.StringToHash("LastVertical");
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int Speed = Animator.StringToHash("Speed");
-        private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
-        private static readonly int LastVertical = Animator.StringToHash("LastVertical");
+        
 
         // Start is called before the first frame update
         private void Awake()
@@ -199,27 +199,24 @@ namespace Assets.Player.Script
 
         #region PlayerDamage
         
-        public bool PlayerTakeDamage(int damage)
+        public void PlayerTakeDamage(int damage)
         {
-            if (_invulnerable) return false;
+            if (_invulnerable) return;
             
-            var remainingHealth = _player.playerstats["CurrentHealth"] -= damage;
+            var remainingHealth = _player.PlayerStats["CurrentHealth"] -= damage;
 
             if (remainingHealth > 0)
             {
-                _player.playerstats["CurrentHealth"] = remainingHealth;
+                _player.PlayerStats["CurrentHealth"] = remainingHealth;
                 PlayerChangeLightLevel(-damage * 10);
                 onPlayerLifeChanged.Invoke();
                 onPlayerTakeDamage.Invoke();
             }
             else
             {
-                _player.playerstats["CurrentHealth"] = 0;
+                _player.PlayerStats["CurrentHealth"] = 0;
                 KillPlayer();
             }
-
-            StartCoroutine(Invulnerability());
-            return true;
         }
 
         private void KillPlayer()
@@ -230,18 +227,18 @@ namespace Assets.Player.Script
 
         public void PlayerTakeHeal(int heal)
         {
-            _player.playerstats["CurrentHealth"] += heal;
+            _player.PlayerStats["CurrentHealth"] += heal;
             onPlayerLifeChanged.Invoke();
         }
 
         public int GetPlayerCurrentHealth()
         {
-            return _player.playerstats["CurrentHealth"];
+            return _player.PlayerStats["CurrentHealth"];
         }
 
         public int GetPlayerMaxHealth()
         {
-            return _player.playerstats["MaxHealth"];
+            return _player.PlayerStats["MaxHealth"];
         }
         
         public int GetPlayerDamage()
@@ -287,25 +284,25 @@ namespace Assets.Player.Script
         //Setter
         public void PlayerChangeLightLevel(int lightlevel)
         {
-            _player.playerstats["CurrentLightLevel"] += lightlevel;
-            if (_player.playerstats["CurrentLightLevel"] < 0) _player.playerstats["CurrentLightLevel"] = 0;
+            _player.PlayerStats["CurrentLightLevel"] += lightlevel;
+            if (_player.PlayerStats["CurrentLightLevel"] < 0) _player.PlayerStats["CurrentLightLevel"] = 0;
             onPlayerLightLevelChanged.Invoke();
         }
 
         //Getter
         public float GetPlayerLightLevel()
         {
-            return (float) _player.playerstats["CurrentLightLevel"] / (float) _player.playerstats["MaxLightLevel"];
+            return (float) _player.PlayerStats["CurrentLightLevel"] / (float) _player.PlayerStats["MaxLightLevel"];
         }
 
         public int GetPlayerCurrentLightValue()
         {
-            return _player.playerstats["CurrentLightLevel"];
+            return _player.PlayerStats["CurrentLightLevel"];
         }
 
         public int GetPlayerMaxLightValue()
         {
-            return _player.playerstats["MaxLightLevel"];
+            return _player.PlayerStats["MaxLightLevel"];
         }
 
         //Timer
@@ -344,11 +341,11 @@ namespace Assets.Player.Script
         }
 
         #endregion
-
-        private IEnumerator Invulnerability()
+        
+        private IEnumerator Invulnerable()
         {
             _invulnerable = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
             _invulnerable = false;
         }
     }

@@ -7,43 +7,42 @@ namespace Assets.Player.Script
     [BurstCompile]
     public class Player {
         private string Playername {get; set;}
-        public Dictionary<string, int> playerstats { get; set; }
+        public Dictionary<string, int> PlayerStats { get; set; }
         public Inventory Inventory { get; set;}
 
         public Player(string playername, int maxHealth = 5, int attackDamage = 5, int defense = 5)
         {
             Playername = playername;
             Inventory = new Inventory();
-            playerstats = new Dictionary<string, int>();
+            PlayerStats = new Dictionary<string, int>();
             ConstructPlayerStats(maxHealth, attackDamage, defense);
         }
 
         private void ConstructPlayerStats(int maxHealth, int attackDamage, int defense)
         {
-            playerstats.Add("MaxHealth",  maxHealth);
-            playerstats.Add("CurrentHealth", maxHealth);
-            playerstats.Add("AttackDamage", attackDamage);
-            playerstats.Add("FireDamage", 0);
-            playerstats.Add("IceDamage", 0);
-            playerstats.Add("Defense", defense);
-            playerstats.Add("ElementalDefense", 0);
-            playerstats.Add("MaxLightLevel", 1000);
-            playerstats.Add("CurrentLightLevel", 1000);
+            PlayerStats.Add("MaxHealth",  maxHealth);
+            PlayerStats.Add("CurrentHealth", maxHealth);
+            PlayerStats.Add("AttackDamage", attackDamage);
+            PlayerStats.Add("FireDamage", 0);
+            PlayerStats.Add("IceDamage", 0);
+            PlayerStats.Add("Defense", defense);
+            PlayerStats.Add("ElementalDefense", 0);
+            PlayerStats.Add("MaxLightLevel", 1000);
+            PlayerStats.Add("CurrentLightLevel", 1000);
         }
+        
         private void OnItemChange(GameItem item, bool removed)
         {
             foreach (var itemStat in item.ValueIncreases)
             {
                 if (removed)
-                    playerstats[itemStat.Key] -= itemStat.Value;
+                    PlayerStats[itemStat.Key] -= itemStat.Value;
                 else
                 {
-                    playerstats[itemStat.Key] += itemStat.Value;
+                    PlayerStats[itemStat.Key] += itemStat.Value;
                 }
                 
             }
-
-      
         }
     }
 }

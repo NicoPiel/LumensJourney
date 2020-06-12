@@ -9,20 +9,32 @@ namespace Assets.Enemies.Scripts
 {
     public class Enemy : MonoBehaviour
     {
+        #region Events
+
         public UnityEvent onDeath;
-        
+
+        #endregion
+
+        #region Inspector variables
+
         [Header("AI settings")] 
-        public float detectionRadius;
-        public float innerRadius;
-        public float speed;
-        public int vertical;
-        public int horizontal;
-        public int knockBackForce;
+        [SerializeField] private float detectionRadius;
+        [SerializeField] private float innerRadius;
+        [SerializeField] private float speed;
+        [SerializeField] private int vertical;
+        [SerializeField] private int horizontal;
+        [SerializeField] private int maxShardsOnDrop;
         [Space] [Header("Combat settings")] public int health;
         public int damage;
         [Space]
         [Header("Other settings")]
         [SerializeField] private float screenShakeMagnitude;
+
+        [SerializeField] private GameObject lightShardPrefab;
+
+        #endregion
+
+        #region Private variables
 
         private DetectionRadius _detectionRadius;
         private InnerRadius _innerRadius;
@@ -37,6 +49,10 @@ namespace Assets.Enemies.Scripts
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
         private static readonly int Speed = Animator.StringToHash("Speed");
+
+        #endregion
+
+        #region UnityEvent functions
 
         private void Awake()
         {
@@ -62,10 +78,15 @@ namespace Assets.Enemies.Scripts
             _rigidbody = GetComponent<Rigidbody2D>();
             _particleSystem = GetComponent<ParticleSystem>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
-
+            
             onDeath.AddListener(OnDeath);
         }
 
+        #endregion
+
+        #region EventSubscriptions
+
+        // On DetectionRadius.onDetected
         private void MoveToPlayer()
         {
             Vector3 enemyPosition = transform.position;
@@ -74,7 +95,7 @@ namespace Assets.Enemies.Scripts
             Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
             var distanceToPlayer = vectorToPlayer.magnitude;
 
-            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer);
+            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer, LayerMask.GetMask("Player"));
             Debug.DrawRay(enemyPosition, vectorToPlayer);
 
             if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())
@@ -96,28 +117,45 @@ namespace Assets.Enemies.Scripts
                 _rigidbody.velocity = new Vector2(0, 0);
             }
         }
+        
+        // On DetectionRadius.onLostSight
+        private void StopMoving()
+        {
+            _rigidbody.velocity = new Vector2(0, 0);
+        }
 
+        // On InnerRadius.onPlayerWalkIntoRange
         private void OnPlayerWalkIntoRange()
         {
             Debug.Log($"Player walked into {gameObject.name}");
 
             PlayerScript playerScipt = GameManager.GetPlayerScript();
             Rigidbody2D playerRigidbody = playerScipt.GetRigidbody();
-
-            if (playerScipt.PlayerTakeDamage(damage))
-            {
-                Vector3 moveDirection = playerRigidbody.transform.position - transform.position;
-                playerRigidbody.AddForce( moveDirection.normalized * knockBackForce, ForceMode2D.Force);
-            
-                _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
-            }
+                
+            playerScipt.PlayerTakeDamage(damage);
+                
+            Vector3 moveDirection = playerRigidbody.transform.position - this.transform.position;
+            playerRigidbody.AddForce( moveDirection.normalized * 500f, ForceMode2D.Force);
+                
+            _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }
 
+        // On InnerRadius.onHit
         private void OnHit()
         {
             _particleSystem.Play();
             _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude/2,screenShakeMagnitude/2));
         }
+        
+        // On this.onDeath
+        private void OnDeath()
+        {
+            _particleSystem.Play();
+            DropShards();
+            Destroy(gameObject);
+        }
+
+        #endregion
 
         public void TakeDamage(int damageTaken)
         {
@@ -126,8 +164,6 @@ namespace Assets.Enemies.Scripts
             health -= damageTaken;
             if (health < 0) health = 0;
 
-            StartCoroutine(Invulnerability());
-                
             Die();
         }
 
@@ -141,18 +177,32 @@ namespace Assets.Enemies.Scripts
             onDeath.Invoke();
         }
 
-        private void OnDeath()
+        private void DropShards()
         {
-            _particleSystem.Play();
-            Destroy(gameObject);
+            Drop(lightShardPrefab);
+            
+            for (var i = 1; i < maxShardsOnDrop; i++)
+            {
+                Drop(lightShardPrefab);
+            }
         }
 
-        private void StopMoving()
+        private GameObject Drop(GameObject prefab)
         {
-            _rigidbody.velocity = new Vector2(0, 0);
+            Transform dropPosition = transform;
+            
+            GameObject drop = Instantiate(prefab, dropPosition.position, Quaternion.identity, dropPosition);
+            drop.GetComponent<Rigidbody2D>().AddForce(GetRandomDirection(), ForceMode2D.Impulse);
+
+            return drop;
         }
-        
-        private IEnumerator Invulnerability()
+
+        private Vector2 GetRandomDirection()
+        {
+            return new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
+        }
+
+        private IEnumerator Invulnerable()
         {
             _invulnerable = true;
             yield return new WaitForSeconds(0.1f);
