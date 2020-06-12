@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core;
+using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
@@ -137,7 +139,7 @@ namespace Assets.ProceduralGeneration.Core
             _spawnedRooms = new List<Rect>();
             var metadata = new Dictionary<int[], string>();
 
-            for (var i = 0; i < numberOfRooms; i++)
+            Parallel.For(0, numberOfRooms, i =>
             {
                 var randomRoomWidth = Random.Range(minWidth, maxWidth);
                 var randomRoomHeight = Random.Range(minHeight, maxHeight);
@@ -145,7 +147,8 @@ namespace Assets.ProceduralGeneration.Core
                 var room = new Rect(new Vector2(0, 0), new Vector2(randomRoomWidth, randomRoomHeight));
 
                 _rooms.Add(room);
-            }
+            });
+            
 
             for (var i = 0; i < _rooms.Count; i++)
             {
@@ -388,6 +391,21 @@ namespace Assets.ProceduralGeneration.Core
             }
 
             #endregion
+        }
+
+        private void GenerateRoomsJob()
+        {
+            var generateRoomsTask = new GenerateRoomsTask();
+        }
+
+        private struct GenerateRoomsTask : IJob
+        {
+            public int numberOfRooms;
+            
+            public void Execute()
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         #endregion

@@ -546,6 +546,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: enemies.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: spawnRateInPercent
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: enemies.Array.data[1]
+      value: 
+      objectReference: {fileID: 5111081116285643832, guid: 163d601ff0abf4449ab037bfcbc4fc1a,
+        type: 3}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: roomPerEnemy
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f61b24f5298cc54daae4ebef9fd6f62, type: 3}
 --- !u!4 &6029391063509343128 stripped

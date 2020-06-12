@@ -27,6 +27,7 @@ namespace Assets.Enemies.Scripts
         private BoxCollider2D _collider;
         private Rigidbody2D _rigidbody;
         private ParticleSystem _particleSystem;
+        private CinemachineImpulseSource _impulseSource;
 
         private void Awake()
         {
@@ -50,6 +51,7 @@ namespace Assets.Enemies.Scripts
             _innerRadius.GetComponent<CircleCollider2D>().radius = innerRadius;
             _rigidbody = GetComponent<Rigidbody2D>();
             _particleSystem = GetComponent<ParticleSystem>();
+            _impulseSource = GetComponent<CinemachineImpulseSource>();
             
             onDeath.AddListener(OnDeath);
         }
@@ -94,12 +96,13 @@ namespace Assets.Enemies.Scripts
             Vector3 moveDirection = playerRigidbody.transform.position - this.transform.position;
             playerRigidbody.AddForce( moveDirection.normalized * 500f, ForceMode2D.Force);
                 
-            GetComponent<CinemachineImpulseSource>().GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
+            _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }
 
         private void OnHit()
         {
             _particleSystem.Play();
+            _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude/2,screenShakeMagnitude/2));
         }
 
         public void TakeDamage(int damageTaken)

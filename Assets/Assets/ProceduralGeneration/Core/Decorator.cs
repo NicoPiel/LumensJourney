@@ -13,7 +13,7 @@ namespace Assets.ProceduralGeneration.Core
     public class Decorator : MonoBehaviour
     {
         public float spawnRateInPercent;
-
+        public float roomPerEnemy;
         public List<GameObject> enemies;
         
         private GeneratorV2 _generator;
@@ -38,7 +38,7 @@ namespace Assets.ProceduralGeneration.Core
                 Debug.Log($"Spawning enemies in {room.ToString()}");
                 SpawnRandomly(GetRandomEnemy(), room, enemyDecorator.transform);
                 
-                var numberOfEnemies = room.width * room.height / 10;
+                var numberOfEnemies = room.width * room.height / roomPerEnemy;
                 
                 for (var i = 0; i < numberOfEnemies; i++)
                 {
