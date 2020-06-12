@@ -50,8 +50,11 @@ namespace Assets.Items.Scripts
 
                 foreach (XElement v in values)
                 {
-   
-                    var attribute = v.Attribute("name").Value;
+                    XAttribute queryName = v.Attribute("name");
+
+                    if (queryName == null) continue;
+                    
+                    var attribute = queryName.Value;
                     var val = int.Parse(v.Value);
                     item.ValueIncreases.Add(attribute, val);
                 }

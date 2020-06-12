@@ -40,6 +40,11 @@ namespace Assets.Player.Script
         
 
         [SerializeField] private int playerDamage;
+        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+        private static readonly int Vertical = Animator.StringToHash("Vertical");
+        private static readonly int Speed = Animator.StringToHash("Speed");
+        private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
+        private static readonly int LastVertical = Animator.StringToHash("LastVertical");
 
         // Start is called before the first frame update
         private void Awake()
@@ -100,27 +105,27 @@ namespace Assets.Player.Script
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 HitInDirection(180, new Vector2(2, 1), new Vector2(0, -1f), "SwingUp");
-                _animator.SetFloat("LastHorizontal", 0);
-                _animator.SetFloat("LastVertical", 1);
+                _animator.SetFloat(LastHorizontal, 0);
+                _animator.SetFloat(LastVertical, 1);
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
-                _animator.SetFloat("LastHorizontal", 1);
-                _animator.SetFloat("LastVertical", 0);
+                _animator.SetFloat(LastHorizontal, 1);
+                _animator.SetFloat(LastVertical, 0);
                 
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 HitInDirection(0, new Vector2(2, 1), new Vector2(0, -0.5f), "SwingDown");
-                _animator.SetFloat("LastHorizontal", 0);
-                _animator.SetFloat("LastVertical", -1);
+                _animator.SetFloat(LastHorizontal, 0);
+                _animator.SetFloat(LastVertical, -1);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 HitInDirection(270, new Vector2(1, 1), new Vector2(-0.5f, -1f), "SwingLeft");
-                _animator.SetFloat("LastHorizontal", -1);
-                _animator.SetFloat("LastVertical", 0);
+                _animator.SetFloat(LastHorizontal, -1);
+                _animator.SetFloat(LastVertical, 0);
             }
             else
             {
@@ -128,13 +133,13 @@ namespace Assets.Player.Script
                 _change.Normalize();
                 if (_change.x < 0 || _change.x > 0)
                 {
-                    _animator.SetFloat("LastHorizontal", _change.x);
-                    _animator.SetFloat("LastVertical", 0);
+                    _animator.SetFloat(LastHorizontal, _change.x);
+                    _animator.SetFloat(LastVertical, 0);
                 }
                 if (_change.y < 0 || _change.y > 0)
                 {
-                    _animator.SetFloat("LastVertical", _change.y);
-                    _animator.SetFloat("LastHorizontal", 0);
+                    _animator.SetFloat(LastVertical, _change.y);
+                    _animator.SetFloat(LastHorizontal, 0);
                 }
             }
         }
@@ -169,9 +174,9 @@ namespace Assets.Player.Script
 
         private void MoveCharacter()
         {
-            _animator.SetFloat("Horizontal", _change.x);
-            _animator.SetFloat("Vertical", _change.y);
-            _animator.SetFloat("Speed", _change.magnitude);
+            _animator.SetFloat(Horizontal, _change.x);
+            _animator.SetFloat(Vertical, _change.y);
+            _animator.SetFloat(Speed, _change.magnitude);
             _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Assets.Player.Script;
+﻿using Assets.Player.Script;
 using Cinemachine;
 using Core;
 using UnityEngine;
