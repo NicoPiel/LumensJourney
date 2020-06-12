@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Core;
 using Unity.Burst;
 using UnityEngine;
@@ -12,18 +11,35 @@ namespace Assets.ProceduralGeneration.Core
     [BurstCompile]
     public class Decorator : MonoBehaviour
     {
+        #region Public variables
+
         public float spawnRateInPercent;
         public float roomPerEnemy;
         public List<GameObject> enemies;
-        
+
+        #endregion
+
+        #region Private variables
+
         private GeneratorV2 _generator;
+
+        #endregion
+
+        #region UnityEvent functions
 
         private void Start()
         {
             _generator = GameManager.GetGenerator();
             _generator.onDungeonGenerated.AddListener(Decorate);
         }
-        
+
+        #endregion
+
+        #region Decoration
+
+        /// <summary>
+        /// Uses data from the generator to bring life to the dungeon.
+        /// </summary>
         private void Decorate()
         {
             Debug.Log("Decorating..");
@@ -52,7 +68,18 @@ namespace Assets.ProceduralGeneration.Core
             Debug.Log("Dungeon decorated.");
         }
 
-        private GameObject Spawn (string resourcesPath, Vector2 position, Transform parent)
+        #endregion
+
+        #region Utility
+
+        /// <summary>
+        /// Spawns a new enemy at the given position
+        /// </summary>
+        /// <param name="resourcesPath">Path of the enemy prefab</param>
+        /// <param name="position">Position to spawn at</param>
+        /// <param name="parent">Parent object</param>
+        /// <returns></returns>
+        private GameObject Spawn (string resourcesPath, Vector2 position, Transform parent = null)
         {
             return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath), 
                 new Vector3(position.x, position.y, 0),
@@ -113,5 +140,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             return Random.Range(0f, 1f) <= pInPercent / 100;
         }
+
+        #endregion
     }
 }
