@@ -68,7 +68,7 @@ namespace Assets.Enemies.Scripts
             Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
             var distanceToPlayer = vectorToPlayer.magnitude;
 
-            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer, LayerMask.GetMask("Player"));
+            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer);
             Debug.DrawRay(enemyPosition, vectorToPlayer);
 
             if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())

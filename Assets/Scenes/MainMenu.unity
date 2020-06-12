@@ -418,6 +418,16 @@ PrefabInstance:
       propertyPath: itemSpawnRateInPercent
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6086055997660192313, guid: d809ff8be5b6d694da04e14cf7f25865,
+        type: 3}
+      propertyPath: allowedDistanceToPlayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6086055997660192313, guid: d809ff8be5b6d694da04e14cf7f25865,
+        type: 3}
+      propertyPath: minimumDistanceToPlayer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d809ff8be5b6d694da04e14cf7f25865, type: 3}
 --- !u!1001 &2010919515290640471

@@ -9,12 +9,12 @@ namespace Assets.Items.Scripts
     public class GameItem
     {
     
-        public Dictionary<string, int> ValueIncreasments {get; set;}
+        public Dictionary<string, int> ValueIncreases {get; set;}
         public string ItemName {get; set;}
         
         public GameItem()
         {
-            ValueIncreasments = new Dictionary<string, int>();
+            ValueIncreases = new Dictionary<string, int>();
             ItemName = null;
         }
 
@@ -51,7 +51,7 @@ namespace Assets.Items.Scripts
    
                     var attribute = v.Attribute("name").Value;
                     var val = int.Parse(v.Value);
-                    item.ValueIncreasments.Add(attribute, val);
+                    item.ValueIncreases.Add(attribute, val);
                 }
             }
             

@@ -32,7 +32,7 @@ namespace Assets.Player.Script
         }
         private void OnItemChange(GameItem item, bool removed)
         {
-            foreach (var itemStat in item.ValueIncreasments)
+            foreach (var itemStat in item.ValueIncreases)
             {
                 if (removed)
                     playerstats[itemStat.Key] -= itemStat.Value;

@@ -5,6 +5,7 @@ using Assets.PickUps.Scripts;
 using Core;
 using JetBrains.Annotations;
 using Unity.Burst;
+using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -24,7 +25,10 @@ namespace Assets.ProceduralGeneration.Core
         public float itemSpawnRateInPercent;
         public int maxItemsPerRoom;
         public List<GameObject> items;
+
+        public float minimumDistanceToPlayer;
         
+        [ReadOnly]
         public int globalItemCount;
 
         #endregion
@@ -87,7 +91,7 @@ namespace Assets.ProceduralGeneration.Core
             {
                 if (GetProbability(enemySpawnRateInPercent))
                 {
-                    SpawnRandomly(GetRandomEnemy(), room, enemyDecorator);
+                    SpawnRandomlyAwayFromPlayer(GetRandomEnemy(), room, enemyDecorator);
                 }
             }
         }
@@ -98,7 +102,7 @@ namespace Assets.ProceduralGeneration.Core
             {
                 if (GetProbability(itemSpawnRateInPercent))
                 {
-                    GameObject pickUp = SpawnRandomly("PickUp", room, itemDecorator);
+                    GameObject pickUp = SpawnRandomlyAwayFromPlayer("PickUp", room, itemDecorator);
                     pickUp.GetComponent<PickUpScript>().SetPickUpItem(GetRandomItem().name);
                     
                     _levelItemCount++;
@@ -149,6 +153,22 @@ namespace Assets.ProceduralGeneration.Core
                 Quaternion.identity,
                 parent);
         }
+        
+        private GameObject SpawnRandomlyAwayFromPlayer (string resourcesPath, Rect room, Transform parent)
+        {
+            return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath),
+                GetRandomPositionAwayFromPlayer((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                Quaternion.identity,
+                parent);
+        }
+        
+        private GameObject SpawnRandomlyAwayFromPlayer (GameObject prefab, Rect room, Transform parent)
+        {
+            return Instantiate(prefab,
+                GetRandomPositionAwayFromPlayer((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                Quaternion.identity,
+                parent);
+        }
 
         private GameObject GetRandomEnemy()
         {
@@ -163,6 +183,21 @@ namespace Assets.ProceduralGeneration.Core
         private Vector2 GetRandomPosition(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary) 
         {
             return new Vector2(Random.Range(leftXBoundary, rightXBoundary), Random.Range(leftYBoundary, rightYBoundary));
+        }
+        
+        private Vector2 GetRandomPositionAwayFromPlayer(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary)
+        {
+            Vector2 playerPosition = GameManager.GetPlayer().transform.position;
+            var spawnPosition = new Vector2(Random.Range(leftXBoundary, rightXBoundary), Random.Range(leftYBoundary, rightYBoundary));
+            var distanceToPlayer = (playerPosition - spawnPosition).magnitude;
+
+            while (distanceToPlayer < minimumDistanceToPlayer)
+            {
+                spawnPosition = new Vector2(Random.Range(leftXBoundary, rightXBoundary), Random.Range(leftYBoundary, rightYBoundary));
+                distanceToPlayer = (playerPosition - spawnPosition).magnitude;
+            }
+
+            return spawnPosition;
         }
 
         private GameObject CreateEnemyDecorator()

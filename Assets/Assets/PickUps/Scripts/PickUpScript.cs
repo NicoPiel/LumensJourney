@@ -43,7 +43,7 @@ namespace Assets.PickUps.Scripts
                 StringBuilder n = new StringBuilder();
                 n.Append(_item.ItemName + "\n");
 
-                foreach (var stuff in _item.ValueIncreasments)
+                foreach (var stuff in _item.ValueIncreases)
                 {
                     n.Append(stuff.Key + " " + stuff.Value + "\n");
                 }
