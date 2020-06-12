@@ -10,8 +10,10 @@ namespace Assets.UI.Healthbar.Scripts
     public class HealthbarScript : MonoBehaviour
     {
         public GameObject heart;
-        public Sprite fullHeart;
-        public Sprite emptyHeart;
+        public Sprite full;
+        public Sprite firstfull;
+        public Sprite firstempty;
+        public Sprite empty;
         private Dictionary<int, Image> hearts;
       
         
@@ -35,20 +37,23 @@ namespace Assets.UI.Healthbar.Scripts
             {
                 Destroy(child.gameObject);
             }
-            float x = 11f;
-            float y = -20f;
+            float x = 40f;
+            float y = -30f;
             for (int i = 1; i <= maxHealth; i++)
             {
                 var heartSlot = Instantiate(heart);
                 heartSlot.name = "Herz";
-                var rect = heartSlot.GetComponent<RectTransform>();
-                rect.SetParent(transform);
-                rect.anchoredPosition = new Vector3(x, y, 0);
-                
-                
+                var rectTrans = heartSlot.GetComponent<RectTransform>();
+                rectTrans.SetParent(transform);
+                rectTrans.anchoredPosition = new Vector3(x, y, 0);
+                rectTrans.localScale = new Vector3(1.5f, 1.5f,1.5f);
+                rectTrans.sizeDelta = new Vector2(50, 35);
+              
+
+
                 var image = heartSlot.GetComponent<Image>();
                 hearts.Add(i, image);
-                x += 100;
+                x += 75;
             }
         }
 
@@ -59,12 +64,14 @@ namespace Assets.UI.Healthbar.Scripts
             {
                 if (currentHealth >= i)
                 {
-                    hearts[i].sprite = fullHeart;
+                    hearts[i].sprite = i == 1 ? firstfull : full;
                 }
                 else
                 {
-                    hearts[i].sprite = emptyHeart;
+                    hearts[i].sprite = i == 1 ? firstempty : empty;
                 }
+                
+                
             }
         }
     }

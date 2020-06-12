@@ -49,5 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heart: {fileID: 4955654443234629947, guid: ed9b891ce9c6c844dbcfdb57ab07720d, type: 3}
-  fullHeart: {fileID: 21300000, guid: 39b66e339ba1b9f4db6f85ef6376d6a9, type: 3}
-  emptyHeart: {fileID: 21300000, guid: 019c2dae4e9702d438f77ca9b9d1b0fe, type: 3}
+  full: {fileID: 219433517873854331, guid: 70f56a17b7698d349a805a63e754ad1a, type: 3}
+  firstfull: {fileID: 4596313960938759734, guid: 70f56a17b7698d349a805a63e754ad1a,
+    type: 3}
+  firstempty: {fileID: -8739779878225115318, guid: 70f56a17b7698d349a805a63e754ad1a,
+    type: 3}
+  empty: {fileID: 5834862339343480434, guid: 70f56a17b7698d349a805a63e754ad1a, type: 3}
