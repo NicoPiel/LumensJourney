@@ -61,7 +61,6 @@ namespace Assets.Player.Script
             _audioClips = new Dictionary<String, AudioClip>();
             _playerCollider = GetComponent<CapsuleCollider2D>();
             hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
-            hitCollider.gameObject.SetActive(false);
             _audioSource = GetComponent<AudioSource>();
 
             AddAudioClips();
@@ -161,16 +160,11 @@ namespace Assets.Player.Script
         private void SetStateEnter()
         {
             hitCollider.gameObject.SetActive(true);
-            //_animator.SetBool(StateExit, true);
         }
 
         private void SetStateExit()
         {
-            //if (!_animator.GetBool(StateExit)) return;
-
             hitCollider.gameObject.SetActive(false);
-            //var layerIndex = _animator.GetLayerIndex("Player");
-            //_animator.SetBool(StateExit, false);
         }
 
         private void MoveCharacter()
