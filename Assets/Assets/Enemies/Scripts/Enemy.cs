@@ -21,8 +21,6 @@ namespace Assets.Enemies.Scripts
         [SerializeField] private float detectionRadius;
         [SerializeField] private float innerRadius;
         [SerializeField] private float speed;
-        [SerializeField] private int vertical;
-        [SerializeField] private int horizontal;
         [SerializeField] private int maxShardsOnDrop;
         [Space] [Header("Combat settings")] public int health;
         public int damage;
@@ -78,7 +76,9 @@ namespace Assets.Enemies.Scripts
             _rigidbody = GetComponent<Rigidbody2D>();
             _particleSystem = GetComponent<ParticleSystem>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
-            
+
+            lightShardPrefab = Resources.Load<GameObject>("LightShard");
+
             onDeath.AddListener(OnDeath);
         }
 

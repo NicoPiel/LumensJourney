@@ -158,9 +158,11 @@ MonoBehaviour:
   speed: 60
   vertical: 0
   horizontal: 0
+  maxShardsOnDrop: 4
   health: 2
   damage: 1
   screenShakeMagnitude: 1
+  lightShardPrefab: {fileID: 0}
 --- !u!114 &359570173015442694
 MonoBehaviour:
   m_ObjectHideFlags: 0

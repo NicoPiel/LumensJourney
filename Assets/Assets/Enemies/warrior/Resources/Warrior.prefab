@@ -156,11 +156,12 @@ MonoBehaviour:
   detectionRadius: 7
   innerRadius: 0.75
   speed: 80
-  vertical: 0
-  horizontal: 0
+  maxShardsOnDrop: 4
   health: 2
   damage: 1
   screenShakeMagnitude: 1
+  lightShardPrefab: {fileID: 7459398861275665276, guid: 92451223147d97043bc7f5dd8fbff98e,
+    type: 3}
 --- !u!114 &359570173015442694
 MonoBehaviour:
   m_ObjectHideFlags: 0

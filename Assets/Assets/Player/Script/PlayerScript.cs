@@ -162,16 +162,16 @@ namespace Assets.Player.Script
         private void SetStateEnter()
         {
             hitCollider.gameObject.SetActive(true);
-            _animator.SetBool(StateExit, true);
+            //_animator.SetBool(StateExit, true);
         }
 
         private void SetStateExit()
         {
-            if (!_animator.GetBool(StateExit)) return;
+            //if (!_animator.GetBool(StateExit)) return;
 
             hitCollider.gameObject.SetActive(false);
-            var layerIndex = _animator.GetLayerIndex("Player");
-            _animator.SetBool(StateExit, false);
+            //var layerIndex = _animator.GetLayerIndex("Player");
+            //_animator.SetBool(StateExit, false);
         }
 
         private void MoveCharacter()
@@ -345,7 +345,7 @@ namespace Assets.Player.Script
         private IEnumerator Invulnerable()
         {
             _invulnerable = true;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.5f);
             _invulnerable = false;
         }
     }
