@@ -158,11 +158,6 @@ namespace Assets.Player.Script
             _animator.SetBool(StateExit, true);
         }
 
-        private void SetStateEnter()
-        {
-            _animator.SetBool(StateExit, true);
-        }
-
         private void SetStateExit()
         {
             if (!_animator.GetBool(StateExit)) return;
