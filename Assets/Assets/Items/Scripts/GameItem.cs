@@ -11,6 +11,8 @@ namespace Assets.Items.Scripts
     
         public Dictionary<string, int> ValueIncreases {get; set;}
         public string ItemName {get; set;}
+
+        public const string PathToItemFile = "Assets/Assets/Items/Data/items.xml";
         
         public GameItem()
         {
@@ -34,7 +36,7 @@ namespace Assets.Items.Scripts
         public static GameItem ConstructItem(string itemName)
         {
             var item = new GameItem();
-            XElement rootNode = XElement.Load("Assets/Resources/Items/Data/items.xml");
+            XElement rootNode = XElement.Load(PathToItemFile);
             var items =
                 from xElement in rootNode.Elements("item")
                 where (string) xElement.Attribute("name") == itemName
@@ -56,6 +58,16 @@ namespace Assets.Items.Scripts
             }
             
             return item;
+        }
+
+        public static List<string> GetItemNames()
+        {
+            XElement rootNode = XElement.Load(PathToItemFile);
+            var items =
+                from xElement in rootNode.Elements("item")
+                select xElement.Attribute("name")?.ToString();
+
+            return items.ToList();
         }
 
     }

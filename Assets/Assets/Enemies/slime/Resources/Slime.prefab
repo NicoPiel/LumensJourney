@@ -158,6 +158,7 @@ MonoBehaviour:
   speed: 60
   vertical: 0
   horizontal: 0
+  knockBackForce: 500
   health: 2
   damage: 1
   screenShakeMagnitude: 1

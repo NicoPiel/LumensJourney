@@ -18,6 +18,7 @@ namespace Assets.Enemies.Scripts
         public float speed;
         public int vertical;
         public int horizontal;
+        public int knockBackForce;
         [Space] [Header("Combat settings")] public int health;
         public int damage;
         [Space]
@@ -31,6 +32,10 @@ namespace Assets.Enemies.Scripts
         private ParticleSystem _particleSystem;
         private CinemachineImpulseSource _impulseSource;
         private Animator _animator;
+        
+        private static readonly int Vertical = Animator.StringToHash("Vertical");
+        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+        private static readonly int Speed = Animator.StringToHash("Speed");
 
         private void Awake()
         {
@@ -78,9 +83,9 @@ namespace Assets.Enemies.Scripts
                     Debug.Log(raycastHitInfo.transform.gameObject.tag);
                     if (raycastHitInfo.transform.gameObject.CompareTag("Player"))
                     {
-                        _animator.SetFloat("Vertical", playerDirection.y);
-                        _animator.SetFloat("Horizontal", playerDirection.x);
-                        _animator.SetFloat("Speed", playerDirection.magnitude);
+                        _animator.SetFloat(Vertical, playerDirection.y);
+                        _animator.SetFloat(Horizontal, playerDirection.x);
+                        _animator.SetFloat(Speed, playerDirection.magnitude);
                         _rigidbody.velocity = playerDirection * speed * Time.deltaTime;
                     }
                 }
@@ -101,7 +106,7 @@ namespace Assets.Enemies.Scripts
             playerScipt.PlayerTakeDamage(damage);
                 
             Vector3 moveDirection = playerRigidbody.transform.position - this.transform.position;
-            playerRigidbody.AddForce( moveDirection.normalized * 500f, ForceMode2D.Force);
+            playerRigidbody.AddForce( moveDirection.normalized * knockBackForce, ForceMode2D.Force);
                 
             _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }

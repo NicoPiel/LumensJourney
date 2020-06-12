@@ -24,7 +24,7 @@ namespace Assets.ProceduralGeneration.Core
         
         public float itemSpawnRateInPercent;
         public int maxItemsPerRoom;
-        public List<GameObject> items;
+        public List<string> items;
 
         public float minimumDistanceToPlayer;
         
@@ -47,6 +47,8 @@ namespace Assets.ProceduralGeneration.Core
         {
             _generator = GameManager.GetGenerator();
             _generator.onDungeonGenerated.AddListener(Decorate);
+
+            items = GameItem.GetItemNames();
 
             globalItemCount = 0;
         }
@@ -103,7 +105,7 @@ namespace Assets.ProceduralGeneration.Core
                 if (GetProbability(itemSpawnRateInPercent))
                 {
                     GameObject pickUp = SpawnRandomlyAwayFromPlayer("PickUp", room, itemDecorator);
-                    pickUp.GetComponent<PickUpScript>().SetPickUpItem(GetRandomItem().name);
+                    pickUp.GetComponent<PickUpScript>().SetPickUpItem(GetRandomItemName());
                     
                     _levelItemCount++;
                     globalItemCount++;
@@ -175,7 +177,7 @@ namespace Assets.ProceduralGeneration.Core
             return enemies?[Random.Range(0, enemies.Count)];
         }
         
-        private GameObject GetRandomItem()
+        private string GetRandomItemName()
         {
             return items?[Random.Range(0, items.Count)];
         }
