@@ -1,4 +1,5 @@
-﻿using Assets.Player.Script;
+﻿using System.Collections;
+using Assets.Player.Script;
 using Cinemachine;
 using Core;
 using UnityEngine;
@@ -30,6 +31,8 @@ namespace Assets.Enemies.Scripts
         private ParticleSystem _particleSystem;
         private CinemachineImpulseSource _impulseSource;
         private Animator _animator;
+
+        private bool _invulnerable;
         
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
@@ -59,7 +62,7 @@ namespace Assets.Enemies.Scripts
             _rigidbody = GetComponent<Rigidbody2D>();
             _particleSystem = GetComponent<ParticleSystem>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
-            
+
             onDeath.AddListener(OnDeath);
         }
 
@@ -84,7 +87,7 @@ namespace Assets.Enemies.Scripts
                         _animator.SetFloat(Vertical, playerDirection.y);
                         _animator.SetFloat(Horizontal, playerDirection.x);
                         _animator.SetFloat(Speed, playerDirection.magnitude);
-                        _rigidbody.velocity = playerDirection * speed * Time.deltaTime;
+                        _rigidbody.velocity = playerDirection * speed * Time.fixedDeltaTime;
                     }
                 }
             }
@@ -100,13 +103,14 @@ namespace Assets.Enemies.Scripts
 
             PlayerScript playerScipt = GameManager.GetPlayerScript();
             Rigidbody2D playerRigidbody = playerScipt.GetRigidbody();
-                
-            playerScipt.PlayerTakeDamage(damage);
-                
-            Vector3 moveDirection = playerRigidbody.transform.position - this.transform.position;
-            playerRigidbody.AddForce( moveDirection.normalized * knockBackForce, ForceMode2D.Force);
-                
-            _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
+
+            if (playerScipt.PlayerTakeDamage(damage))
+            {
+                Vector3 moveDirection = playerRigidbody.transform.position - transform.position;
+                playerRigidbody.AddForce( moveDirection.normalized * knockBackForce, ForceMode2D.Force);
+            
+                _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
+            }
         }
 
         private void OnHit()
@@ -117,9 +121,13 @@ namespace Assets.Enemies.Scripts
 
         public void TakeDamage(int damageTaken)
         {
+            if (_invulnerable) return;
+            
             health -= damageTaken;
             if (health < 0) health = 0;
 
+            StartCoroutine(Invulnerability());
+                
             Die();
         }
 
@@ -142,6 +150,13 @@ namespace Assets.Enemies.Scripts
         private void StopMoving()
         {
             _rigidbody.velocity = new Vector2(0, 0);
+        }
+        
+        private IEnumerator Invulnerability()
+        {
+            _invulnerable = true;
+            yield return new WaitForSeconds(0.1f);
+            _invulnerable = false;
         }
 
         public Rigidbody2D GetRigidBody()

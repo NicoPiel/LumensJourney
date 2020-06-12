@@ -103,6 +103,7 @@ namespace Assets.ProceduralGeneration.Core
         public bool Generate(int numberOfRooms)
         {
             Generated = false;
+            Time.timeScale = 0f;
 
             if ((minWidth > maxWidth)
                 || (minHeight > maxHeight))
@@ -416,6 +417,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             Debug.Log("Dungeon generated event invoked.");
             Generated = true;
+            Time.timeScale = 1f;
         }
 
         private void OnDungeonChanged()

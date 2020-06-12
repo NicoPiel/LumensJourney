@@ -15,6 +15,7 @@ namespace Assets.Player.Script
     {
         public int lightLoss;
         public float speed;
+
         private CapsuleCollider2D _playerCollider;
         private Rigidbody2D _playerRigidbody2D;
         private Vector3 _change;
@@ -22,7 +23,6 @@ namespace Assets.Player.Script
         private Animator _animator;
         private Player _player = new Player("Pacolos");
         public BoxCollider2D hitCollider;
-        private static readonly int StateExit = Animator.StringToHash("StateExit");
 
         #region UnityEvents
 
@@ -37,9 +37,11 @@ namespace Assets.Player.Script
         #endregion
 
         private Dictionary<string, AudioClip> _audioClips;
+        private bool _invulnerable;
         
 
         [SerializeField] private int playerDamage;
+        private static readonly int StateExit = Animator.StringToHash("StateExit");
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int Speed = Animator.StringToHash("Speed");
@@ -197,14 +199,16 @@ namespace Assets.Player.Script
 
         #region PlayerDamage
         
-        public void PlayerTakeDamage(int damage)
+        public bool PlayerTakeDamage(int damage)
         {
+            if (_invulnerable) return false;
+            
             var remainingHealth = _player.playerstats["CurrentHealth"] -= damage;
 
             if (remainingHealth > 0)
             {
                 _player.playerstats["CurrentHealth"] = remainingHealth;
-                PlayerChangeLightLevel(-damage*10);
+                PlayerChangeLightLevel(-damage * 10);
                 onPlayerLifeChanged.Invoke();
                 onPlayerTakeDamage.Invoke();
             }
@@ -213,6 +217,9 @@ namespace Assets.Player.Script
                 _player.playerstats["CurrentHealth"] = 0;
                 KillPlayer();
             }
+
+            StartCoroutine(Invulnerability());
+            return true;
         }
 
         private void KillPlayer()
@@ -337,5 +344,12 @@ namespace Assets.Player.Script
         }
 
         #endregion
+
+        private IEnumerator Invulnerability()
+        {
+            _invulnerable = true;
+            yield return new WaitForSeconds(0.5f);
+            _invulnerable = false;
+        }
     }
 }

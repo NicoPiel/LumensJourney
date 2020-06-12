@@ -4,7 +4,6 @@ using Assets.Items.Scripts;
 using Assets.PickUps.Scripts;
 using Core;
 using JetBrains.Annotations;
-using Unity.Burst;
 using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
