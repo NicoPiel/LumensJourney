@@ -9,7 +9,7 @@ namespace Assets.ProceduralGeneration.Menu
 {
     [BurstCompile]
     [CustomEditor(typeof(Generator))]
-    public class PcgMenu : Editor
+    public class PcgMenuV2 : Editor
     {
         // OnInspector GUI
         public override void OnInspectorGUI()
@@ -22,7 +22,7 @@ namespace Assets.ProceduralGeneration.Menu
                 var generator = GameObject.FindWithTag("Generator").GetComponent<Generator>();
                 
                 stopwatch.Restart();
-                if (generator.Generate(generator.RoomNumber))
+                if (generator.Generate(generator.roomNumber))
                 {
                     stopwatch.Stop();
                     Debug.Log($"Generated dungeon in {stopwatch.ElapsedMilliseconds}ms.");

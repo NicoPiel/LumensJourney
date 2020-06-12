@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core;
-using Unity.Burst;
+using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,59 +10,41 @@ using Random = UnityEngine.Random;
 
 namespace Assets.ProceduralGeneration.Core
 {
-    /// <summary>
-    /// The PCG's core GameObject. It builds and maintains the rooms, corridors and doors inside a level.
-    /// </summary>
-    [BurstCompile]
     public class Generator : MonoBehaviour
     {
         #region Events
+
         // Events
 
         /// <summary>
         /// Triggers when a dungeon level has been fully generated.
         /// </summary>
         public UnityEvent onDungeonGenerated;
+
         /// <summary>
         /// Triggers when something in an existing dungeon changes (e.g. a door opens).
         /// </summary>
         public UnityEvent onDungeonChanged;
-        
+
         #endregion
-        
+
         #region Editor variables
 
-        [Header("Room Settings")] 
-        [Range(1, 30)] public int RoomNumber;
+        [Header("Room Settings")] [Range(1, 30)]
+        public int roomNumber;
 
-        [Space] 
-        [SerializeField]
-        [Range(5, 30)] private int minWidth;
-        [SerializeField]
-        [Range(5, 30)] private int maxWidth;
-        
-        [Space] 
-        [SerializeField]
-        [Range(5, 30)] private int minHeight;
-        [SerializeField]
-        [Range(5, 30)] private int maxHeight;
+        [Space] [SerializeField] [Range(5, 30)]
+        private int minWidth;
 
-        [Space] 
-        [SerializeField]
-        [Range(4, 40)] private int minSpacingX;
-        [SerializeField]
-        [Range(4, 40)] private int maxSpacingX;
-        
-        [Space] 
-        [SerializeField]
-        [Range(-80, 0)] private int minSpacingY;
-        [SerializeField]
-        [Range(0, 80)] private int maxSpacingY;
+        [SerializeField] [Range(5, 30)] private int maxWidth;
 
-        [Header("Tileset")]
-        [Tooltip("Determines the likelihood with which the standard floor tile will spawn.")]
-        [SerializeField]
-        [Range(0, 100)] private int stdLikelihood;
+        [Space] [SerializeField] [Range(5, 30)]
+        private int minHeight;
+
+        [SerializeField] [Range(5, 30)] private int maxHeight;
+
+        [Header("Tileset")] [Tooltip("Determines the likelihood with which the standard floor tile will spawn.")] [SerializeField] [Range(0, 100)]
+        private int stdLikelihood;
 
         [SerializeField] private GameObject standardFloorTile;
         [SerializeField] private List<GameObject> otherFloorTiles;
@@ -69,19 +53,19 @@ namespace Assets.ProceduralGeneration.Core
         [Space]
 
         // Wall tiles
-        [SerializeField] private GameObject wallTile;
+        [SerializeField]
+        private GameObject wallTile;
+
         [SerializeField] private GameObject wallTileTopDown;
 
-        [Space] 
-        [Header("Doors")]
-        private List<int[]> _leftDoors;
-        
+        [Space] [Header("Doors")] private List<int[]> _leftDoors;
+
         #endregion
 
-        private List<int[]> _rightDoors;
-        private Dictionary<int[], int[]> _doorRelations;
-        [Space] 
+        #region Class-specific variables
+        
         private List<Rect> _rooms;
+        private List<Rect> _spawnedRooms;
 
         [SerializeField] private GameObject dungeonObject;
 
@@ -89,6 +73,10 @@ namespace Assets.ProceduralGeneration.Core
         /// True, if the dungeon has finished generating.
         /// </summary>
         public bool Generated { get; set; }
+
+        #endregion
+
+        #region UnityEvent functions
 
         private void Awake()
         {
@@ -103,6 +91,10 @@ namespace Assets.ProceduralGeneration.Core
             onDungeonChanged.AddListener(OnDungeonChanged);
         }
 
+        #endregion
+
+        #region Generation
+
         /// <summary>
         /// Generates a new dungeon with the specified number of rooms.
         /// </summary>
@@ -111,11 +103,9 @@ namespace Assets.ProceduralGeneration.Core
         public bool Generate(int numberOfRooms)
         {
             Generated = false;
-            
+
             if ((minWidth > maxWidth)
-                || (minHeight > maxHeight)
-                || (minSpacingX > maxSpacingX)
-                || (minSpacingY > maxSpacingY))
+                || (minHeight > maxHeight))
             {
                 Debug.LogError(
                     "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
@@ -124,16 +114,16 @@ namespace Assets.ProceduralGeneration.Core
 
             dungeonObject = CreateDungeonObject();
 
-            RoomNumber = numberOfRooms;
-            GenerateRooms(RoomNumber);
+            roomNumber = numberOfRooms;
+            GenerateRooms(roomNumber);
 
             PlacePlayer();
-            PlaceTeleporter();
 
             onDungeonGenerated?.Invoke();
             return true;
         }
 
+        
         /// <summary>
         /// Generates the specified number of rooms (only). 
         /// </summary>
@@ -146,38 +136,43 @@ namespace Assets.ProceduralGeneration.Core
             GameObject spawner = CreateRoomSpawner();
 
             _rooms = new List<Rect>();
-            _rightDoors = new List<int[]>();
-            _leftDoors = new List<int[]>();
-            _doorRelations = new Dictionary<int[], int[]>();
+            _spawnedRooms = new List<Rect>();
+            var metadata = new Dictionary<int[], string>();
 
             for (var i = 0; i < numberOfRooms; i++)
             {
                 var randomRoomWidth = Random.Range(minWidth, maxWidth);
                 var randomRoomHeight = Random.Range(minHeight, maxHeight);
 
-                Vector3 position = spawner.transform.position;
-
-                var room = new Rect(new Vector2(position.x / 2, position.y / 2),
-                    new Vector2(randomRoomWidth, randomRoomHeight));
-
-                var xMin = (int) math.floor(room.xMin);
-                var xMax = (int) math.ceil(room.xMax);
-                var yMin = (int) math.floor(room.yMin);
-                var yMax = (int) math.ceil(room.yMax);
+                var room = new Rect(new Vector2(0, 0), new Vector2(randomRoomWidth, randomRoomHeight));
 
                 _rooms.Add(room);
+            }
+            
 
-                // Make random position for the doors
-                var doorLeft = Random.Range(yMin + 1, yMax - 1);
-                var doorRight = Random.Range(yMin + 1, yMax - 1);
+            for (var i = 0; i < _rooms.Count; i++)
+            {
+                Rect currentRoom = _rooms[i];
+                Rect spawnedRoom;
 
-                var roomObject = new GameObject
+                Vector3 position = spawner.transform.position;
+
+                if (_spawnedRooms.Count > 0)
                 {
-                    name = $"Room_{i}"
-                };
-                roomObject.transform.SetParent(dungeon.transform);
-                roomObject.transform.rotation = Quaternion.identity;
-                roomObject.transform.position = spawner.transform.position;
+                    spawnedRoom = _spawnedRooms[Random.Range(0, _spawnedRooms.Count)];
+
+                    var probability = Random.Range(0, 4);
+                    MoveSpawner(probability);
+                }
+
+                var xMin = (int) math.floor(position.x);
+                var xMax = (int) math.ceil(position.x + _rooms[i].width);
+                var yMin = (int) math.floor(position.y);
+                var yMax = (int) math.ceil(position.y + _rooms[i].height);
+
+                GameObject roomObject = GenerateRoomObject();
+
+                #region Generate tiles
 
                 // Generate all room tiles
                 for (var x = xMin; x <= xMax; x++)
@@ -199,42 +194,12 @@ namespace Assets.ProceduralGeneration.Core
                         else if (x == xMin && y > yMin && y < yMax)
                         {
                             // Generate bottom wall, and make room for a door
-                            if (y != doorLeft)
-                            {
-                                PlaceTile(wallTileTopDown, x, y, roomObject);
-                            }
-                            else if (y == doorLeft)
-                            {
-                                if (_rooms.Count > 1)
-                                {
-                                    PlaceTile(standardFloorTile, x, y, roomObject);
-                                    _leftDoors.Add(new[] {xMin, doorLeft});
-                                }
-                                else
-                                {
-                                    PlaceTile(wallTileTopDown, x, y, roomObject);
-                                }
-                            }
+                            PlaceTile(wallTileTopDown, x, y, roomObject);
                         }
                         else if (x == xMax && y > yMin && y < yMax)
                         {
                             // Generate top wall, and make room for a door
-                            if (y != doorRight)
-                            {
-                                PlaceTile(wallTileTopDown, x, y, roomObject);
-                            }
-                            else if (y == doorRight)
-                            {
-                                if (_rooms.Count < numberOfRooms)
-                                {
-                                    PlaceTile(standardFloorTile, x, y, roomObject);
-                                    _rightDoors.Add(new[] {xMax, doorRight});
-                                }
-                                else
-                                {
-                                    PlaceTile(wallTileTopDown, x, y, roomObject);
-                                }
-                            }
+                            PlaceTile(wallTileTopDown, x, y, roomObject);
                         }
 
                         // Erect horizontal walls
@@ -249,222 +214,217 @@ namespace Assets.ProceduralGeneration.Core
                     }
                 }
 
-                // Move spawner to the right
-                spawner.transform.position =
-                    new Vector2(position.x + room.width * 2 + Random.Range(minSpacingX, maxSpacingX),
-                        room.y + Random.Range(minSpacingY, maxSpacingY));
+                #endregion
+
+                _spawnedRooms.Add(currentRoom);
+
+                #region Local functions
+
+                // Local function moving the spawner according to the rules.
+                void MoveSpawner(int p)
+                {
+                    for (var u = 0; u < 50; u++)
+                    {
+                        switch (p)
+                        {
+                            case 0:
+                                // Move spawner up
+                                position = new Vector2(spawnedRoom.x, spawnedRoom.yMax + 1);
+                                break;
+                            case 1:
+                                // Move spawner down
+                                position = new Vector2(spawnedRoom.x, spawnedRoom.y - currentRoom.height - 1);
+                                break;
+                            case 2:
+                                // Move spawner left
+                                position = new Vector2(spawnedRoom.x - currentRoom.width - 1, spawnedRoom.y);
+                                break;
+                            case 3:
+                                // Move spawner right
+                                position = new Vector2(spawnedRoom.xMax + 1, spawnedRoom.y);
+                                break;
+                        }
+
+                        currentRoom.position = position;
+
+                        if (!IsTouchingAnotherRoom(currentRoom))
+                        {
+                            switch (p)
+                            {
+                                case 0:
+                                    //Debug.Log($"Moved up from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "N");
+                                    break;
+                                case 1:
+                                    //Debug.Log($"Moved down from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "S");
+                                    break;
+                                case 2:
+                                    //Debug.Log($"Moved left from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "W");
+                                    break;
+                                case 3:
+                                    //Debug.Log($"Moved right from {spawnedRoom.ToString()}");
+                                    metadata.Add(new[] {_spawnedRooms.IndexOf(spawnedRoom), i}, "E");
+                                    break;
+                            }
+
+                            return;
+                        }
+
+                        p = p < 3 ? p + 1 : 0;
+                    }
+
+                    spawnedRoom = _spawnedRooms[Random.Range(0, _spawnedRooms.Count)];
+                    var probability = Random.Range(0, 4);
+                    MoveSpawner(probability);
+                    //Debug.Log("Generation didn't work, recalibrating.");
+                }
+
+                // Places a teleporter object, which upon activation generates a new dungeon.
+
+
+                bool IsTouchingAnotherRoom(Rect other)
+                {
+                    return _spawnedRooms.Any(r => r.Overlaps(other));
+                }
+
+                GameObject GenerateRoomObject()
+                {
+                    var newObject = new GameObject
+                    {
+                        name = $"Room_{i}: {currentRoom.width}x{currentRoom.height}",
+                        tag = "Room",
+                        layer = LayerMask.NameToLayer("Rooms")
+                    };
+                    newObject.transform.SetParent(dungeon.transform);
+                    newObject.transform.rotation = Quaternion.identity;
+                    newObject.transform.position = spawner.transform.position;
+
+                    return newObject;
+                }
+
+                #endregion
             }
 
-            for (var i = 0; i < _rightDoors.Count; i++)
+            PlaceTeleporter();
+            PlaceDoors();
+
+            #region Local functions
+
+            void PlaceDoors()
             {
-                _doorRelations.Add(_rightDoors[i], _leftDoors[i]);
+                foreach (Rect r in _spawnedRooms)
+                {
+                    // Increase the size of the room
+                    var rect = new Rect(new Vector2(r.x - 0.1f, r.y - 0.1f), new Vector2(r.width + 1.2f, r.height + 1.2f));
+                    // Look for overlapping rooms
+                    var overlaps = _spawnedRooms.Where(r2 => rect.Overlaps(r2)).ToList();
+
+                    //Debug.Log($"{r.ToString()} overlaps {overlaps.Count} rooms.");
+
+                    foreach (Rect overlap in overlaps)
+                    {
+                        var angleUpDown = Vector2.Angle(overlap.center - r.center, Vector2.up);
+                        var angleLeftRight = Vector2.Angle(overlap.center - r.center, Vector2.left);
+                        
+                        if ((angleUpDown < 30 || angleUpDown > 150) ^ (angleLeftRight < 30 || angleLeftRight > 150))
+                        {
+                            var results = new RaycastHit2D[100];
+                            var size = Physics2D.LinecastNonAlloc(
+                                r.center,
+                                overlap.center,
+                                results,
+                                LayerMask.GetMask("Walls"),
+                                0,
+                                0);
+                            //Debug.Log($"Linecast hit {size} objects");
+
+                            if (size > 0)
+                            {
+                                //Debug.Log("Linecast hit something.");
+                                foreach (RaycastHit2D result in results)
+                                {
+                                    if (result.transform == null) continue;
+
+                                    //Debug.Log("Detected walls.");
+                                    GameObject hit = result.transform.gameObject;
+                                    if (hit.CompareTag("Wall"))
+                                    {
+                                        //Debug.Log("Destroyed wall.");
+                                        PlaceTile(GetRandomTile(), hit.transform.position, dungeon);
+                                        Destroy(hit);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-            GenerateCorridors(dungeon);
-            GenerateDoors(dungeon);
+            void PlaceTeleporter()
+            {
+                Rect firstRoom = _spawnedRooms[0];
+                Rect lastRoom = Rect.zero;
+                var distance = new Vector2(0, 0);
+
+                foreach (Rect r in _spawnedRooms)
+                {
+                    if (Vector2.Distance(firstRoom.center, r.center) > distance.magnitude)
+                    {
+                        lastRoom = r;
+                        distance = r.center - firstRoom.center;
+                    }
+                }
+
+                if (lastRoom != Rect.zero)
+                {
+                    Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"),
+                        new Vector3(lastRoom.x + Random.Range(1, (int) lastRoom.width), lastRoom.y + Random.Range(1, (int) lastRoom.height), 0),
+                        Quaternion.identity,
+                        dungeonObject.transform);
+                }
+                else
+                {
+                    Debug.LogError("Teleporter couldn't be placed.");
+                }
+            }
+
+            #endregion
         }
 
-        /// <summary>
-        /// Generates corridors after the rooms have been built.
-        /// </summary>
-        /// <param name="parent">The parent GameObject</param>
-        private void GenerateCorridors(GameObject parent)
+        private void GenerateRoomsJob()
         {
-            Debug.Log("Generating corridors..");
-
-            foreach (var doorRelation in _doorRelations)
-            {
-                var leftDoorX = doorRelation.Key[0];
-                var leftDoorY = doorRelation.Key[1];
-                var rightDoorX = doorRelation.Value[0];
-                var rightDoorY = doorRelation.Value[1];
-
-                int xBuffer = 0;
-
-                int width = math.abs(rightDoorX - leftDoorX);
-                int height = rightDoorY - leftDoorY;
-                int middle = (int) math.floor(rightDoorX - width / 2);
-
-                for (var x = leftDoorX + 1; x < middle; x++)
-                {
-                    if (width > 1)
-                    {
-                        if (x < middle - 1)
-                        {
-                            // Place a wall directly above the corridor
-                            PlaceTile(wallTile, x, leftDoorY + 1, parent);
-                            // Place a dark tile above that
-                            PlaceTile(wallTileTopDown, x, leftDoorY + 2, parent);
-                        }
-
-                        // Place a dark tile directly below the corridor
-                        PlaceTile(wallTileTopDown, x, leftDoorY - 1, parent);
-                    }
-
-                    // Place floor tile
-                    PlaceTile(standardFloorTile, x, leftDoorY, parent);
-
-                    xBuffer = x + 1;
-                }
-
-                if (height > 0)
-                {
-                    // Place a corner tile
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, parent);
-                    // Place two walls to complete the lower-right corner
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, parent);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, parent);
-                    
-                    
-                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, parent);
-
-                    for (var y = leftDoorY + 1; y < rightDoorY; y++)
-                    {
-                        if (width > 1 && y < rightDoorY)
-                        {
-                            if (xBuffer > leftDoorX)
-                            {
-                                PlaceTile(wallTileTopDown, xBuffer - 1, y, parent);
-                            }
-
-                            if (xBuffer < rightDoorX)
-                            {
-                                PlaceTile(wallTileTopDown, xBuffer + 1, y, parent);
-                            }
-                        }
-
-                        PlaceTile(standardFloorTile, xBuffer, y, parent);
-                    }
-                    
-                    // Place seven walls to complete the upper-left corner
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, parent);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, parent);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 2, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer, rightDoorY + 1, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, parent);
-                }
-                
-                else if (height < 0)
-                {
-                    // Place walls to complete the upper-right corner
-                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, parent);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 1, parent);
-                    
-                    // Place a corner tile
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY, parent);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, parent);
-                    
-                    PlaceTile(standardFloorTile, xBuffer, leftDoorY, parent);
-
-                    for (var y = leftDoorY - 1; y > rightDoorY; y--)
-                    {
-                        if (width > 1 && y > rightDoorY + 1)
-                        {
-                            if (xBuffer > leftDoorX)
-                            {
-                                PlaceTile(wallTileTopDown, xBuffer - 1, y, parent);
-                            }
-
-                            if (xBuffer < rightDoorX)
-                            {
-                                PlaceTile(wallTileTopDown, xBuffer + 1, y, parent);
-                            }
-                        }
-
-                        PlaceTile(standardFloorTile, xBuffer, y, parent);
-                    }
-                    
-                    // Place walls to complete the lower-left corner
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY + 1, parent);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY, parent);
-                    PlaceTile(wallTileTopDown, xBuffer - 1, rightDoorY - 1, parent);
-                    PlaceTile(wallTileTopDown, xBuffer, rightDoorY - 1, parent);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, rightDoorY - 1, parent);
-                    PlaceTile(wallTile, xBuffer + 1, rightDoorY + 1, parent);
-                }
-                
-                else if (height == 0)
-                {
-                    // Place walls to complete a straight corridor
-                    PlaceTile(wallTileTopDown, xBuffer - 1, leftDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer - 1, leftDoorY + 1, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer, leftDoorY + 1, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY + 2, parent);
-                    PlaceTile(wallTile, xBuffer + 1, leftDoorY + 1, parent);
-                    
-                    PlaceTile(wallTileTopDown, xBuffer, leftDoorY - 1, parent);
-                    PlaceTile(wallTileTopDown, xBuffer + 1, leftDoorY - 1, parent);
-                }
-                
-                // Get to the y of the right door
-                PlaceTile(standardFloorTile, xBuffer, rightDoorY, parent);
-                PlaceTile(standardFloorTile, xBuffer + 1, rightDoorY, parent);
-                
-                for (var x = xBuffer + 2; x < rightDoorX; x++)
-                {
-                    if (width > 1)
-                    {
-                        if (x > middle - 1)
-                        {
-                            // Place a wall directly above the corridor
-                            PlaceTile(wallTile, x, rightDoorY + 1, parent);
-                            // Place a dark tile above that
-                            PlaceTile(wallTileTopDown, x, rightDoorY + 2, parent);
-                        }
-
-                        // Place a dark tile directly below the corridor
-                        PlaceTile(wallTileTopDown, x, rightDoorY - 1, parent);
-                    }
-
-                    PlaceTile(standardFloorTile, x, rightDoorY, parent);
-
-                    xBuffer += 1;
-                }
-            }
+            var generateRoomsTask = new GenerateRoomsTask();
         }
 
-        /// <summary>
-        /// Generates door objects where rooms and corridors intersect.
-        /// </summary>
-        /// <param name="dungeon">The parent GameObject</param>
-        private void GenerateDoors(GameObject dungeon)
+        private struct GenerateRoomsTask : IJob
         {
-            foreach (var leftDoor in _leftDoors)
-            {
-                PlaceTile(door, leftDoor[0], leftDoor[1], dungeon);
-            }
+            public int numberOfRooms;
             
-            foreach (var rightDoor in _rightDoors)
+            public void Execute()
             {
-                PlaceTile(door, rightDoor[0], rightDoor[1], dungeon);
+                throw new NotImplementedException();
             }
         }
 
-        /// <summary>
-        /// Does work after the dungeon has been fully generated.
-        /// </summary>
+        #endregion
+
+        #region Event subscriptions
+
         private void OnDungeonGenerated()
         {
+            Debug.Log("Dungeon generated event invoked.");
             Generated = true;
         }
 
         private void OnDungeonChanged()
         {
-            
         }
+
+        #endregion
+
+        #region Object creations
 
         /// <summary>
         /// Spawns the parent Dungeon object.
@@ -500,19 +460,6 @@ namespace Assets.ProceduralGeneration.Core
         }
 
         /// <summary>
-        /// Places a tile at the specified location and parent.
-        /// </summary>
-        /// <param name="tile">A tile resource.</param>
-        /// <param name="x">x position</param>
-        /// <param name="y">y position</param>
-        /// <param name="parent">The parent object</param>
-        /// <returns>The placed Tile</returns>
-        public static GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
-        {
-            return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
-        }
-
-        /// <summary>
         /// Sets the player's position to be in the left corner of the first room.
         /// </summary>
         private void PlacePlayer()
@@ -521,17 +468,33 @@ namespace Assets.ProceduralGeneration.Core
             GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
         }
 
+        #endregion
+
+        #region Utility
+
         /// <summary>
-        /// Places a teleporter object, which upon activation generates a new dungeon.
+        /// Places a tile at the specified location and parent.
         /// </summary>
-        private void PlaceTeleporter()
+        /// <param name="tile">A tile resource.</param>
+        /// <param name="x">x position</param>
+        /// <param name="y">y position</param>
+        /// <param name="parent">The parent object</param>
+        /// <returns>The placed Tile</returns>
+        private static GameObject PlaceTile(GameObject tile, int x, int y, GameObject parent)
         {
-            Rect lastRoom = _rooms[_rooms.Count - 1];
-            
-            Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"), 
-                new Vector3(lastRoom.x + Random.Range(0, (int) lastRoom.width), lastRoom.y + Random.Range(0, (int) lastRoom.height), 0), 
-                Quaternion.identity, 
-                dungeonObject.transform);
+            return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
+        }
+        
+        /// <summary>
+        /// Places a tile at the specified location and parent.
+        /// </summary>
+        /// <param name="tile">A tile resource.</param>
+        /// <param name="pos">Position vector</param>
+        /// <param name="parent">The parent object</param>
+        /// <returns>The placed Tile</returns>
+        private static GameObject PlaceTile(GameObject tile, Vector2 pos, GameObject parent)
+        {
+            return Instantiate(tile, new Vector3(pos.x, pos.y, 0), Quaternion.identity, parent.transform);
         }
 
         /// <summary>
@@ -548,7 +511,7 @@ namespace Assets.ProceduralGeneration.Core
         /// Returns the DungeonParent object
         /// </summary>
         /// <returns>The DungeonParent object</returns>
-        public GameObject GetParent()
+        public GameObject GetDungeonParent()
         {
             return dungeonObject;
         }
@@ -561,5 +524,11 @@ namespace Assets.ProceduralGeneration.Core
         {
             return this._rooms;
         }
+
+        public IEnumerable<Rect> GetSpawnedRooms()
+        {
+            return _spawnedRooms;
+        }
+        #endregion
     }
 }

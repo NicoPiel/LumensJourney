@@ -18,7 +18,6 @@ using Utility;
 
 namespace Core
 {
-    [BurstCompile]
     public class GameManager : MonoBehaviour
     {
         // Singleton instance of the game manager
@@ -36,7 +35,7 @@ namespace Core
 
         #region Inspector variables
 
-        [SerializeField] private GeneratorV2 generator;
+        [SerializeField] private Generator generator;
         [SerializeField] private GameObject player;
         [SerializeField] private PlayerScript playerScript;
         [SerializeField] private Camera mainCamera;
@@ -370,7 +369,7 @@ namespace Core
             return _instance.playerScript;
         }
 
-        public static GeneratorV2 GetGenerator()
+        public static Generator GetGenerator()
         {
             return _instance.generator;
         }

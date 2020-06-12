@@ -6,9 +6,8 @@ using UnityEngine;
 namespace Assets.ProceduralGeneration.Core
 {
     /// <summary>
-    /// The PCG's
+    /// The PCG's secondary main script. It brings life to the dungeon.
     /// </summary>
-    [BurstCompile]
     public class Decorator : MonoBehaviour
     {
         #region Public variables
@@ -21,7 +20,7 @@ namespace Assets.ProceduralGeneration.Core
 
         #region Private variables
 
-        private GeneratorV2 _generator;
+        private Generator _generator;
 
         #endregion
 
