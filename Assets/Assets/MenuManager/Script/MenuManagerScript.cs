@@ -22,7 +22,7 @@ namespace Assets.MenuManager.Script
             {
                 case "BankMenu":
                     _currentMenu = "BankMenu";
-                    AnimateUi(bankMenu);
+                    bankMenu.SetActive(true);
                     break;
                 default:
                     break;
@@ -34,7 +34,7 @@ namespace Assets.MenuManager.Script
             switch (_currentMenu)
             {
                 case "BankMenu":
-                    AnimateUi(bankMenu);
+                    bankMenu.SetActive(false);
                     _currentMenu = null;
                     break;
                 default:

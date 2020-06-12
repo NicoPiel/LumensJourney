@@ -13,6 +13,8 @@ namespace Assets.Hub.Bank.Menu
 
         private void OnEnable()
         {
+            GetComponent<RectTransform>().localScale = Vector3.zero;
+            LeanTween.scale(GetComponent<RectTransform>(), new Vector3(0.5f, 0.5f, 1), 0.2f);
             if (_bankScript == null)
             {
                 _bankScript =  GameObject.Find("Bank").GetComponent<BankScript>();

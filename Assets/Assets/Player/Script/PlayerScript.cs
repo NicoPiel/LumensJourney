@@ -149,13 +149,13 @@ namespace Assets.Player.Script
             hitCollider.transform.eulerAngles = new Vector3(0, 0, rotation);
             hitCollider.size = size;
             hitCollider.offset = offset;
-            hitCollider.gameObject.SetActive(true);
-            var rnd = Random.Range(1, 8);
-            _audioSource.clip = _audioClips["woosh" + rnd];
-            _animator.SetBool(StateExit, true);
-            
-            _audioSource.Play();
             _animator.Play(stateName);
+        }
+
+        private void SetStateEnter()
+        {
+            hitCollider.gameObject.SetActive(true);
+            _animator.SetBool(StateExit, true);
         }
 
         private void SetStateExit()
