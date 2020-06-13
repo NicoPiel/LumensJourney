@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1855166605940470289, guid: e2d6d5c482d66584ca411df040d031c0,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -156,8 +156,6 @@ MonoBehaviour:
   detectionRadius: 7
   innerRadius: 0.75
   speed: 60
-  vertical: 0
-  horizontal: 0
   maxShardsOnDrop: 4
   health: 2
   damage: 1

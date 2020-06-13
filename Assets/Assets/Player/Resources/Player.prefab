@@ -271,6 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48752469687184438633f6e73138948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBetweenAttacks: 0.3
+  invunerabilityTime: 0.5
   lightLoss: 2
   speed: 4
   hitCollider: {fileID: 0}

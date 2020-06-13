@@ -13,15 +13,45 @@ namespace Assets.Player.Script
     [BurstCompile]
     public class PlayerScript : MonoBehaviour
     {
+        #region Inspector variables
+
+        [SerializeField] private float timeBetweenAttacks;
+        [SerializeField] private float invunerabilityTime;
+        [SerializeField] private int playerDamage;
+        
         public int lightLoss;
         public float speed;
+        public BoxCollider2D hitCollider;
+
+        #endregion
+
+        #region Public variables
+
+        
+
+        #endregion
+
+        #region Private variables
+        
         private CapsuleCollider2D _playerCollider;
         private Rigidbody2D _playerRigidbody2D;
         private Vector3 _change;
         private AudioSource _audioSource;
         private Animator _animator;
         private Player _player = new Player("Pacolos");
-        public BoxCollider2D hitCollider;
+
+        private Dictionary<string, AudioClip> _audioClips;
+        private bool _invulnerable;
+        private bool _canAttack;
+        
+        private static readonly int StateExit = Animator.StringToHash("StateExit");
+        private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
+        private static readonly int LastVertical = Animator.StringToHash("LastVertical");
+        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+        private static readonly int Vertical = Animator.StringToHash("Vertical");
+        private static readonly int Speed = Animator.StringToHash("Speed");
+
+        #endregion
 
         #region UnityEvents
 
@@ -35,19 +65,6 @@ namespace Assets.Player.Script
 
         #endregion
 
-        private Dictionary<string, AudioClip> _audioClips;
-        private bool _invulnerable;
-        
-
-        [SerializeField] private int playerDamage;
-        private static readonly int StateExit = Animator.StringToHash("StateExit");
-        private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
-        private static readonly int LastVertical = Animator.StringToHash("LastVertical");
-        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
-        private static readonly int Vertical = Animator.StringToHash("Vertical");
-        private static readonly int Speed = Animator.StringToHash("Speed");
-        
-
         // Start is called before the first frame update
         private void Awake()
         {
@@ -58,13 +75,15 @@ namespace Assets.Player.Script
         {
             _playerRigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
-            _audioClips = new Dictionary<String, AudioClip>();
+            _audioClips = new Dictionary<string, AudioClip>();
             _playerCollider = GetComponent<CapsuleCollider2D>();
             hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
             _audioSource = GetComponent<AudioSource>();
 
             AddAudioClips();
             GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
+
+            _canAttack = true;
         }
 
 
@@ -76,7 +95,7 @@ namespace Assets.Player.Script
             onPlayerLightShardsChanged = new UnityEvent();
             onPlayerTakeHeal = new UnityEvent();
             onPlayerLifeChanged = new UnityEvent();
-            onPlayerDied =  new UnityEvent();
+            onPlayerDied = new UnityEvent();
         }
 
         // Update is called once per frame
@@ -96,6 +115,7 @@ namespace Assets.Player.Script
             {
                 PlayerTakeDamage(1);
             }
+
             if (Input.GetKeyDown(KeyCode.B))
             {
                 PlayerTakeHeal(1);
@@ -113,7 +133,6 @@ namespace Assets.Player.Script
                 HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
                 _animator.SetFloat(LastHorizontal, 1);
                 _animator.SetFloat(LastVertical, 0);
-                
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
@@ -136,6 +155,7 @@ namespace Assets.Player.Script
                     _animator.SetFloat(LastHorizontal, _change.x);
                     _animator.SetFloat(LastVertical, 0);
                 }
+
                 if (_change.y < 0 || _change.y > 0)
                 {
                     _animator.SetFloat(LastVertical, _change.y);
@@ -151,20 +171,31 @@ namespace Assets.Player.Script
 
         private void HitInDirection(float rotation, Vector2 size, Vector2 offset, string stateName)
         {
-            hitCollider.transform.eulerAngles = new Vector3(0, 0, rotation);
-            hitCollider.size = size;
-            hitCollider.offset = offset;
-            _animator.Play(stateName);
+            if (_canAttack)
+            {
+                hitCollider.transform.eulerAngles = new Vector3(0, 0, rotation);
+                hitCollider.size = size;
+                hitCollider.offset = offset;
+                
+                _animator.Play(stateName);
+                StartCoroutine(CanAttack());
+            }
         }
 
         private void SetStateEnter()
         {
+            if (_animator.GetBool(StateExit)) return;
+
             hitCollider.gameObject.SetActive(true);
+            _animator.SetBool(StateExit, true);
         }
 
         private void SetStateExit()
         {
+            if (!_animator.GetBool(StateExit)) return;
+
             hitCollider.gameObject.SetActive(false);
+            _animator.SetBool(StateExit, false);
         }
 
         private void MoveCharacter()
@@ -179,7 +210,7 @@ namespace Assets.Player.Script
         {
             _player.Inventory.AddItem(item);
         }
-        
+
         public Collider2D GetCollider()
         {
             return _playerCollider;
@@ -191,11 +222,11 @@ namespace Assets.Player.Script
         }
 
         #region PlayerDamage
-        
+
         public void PlayerTakeDamage(int damage)
         {
             if (_invulnerable) return;
-            
+
             var remainingHealth = _player.PlayerStats["CurrentHealth"] -= damage;
 
             if (remainingHealth > 0)
@@ -233,12 +264,12 @@ namespace Assets.Player.Script
         {
             return _player.PlayerStats["MaxHealth"];
         }
-        
+
         public int GetPlayerDamage()
         {
             return playerDamage;
         }
-        
+
         #endregion
 
         #region Sounds
@@ -334,7 +365,14 @@ namespace Assets.Player.Script
         }
 
         #endregion
-        
+
+        private IEnumerator CanAttack()
+        {
+            _canAttack = false;
+            yield return new WaitForSeconds(0.3f);
+            _canAttack = true;
+        }
+
         private IEnumerator Invulnerable()
         {
             _invulnerable = true;
