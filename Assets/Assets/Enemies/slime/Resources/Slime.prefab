@@ -154,7 +154,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   detectionRadius: 7
-  innerRadius: 0.5
+  innerRadius: 0.55
   speed: 60
   maxShardsOnDrop: 4
   health: 2
@@ -5046,9 +5046,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
+  m_Offset: {x: 0, y: -0.12}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.55
 --- !u!114 &8808417019805977548
 MonoBehaviour:
   m_ObjectHideFlags: 0

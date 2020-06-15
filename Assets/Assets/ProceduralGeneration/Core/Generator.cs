@@ -63,7 +63,7 @@ namespace Assets.ProceduralGeneration.Core
         #endregion
 
         #region Class-specific variables
-        
+
         private List<Rect> _rooms;
         private List<Rect> _spawnedRooms;
 
@@ -73,6 +73,8 @@ namespace Assets.ProceduralGeneration.Core
         /// True, if the dungeon has finished generating.
         /// </summary>
         public bool Generated { get; set; }
+
+        public GameObject teleporter;
 
         #endregion
 
@@ -89,6 +91,8 @@ namespace Assets.ProceduralGeneration.Core
         {
             onDungeonGenerated.AddListener(OnDungeonGenerated);
             onDungeonChanged.AddListener(OnDungeonChanged);
+
+            teleporter = null;
         }
 
         #endregion
@@ -124,7 +128,7 @@ namespace Assets.ProceduralGeneration.Core
             return true;
         }
 
-        
+
         /// <summary>
         /// Generates the specified number of rooms (only). 
         /// </summary>
@@ -149,7 +153,7 @@ namespace Assets.ProceduralGeneration.Core
 
                 _rooms.Add(room);
             }
-            
+
 
             for (var i = 0; i < _rooms.Count; i++)
             {
@@ -308,7 +312,7 @@ namespace Assets.ProceduralGeneration.Core
                 #endregion
             }
 
-            PlaceTeleporter();
+            teleporter = PlaceTeleporter();
             PlaceDoors();
 
             #region Local functions
@@ -328,7 +332,7 @@ namespace Assets.ProceduralGeneration.Core
                     {
                         var angleUpDown = Vector2.Angle(overlap.center - r.center, Vector2.up);
                         var angleLeftRight = Vector2.Angle(overlap.center - r.center, Vector2.left);
-                        
+
                         if ((angleUpDown < 30 || angleUpDown > 150) ^ (angleLeftRight < 30 || angleLeftRight > 150))
                         {
                             var results = new RaycastHit2D[100];
@@ -363,7 +367,7 @@ namespace Assets.ProceduralGeneration.Core
                 }
             }
 
-            void PlaceTeleporter()
+            GameObject PlaceTeleporter()
             {
                 Rect firstRoom = _spawnedRooms[0];
                 Rect lastRoom = Rect.zero;
@@ -380,15 +384,15 @@ namespace Assets.ProceduralGeneration.Core
 
                 if (lastRoom != Rect.zero)
                 {
-                    Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"),
+                    return (GameObject) Instantiate(UnityEngine.Resources.Load("Tiles/Teleporter"),
                         new Vector3(lastRoom.x + Random.Range(1, (int) lastRoom.width), lastRoom.y + Random.Range(1, (int) lastRoom.height), 0),
                         Quaternion.identity,
                         dungeonObject.transform);
                 }
-                else
-                {
-                    Debug.LogError("Teleporter couldn't be placed.");
-                }
+
+                Debug.LogError("Teleporter couldn't be placed.");
+
+                return null;
             }
 
             #endregion
@@ -402,7 +406,7 @@ namespace Assets.ProceduralGeneration.Core
         private struct GenerateRoomsTask : IJob
         {
             public int numberOfRooms;
-            
+
             public void Execute()
             {
                 throw new NotImplementedException();
@@ -486,7 +490,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             return Instantiate(tile, new Vector3(x, y, 0), Quaternion.identity, parent.transform);
         }
-        
+
         /// <summary>
         /// Places a tile at the specified location and parent.
         /// </summary>
@@ -531,6 +535,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             return _spawnedRooms;
         }
+
         #endregion
     }
 }

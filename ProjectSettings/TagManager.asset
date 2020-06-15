@@ -10,6 +10,8 @@ TagManager:
   - Room
   - Wall
   - Door
+  - LightSphere
+  - Teleporter
   layers:
   - Default
   - TransparentFX

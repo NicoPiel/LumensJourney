@@ -18,7 +18,10 @@ namespace Assets.Player.Script
         [SerializeField] private float timeBetweenAttacks;
         [SerializeField] private float invunerabilityTime;
         [SerializeField] private int playerDamage;
-        
+        [SerializeField] private GameObject lightSphereGameObject;
+        [SerializeField] private float lightSphereSpeed;
+        [SerializeField] private float lightSphereCooldown;
+
         public int lightLoss;
         public float speed;
         public BoxCollider2D hitCollider;
@@ -27,12 +30,10 @@ namespace Assets.Player.Script
 
         #region Public variables
 
-        
-
         #endregion
 
         #region Private variables
-        
+
         private CapsuleCollider2D _playerCollider;
         private Rigidbody2D _playerRigidbody2D;
         private Vector3 _change;
@@ -43,7 +44,8 @@ namespace Assets.Player.Script
         private Dictionary<string, AudioClip> _audioClips;
         private bool _invulnerable;
         private bool _canAttack;
-        
+        private bool _canSendLightSphere;
+
         private static readonly int StateExit = Animator.StringToHash("StateExit");
         private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
         private static readonly int LastVertical = Animator.StringToHash("LastVertical");
@@ -65,6 +67,8 @@ namespace Assets.Player.Script
 
         #endregion
 
+        #region UnityEvent functions
+
         // Start is called before the first frame update
         private void Awake()
         {
@@ -85,19 +89,12 @@ namespace Assets.Player.Script
 
             _canAttack = true;
             hitCollider.gameObject.SetActive(false);
+            _canSendLightSphere = true;
         }
 
+        #endregion
 
-        private void SetUpEvents()
-        {
-            onPlayerTakeDamage = new UnityEvent();
-            onItemAddedToPlayerInventory = new UnityEvent();
-            onPlayerLightLevelChanged = new UnityEvent();
-            onPlayerLightShardsChanged = new UnityEvent();
-            onPlayerTakeHeal = new UnityEvent();
-            onPlayerLifeChanged = new UnityEvent();
-            onPlayerDied = new UnityEvent();
-        }
+        #region Update
 
         // Update is called once per frame
         private void Update()
@@ -120,6 +117,12 @@ namespace Assets.Player.Script
             if (Input.GetKeyDown(KeyCode.B))
             {
                 PlayerTakeHeal(1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                GameObject teleporter = GameManager.GetGenerator().teleporter;
+                if (teleporter != null) SendLightSphereFromPlayer(teleporter.transform.position);
             }
 
 
@@ -170,6 +173,20 @@ namespace Assets.Player.Script
             MoveCharacter();
         }
 
+        #endregion
+
+
+        private void SetUpEvents()
+        {
+            onPlayerTakeDamage = new UnityEvent();
+            onItemAddedToPlayerInventory = new UnityEvent();
+            onPlayerLightLevelChanged = new UnityEvent();
+            onPlayerLightShardsChanged = new UnityEvent();
+            onPlayerTakeHeal = new UnityEvent();
+            onPlayerLifeChanged = new UnityEvent();
+            onPlayerDied = new UnityEvent();
+        }
+
         private void HitInDirection(float rotation, Vector2 size, Vector2 offset, string stateName)
         {
             if (_canAttack)
@@ -177,10 +194,32 @@ namespace Assets.Player.Script
                 hitCollider.transform.eulerAngles = new Vector3(0, 0, rotation);
                 hitCollider.size = size;
                 hitCollider.offset = offset;
-                
+
                 _animator.Play(stateName);
                 StartCoroutine(CanAttack());
             }
+        }
+
+        private GameObject SendLightSphereFromPlayer(Vector2 targetPosition)
+        {
+            if (!_canSendLightSphere) return null;
+
+            Vector2 playerPosition = transform.position;
+            Vector2 vectorToTarget = targetPosition - playerPosition;
+
+            GameObject lightSphere = Instantiate(lightSphereGameObject, playerPosition, Quaternion.identity, gameObject.transform);
+            lightSphere.GetComponent<Rigidbody2D>().velocity = vectorToTarget * lightSphereSpeed * Time.fixedDeltaTime;
+
+            StartCoroutine(CanSendLightSphere());
+
+            return lightSphere;
+        }
+
+        private IEnumerator CanSendLightSphere()
+        {
+            _canSendLightSphere = false;
+            yield return new WaitForSeconds(lightSphereCooldown);
+            _canSendLightSphere = true;
         }
 
         private void SetStateEnter()

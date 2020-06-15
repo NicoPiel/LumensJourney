@@ -274,6 +274,10 @@ MonoBehaviour:
   timeBetweenAttacks: 0.4
   invunerabilityTime: 1
   playerDamage: 1
+  lightSphereGameObject: {fileID: 284172668141909758, guid: b9f73fafa8b1e1f48b1777b29bde597e,
+    type: 3}
+  lightSphereSpeed: 1.25
+  lightSphereCooldown: 20
   lightLoss: 2
   speed: 4
   hitCollider: {fileID: 0}
