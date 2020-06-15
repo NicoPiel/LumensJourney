@@ -2,8 +2,10 @@
 using Assets.Player.Script;
 using Cinemachine;
 using Core;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace Assets.Enemies.Scripts
 {
@@ -78,8 +80,6 @@ namespace Assets.Enemies.Scripts
             _impulseSource = GetComponent<CinemachineImpulseSource>();
 
             lightShardPrefab = Resources.Load<GameObject>("LightShard");
-
-            onDeath.AddListener(OnDeath);
         }
 
         #endregion
@@ -89,13 +89,13 @@ namespace Assets.Enemies.Scripts
         // On DetectionRadius.onDetected
         private void MoveToPlayer()
         {
-            Vector3 enemyPosition = transform.position;
-            Vector3 playerPosition = GameManager.GetPlayer().transform.position + (Vector3) GameManager.GetPlayerScript().GetCollider().offset;
+            Vector2 enemyPosition = transform.position;
+            Vector2 playerPosition = GameManager.GetPlayer().transform.position + (Vector3) GameManager.GetPlayerScript().GetCollider().offset;
             Vector2 vectorToPlayer = playerPosition - enemyPosition;
             Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
             var distanceToPlayer = vectorToPlayer.magnitude;
 
-            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer, LayerMask.GetMask("Player"));
+            RaycastHit2D raycastHitInfo = Physics2D.Raycast(enemyPosition, vectorToPlayer, distanceToPlayer);
             Debug.DrawRay(enemyPosition, vectorToPlayer);
 
             if (!_innerRadius.IsInInner() && _detectionRadius.IsDetected())
@@ -108,20 +108,20 @@ namespace Assets.Enemies.Scripts
                         _animator.SetFloat(Vertical, playerDirection.y);
                         _animator.SetFloat(Horizontal, playerDirection.x);
                         _animator.SetFloat(Speed, playerDirection.magnitude);
-                        _rigidbody.velocity = playerDirection * speed * Time.fixedDeltaTime;
+                        _rigidbody.MovePosition(enemyPosition + (playerDirection * speed * Time.fixedDeltaTime));
                     }
                 }
             }
             else
             {
-                _rigidbody.velocity = new Vector2(0, 0);
+                _rigidbody.MovePosition(transform.position);
             }
         }
         
         // On DetectionRadius.onLostSight
         private void StopMoving()
         {
-            _rigidbody.velocity = new Vector2(0, 0);
+            _rigidbody.MovePosition(transform.position);
         }
 
         // On InnerRadius.onPlayerWalkIntoRange
@@ -146,14 +146,6 @@ namespace Assets.Enemies.Scripts
             _particleSystem.Play();
             _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude/2,screenShakeMagnitude/2));
         }
-        
-        // On this.onDeath
-        private void OnDeath()
-        {
-            _particleSystem.Play();
-            DropShards();
-            Destroy(gameObject);
-        }
 
         #endregion
 
@@ -162,28 +154,39 @@ namespace Assets.Enemies.Scripts
             if (_invulnerable) return;
             
             health -= damageTaken;
-            if (health < 0) health = 0;
-
-            StartCoroutine(Invulnerable());
-
-            Die();
-        }
-
-        private void Die ()
-        {
-            if (health > 0) return;
             
+            if (health <= 0)
+            {
+                health = 0;
+                StartCoroutine(Die());
+            }
+            else
+            {
+                StartCoroutine(Invulnerable());
+            }
+        }
+        
+        // On this.onDeath
+        private IEnumerator Die()
+        {
             Debug.Log($"{gameObject.name} died.");
             GameManager.GetPlayerScript().PlayerChangeLightLevel(health*10);
             GameManager.GetPlayerScript().PlayerChangeLightShards(health*10);
+            
+            _particleSystem.Play();
+            DropShards();
+            yield return new WaitForSeconds(0.2f);
             onDeath.Invoke();
+            Destroy(gameObject);
         }
 
         private void DropShards ()
         {
             Drop(lightShardPrefab);
+
+            var droppedShards = Random.Range(0, maxShardsOnDrop);
             
-            for (var i = 1; i < maxShardsOnDrop; i++)
+            for (var i = 0; i < droppedShards; i++)
             {
                 Drop(lightShardPrefab);
             }
@@ -191,9 +194,11 @@ namespace Assets.Enemies.Scripts
 
         private GameObject Drop (GameObject prefab)
         {
-            Transform dropPosition = transform;
+            Vector2 dropPosition = gameObject.transform.position;
             
-            GameObject drop = Instantiate(prefab, dropPosition.position, Quaternion.identity, dropPosition);
+            GameObject drop = Instantiate(prefab, 
+                dropPosition, 
+                Quaternion.identity);
             drop.GetComponent<Rigidbody2D>().AddForce(GetRandomDirection(), ForceMode2D.Impulse);
 
             return drop;
@@ -201,7 +206,7 @@ namespace Assets.Enemies.Scripts
 
         private Vector2 GetRandomDirection ()
         {
-            return new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
+            return new Vector2(math.sin(Random.Range(0f, 2*math.PI)), math.sin(Random.Range(0f, 2*math.PI))).normalized;
         }
 
         private IEnumerator Invulnerable ()
@@ -211,7 +216,7 @@ namespace Assets.Enemies.Scripts
             _invulnerable = false;
         }
 
-        public Rigidbody2D GetRigidBody ()
+        public Rigidbody2D GetRigidbody ()
         {
             return _rigidbody;
         }

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2588251286757590390}
   - component: {fileID: 97151406753685796}
   - component: {fileID: 5218419298337323591}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Slime
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ MonoBehaviour:
       m_Calls: []
   detectionRadius: 7
   innerRadius: 0.55
-  speed: 60
+  speed: 1
   maxShardsOnDrop: 4
   health: 2
   damage: 1
@@ -5012,7 +5012,7 @@ GameObject:
   - component: {fileID: 6211401309326643575}
   - component: {fileID: 1683868882418612489}
   - component: {fileID: 8808417019805977548}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: InnerRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5078,7 +5078,7 @@ GameObject:
   - component: {fileID: 7335809152214289004}
   - component: {fileID: 4460296792896856444}
   - component: {fileID: 5922178604356753872}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DetectionRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}

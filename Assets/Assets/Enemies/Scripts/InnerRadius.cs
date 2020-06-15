@@ -39,8 +39,8 @@ namespace Assets.Enemies.Scripts
 
                 _parent.TakeDamage(playerScipt.GetPlayerDamage());
                 
-                Vector3 moveDirection =  _parent.GetRigidBody().transform.position - playerScipt.transform.position;
-                _parent.GetRigidBody().AddForce( moveDirection.normalized * 1000f);
+                Vector3 moveDirection =  _parent.GetRigidbody().transform.position - playerScipt.transform.position;
+                _parent.GetRigidbody().AddForce( moveDirection.normalized * 1000f);
 
                 Debug.Log($"{_parent.gameObject.name} was hit by the player.");
                 
