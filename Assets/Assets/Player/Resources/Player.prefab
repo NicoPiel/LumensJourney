@@ -271,8 +271,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48752469687184438633f6e73138948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenAttacks: 0.3
-  invunerabilityTime: 0.5
+  timeBetweenAttacks: 0.4
+  invunerabilityTime: 1
+  playerDamage: 1
   lightLoss: 2
   speed: 4
   hitCollider: {fileID: 0}
@@ -297,7 +298,6 @@ MonoBehaviour:
   onPlayerDied:
     m_PersistentCalls:
       m_Calls: []
-  playerDamage: 1
 --- !u!50 &8759012663102982376
 Rigidbody2D:
   serializedVersion: 4

@@ -164,6 +164,8 @@ namespace Assets.Enemies.Scripts
             health -= damageTaken;
             if (health < 0) health = 0;
 
+            StartCoroutine(Invulnerable());
+
             Die();
         }
 
@@ -205,7 +207,7 @@ namespace Assets.Enemies.Scripts
         private IEnumerator Invulnerable ()
         {
             _invulnerable = true;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
             _invulnerable = false;
         }
 

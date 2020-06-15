@@ -242,6 +242,8 @@ namespace Assets.Player.Script
                 _player.PlayerStats["CurrentHealth"] = 0;
                 KillPlayer();
             }
+
+            StartCoroutine(Invulnerable());
         }
 
         private void KillPlayer()
@@ -370,14 +372,14 @@ namespace Assets.Player.Script
         private IEnumerator CanAttack()
         {
             _canAttack = false;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(timeBetweenAttacks);
             _canAttack = true;
         }
 
         private IEnumerator Invulnerable()
         {
             _invulnerable = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(invunerabilityTime);
             _invulnerable = false;
         }
     }
