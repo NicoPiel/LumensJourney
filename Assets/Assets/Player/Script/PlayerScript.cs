@@ -84,6 +84,7 @@ namespace Assets.Player.Script
             GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
 
             _canAttack = true;
+            hitCollider.gameObject.SetActive(false);
         }
 
 
@@ -369,7 +370,7 @@ namespace Assets.Player.Script
         private IEnumerator CanAttack()
         {
             _canAttack = false;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
             _canAttack = true;
         }
 

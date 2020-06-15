@@ -154,7 +154,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   detectionRadius: 7
-  innerRadius: 0.75
+  innerRadius: 0.5
   speed: 60
   maxShardsOnDrop: 4
   health: 2

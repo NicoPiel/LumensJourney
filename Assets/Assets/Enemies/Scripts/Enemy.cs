@@ -157,7 +157,7 @@ namespace Assets.Enemies.Scripts
 
         #endregion
 
-        public void TakeDamage(int damageTaken)
+        public void TakeDamage (int damageTaken)
         {
             if (_invulnerable) return;
             
@@ -167,7 +167,7 @@ namespace Assets.Enemies.Scripts
             Die();
         }
 
-        private void Die()
+        private void Die ()
         {
             if (health > 0) return;
             
@@ -177,7 +177,7 @@ namespace Assets.Enemies.Scripts
             onDeath.Invoke();
         }
 
-        private void DropShards()
+        private void DropShards ()
         {
             Drop(lightShardPrefab);
             
@@ -187,7 +187,7 @@ namespace Assets.Enemies.Scripts
             }
         }
 
-        private GameObject Drop(GameObject prefab)
+        private GameObject Drop (GameObject prefab)
         {
             Transform dropPosition = transform;
             
@@ -197,19 +197,19 @@ namespace Assets.Enemies.Scripts
             return drop;
         }
 
-        private Vector2 GetRandomDirection()
+        private Vector2 GetRandomDirection ()
         {
             return new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
         }
 
-        private IEnumerator Invulnerable()
+        private IEnumerator Invulnerable ()
         {
             _invulnerable = true;
             yield return new WaitForSeconds(0.1f);
             _invulnerable = false;
         }
 
-        public Rigidbody2D GetRigidBody()
+        public Rigidbody2D GetRigidBody ()
         {
             return _rigidbody;
         }
