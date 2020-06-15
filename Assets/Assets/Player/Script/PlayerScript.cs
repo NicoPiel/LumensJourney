@@ -210,12 +210,12 @@ namespace Assets.Player.Script
             GameObject lightSphere = Instantiate(lightSphereGameObject, playerPosition, Quaternion.identity, gameObject.transform);
             lightSphere.GetComponent<Rigidbody2D>().velocity = vectorToTarget * lightSphereSpeed * Time.fixedDeltaTime;
 
-            StartCoroutine(CanSendLightSphere());
+            StartCoroutine(LightSphereCooldown());
 
             return lightSphere;
         }
 
-        private IEnumerator CanSendLightSphere()
+        private IEnumerator LightSphereCooldown()
         {
             _canSendLightSphere = false;
             yield return new WaitForSeconds(lightSphereCooldown);
