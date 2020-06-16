@@ -226,6 +226,8 @@ namespace Assets.Player.Script
         {
             if (_animator.GetBool(StateExit)) return;
 
+            Debug.Log("State enter.");
+
             hitCollider.gameObject.SetActive(true);
             _animator.SetBool(StateExit, true);
         }
@@ -233,6 +235,8 @@ namespace Assets.Player.Script
         private void SetStateExit()
         {
             if (!_animator.GetBool(StateExit)) return;
+            
+            Debug.Log("State exit.");
 
             hitCollider.gameObject.SetActive(false);
             _animator.SetBool(StateExit, false);
