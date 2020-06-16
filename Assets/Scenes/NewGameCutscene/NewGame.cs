@@ -20,7 +20,7 @@ namespace Scenes.NewGameCutscene
             // Skip cutscene
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                StartNewGame();
+                _timeline.Stop();
             }
         }
 
