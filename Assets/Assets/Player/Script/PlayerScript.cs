@@ -204,11 +204,15 @@ namespace Assets.Player.Script
         {
             if (!_canSendLightSphere) return null;
 
-            Vector2 playerPosition = transform.position;
-            Vector2 vectorToTarget = targetPosition - playerPosition;
+            GameObject lightSphere = GameObject.FindWithTag("LightSphere");
+            if (lightSphere != null) Destroy(lightSphere);
 
-            GameObject lightSphere = Instantiate(lightSphereGameObject, playerPosition, Quaternion.identity, gameObject.transform);
-            lightSphere.GetComponent<Rigidbody2D>().velocity = vectorToTarget * lightSphereSpeed * Time.fixedDeltaTime;
+            Vector2 playerPosition = transform.position;
+            Vector2 vectorToTarget = (targetPosition - playerPosition).normalized;
+
+            lightSphere = Instantiate(lightSphereGameObject, playerPosition, Quaternion.identity, gameObject.transform);
+            lightSphere.name = "LightSphere";
+            lightSphere.GetComponent<Rigidbody2D>().velocity = vectorToTarget * lightSphereSpeed;
 
             StartCoroutine(LightSphereCooldown());
 

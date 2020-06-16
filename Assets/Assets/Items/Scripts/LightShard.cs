@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Core;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Assets.Items.Scripts
@@ -25,8 +26,11 @@ namespace Assets.Items.Scripts
             Vector2 shardPosition = transform.position;
             Vector2 playerPosition = _player.transform.position + (Vector3) GameManager.GetPlayerScript().GetCollider().offset;
             Vector2 playerDirection = playerPosition - shardPosition;
+            var playerDistance = playerDirection.magnitude;
+
+            Vector2 movePosition = shardPosition + playerDirection * 1 / playerDistance * (speed * Time.fixedDeltaTime);
             
-            _rigidbody.MovePosition(shardPosition + (playerDirection * speed * Time.fixedDeltaTime));
+            _rigidbody.MovePosition(movePosition);
         }
 
         private IEnumerator OnCollisionEnter2D(Collision2D other)
