@@ -16,26 +16,41 @@ namespace MainMenu
         private void Start()
         {
             Cursor.SetCursor(SpriteToTexture(cursorSprite), Vector2.zero, CursorMode.Auto);
-            if (File.Exists(Application.persistentDataPath + "/save.json"))
+            SwapButtons();
+        }
+
+        public void NewGame()
+        {
+            GameManager.LoadNewGameCutscene_Static();
+        }
+
+        public void LoadGame()
+        {
+            GameManager.LoadGame_Static();
+        }
+
+        public void DeleteSave()
+        {
+            if (GameManager.GetSaveSystem().DeleteSave())
             {
-               loadGameButton.SetActive(true);
-               newGameButton.SetActive(false);
+                SwapButtons();
+                Debug.Log("Successfully deleted save file.");
+            }
+            else Debug.Log("Couldn't delete save file.");
+        }
+
+        private void SwapButtons()
+        {
+            if (GameManager.GetSaveSystem().SaveExists())
+            {
+                loadGameButton.SetActive(true);
+                newGameButton.SetActive(false);
             }
             else
             {
                 newGameButton.SetActive(true);
                 loadGameButton.SetActive(false);
             }
-        }
-        
-        public void NewGame()
-        {
-            GameManager.NewGame_Static();
-        }
-
-        public void LoadGame()
-        {
-            GameManager.LoadGame_Static();
         }
 
         public void PlayMenuSound()

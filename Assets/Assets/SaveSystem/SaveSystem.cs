@@ -40,12 +40,15 @@ namespace Assets.SaveSystem
         {
             if (File.Exists(_saveFilePath))
             {
+                
                 File.Delete(_saveFilePath);
-                if (File.Exists(_saveFilePath))
+                
+                if (!File.Exists(_saveFilePath))
                 {
                     return true;
                 }
             }
+            
             return false;
         }
 

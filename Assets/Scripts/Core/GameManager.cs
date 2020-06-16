@@ -118,13 +118,18 @@ namespace Core
 
         #region Static instance methods
 
+        public static void LoadNewGameCutscene_Static()
+        {
+            _instance.LoadNewGameCutscene();
+        }
+
         /// <summary>
         /// Uses the GameManager's singleton to start a new game.
-        /// <see cref="NewGame"/>
+        /// <see cref="StartNewGame"/>
         /// </summary>
         public static void NewGame_Static()
         {
-            _instance.NewGame();
+            _instance.StartNewGame();
         }
         
         /// <summary>
@@ -140,10 +145,15 @@ namespace Core
 
         #region Game setup
 
+        private void LoadNewGameCutscene()
+        {
+            StartCoroutine(Methods.LoadYourSceneAsync("NewGameCutscene"));
+        }
+
         /// <summary>
         /// Starts a new game and invokes the onNewGameStarted event.
         /// </summary>
-        private void NewGame()
+        private void StartNewGame()
         {
             Setup();
 
