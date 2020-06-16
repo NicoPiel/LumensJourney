@@ -1358,7 +1358,7 @@ MonoBehaviour:
   template:
     color: {r: 1, g: 1, b: 1, a: 0}
     fontSize: 100
-    text: ...
+    text: ... or so they thought.
 --- !u!74 &-2255292883840199462
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -1389,7 +1389,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 90.48333
+        time: 82.3
         value: 1
         inSlope: 0
         outSlope: 0
@@ -1398,7 +1398,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 98.933334
+        time: 92.88333
         value: 0
         inSlope: 0
         outSlope: 0
@@ -1427,7 +1427,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 98.933334
+    m_StopTime: 92.88333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -1456,7 +1456,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 90.48333
+        time: 82.3
         value: 1
         inSlope: 0
         outSlope: 0
@@ -1465,7 +1465,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 98.933334
+        time: 92.88333
         value: 0
         inSlope: 0
         outSlope: 0
