@@ -2183,7 +2183,7 @@ MonoBehaviour:
   template:
     color: {r: 1, g: 1, b: 1, a: 0}
     fontSize: 100
-    text: But the gods were sad to see all this misery and anguish in the world they
+    text: It saddened the gods to see all this misery and anguish in the world they
       had created..
 --- !u!74 &-578819806388537225
 AnimationClip:
