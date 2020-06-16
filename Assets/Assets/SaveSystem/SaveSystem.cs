@@ -31,6 +31,24 @@ namespace Assets.SaveSystem
             GameManager.GetGameManager().onNewGameStarted.AddListener(CreateSave);
         }
 
+        public bool SaveExists()
+        {
+           return File.Exists(_saveFilePath);
+        }
+
+        public bool DeleteSave()
+        {
+            if (File.Exists(_saveFilePath))
+            {
+                File.Delete(_saveFilePath);
+                if (File.Exists(_saveFilePath))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void LoadSave()
         {
             _playerScript = GameManager.GetPlayer().GetComponent<PlayerScript>();
