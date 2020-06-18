@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using Assets.Player.Script;
 using Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.MenuManager.Scripts
 {
     public class DialogueMenu : MonoBehaviour
     {
         private static DialogueMenu _instance;
+
+        public UnityEvent onDialogueShown;
+        public UnityEvent onDialogueHidden;
 
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text namePlate;
@@ -22,6 +29,8 @@ namespace Assets.MenuManager.Scripts
         private void Awake()
         {
             _instance = this;
+            
+            onDialogueShown = new UnityEvent();
         }
 
         private void Start()
@@ -43,22 +52,38 @@ namespace Assets.MenuManager.Scripts
             if (IsShown()) return;
             
             GameManager.GetPlayerScript().FreezeControls();
-            
-            _instance.shown = true;
-            _instance._dialogueMenuTransform.LeanMoveY(90, 0.5f);
+
+            _instance._dialogueMenuTransform.LeanMoveY(90, 0.5f)
+                .setOnComplete(() =>
+                {
+                    _instance.shown = true;
+                    _instance.onDialogueShown.Invoke();
+                });
         }
 
         public static void HideDialogueWindow()
         {
             if (!IsShown()) return;
 
-            
             _instance._dialogueMenuTransform.LeanMoveY(-180, 0.5f)
                 .setOnComplete(() =>
                 {
                     GameManager.GetPlayerScript().UnfreezeControls();
                     _instance.shown = false;
+                    _instance.onDialogueHidden.Invoke();
                 });
+        }
+
+        public IEnumerator PrintLineToBox(string line)
+        {
+            var builder = new StringBuilder();
+            
+            foreach (var c in line)
+            {
+                builder.Append(c);
+                dialogueText.text = builder.ToString();
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
         public static bool IsShown()
