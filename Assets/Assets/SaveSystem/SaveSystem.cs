@@ -1,8 +1,11 @@
-﻿using System;
-using Assets.Player.Script;
+﻿using Assets.Player.Script;
 using Core;
 using UnityEngine;
-using UnityEngine.Windows;
+#if UNITY_WINRT
+using File = UnityEngine.Windows.File;
+#else
+using File = System.IO.File;
+#endif
 
 namespace Assets.SaveSystem
 {
