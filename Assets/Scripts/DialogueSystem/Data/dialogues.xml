@@ -1,0 +1,9 @@
+<dialogues>
+    <smith>
+        <dialogue index="1" flag="first">
+            <line>Welcome, young one.</line>
+            <line>I heard you will be trying to get out of here.</line>
+            <line>Well good luck.</line>
+        </dialogue>
+    </smith>
+</dialogues>

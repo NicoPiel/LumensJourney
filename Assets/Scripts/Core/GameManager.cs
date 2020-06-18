@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Security.Cryptography;
-using Assets.MenuManager.Script;
+using Assets.MenuManager.Scripts;
 using Assets.Player.Script;
 using Assets.ProceduralGeneration.Core;
 using Assets.SaveSystem;
 using Assets.UI.PlayerUI.Scripts;
+using DialogueSystem.Scripts;
 using TMPro;
 using Unity.Burst;
 using UnityEditor;
@@ -41,6 +42,7 @@ namespace Core
         [SerializeField] private Camera mainCamera;
         [SerializeField] private SaveSystem saveSystem;
         [SerializeField] private MenuManagerScript menuManagerScript;
+        [SerializeField] private DialogueManager dialogueManager;
 
         #endregion
 
@@ -88,6 +90,7 @@ namespace Core
         private void Start()
         {
             menuManagerScript = GetComponentInChildren<MenuManagerScript>();
+            dialogueManager = GetComponent<DialogueManager>();
             
             onPlayerSpawned.AddListener(OnPlayerSpawned);
         }
@@ -392,6 +395,11 @@ namespace Core
         public static MenuManagerScript GetMenuManagerScript()
         {
             return _instance.menuManagerScript;
+        }
+
+        public static DialogueManager GetDialogueManager()
+        {
+            return _instance.dialogueManager;
         }
         
         public static Camera GetMainCamera()

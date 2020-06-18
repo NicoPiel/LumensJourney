@@ -40,7 +40,6 @@ namespace Assets.Hub.Bank.Script
                     Tooltip.HideTooltip_Static();
                     _menuOpen = true;
                     GameManager.GetMenuManagerScript().LoadMenu("BankMenu");
-                
                 }
             }
         

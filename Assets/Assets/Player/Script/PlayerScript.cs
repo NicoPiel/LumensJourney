@@ -45,6 +45,7 @@ namespace Assets.Player.Script
         private bool _invulnerable;
         private bool _canAttack;
         private bool _canSendLightSphere;
+        private bool _frozen;
 
         private static readonly int StateExit = Animator.StringToHash("StateExit");
         private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
@@ -99,72 +100,78 @@ namespace Assets.Player.Script
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.J))
+            if (!_frozen)
             {
-                PlayerChangeLightShards(50);
-            }
+                #region Controls
 
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                PlayerChangeLightShards(-50);
-            }
-
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                PlayerTakeDamage(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                PlayerTakeHeal(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                GameObject teleporter = GameManager.GetGenerator().teleporter;
-                if (teleporter != null) SendLightSphereFromPlayer(teleporter.transform.position);
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                HitInDirection(180, new Vector2(2, 1), new Vector2(0, -1f), "SwingUp");
-                _animator.SetFloat(LastHorizontal, 0);
-                _animator.SetFloat(LastVertical, 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
-                _animator.SetFloat(LastHorizontal, 1);
-                _animator.SetFloat(LastVertical, 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                HitInDirection(0, new Vector2(2, 1), new Vector2(0, -0.5f), "SwingDown");
-                _animator.SetFloat(LastHorizontal, 0);
-                _animator.SetFloat(LastVertical, -1);
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                HitInDirection(270, new Vector2(1, 1), new Vector2(-0.5f, -1f), "SwingLeft");
-                _animator.SetFloat(LastHorizontal, -1);
-                _animator.SetFloat(LastVertical, 0);
-            }
-            else
-            {
-                _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
-                _change.Normalize();
-                if (_change.x < 0 || _change.x > 0)
+                if (Input.GetKeyDown(KeyCode.J))
                 {
-                    _animator.SetFloat(LastHorizontal, _change.x);
+                    PlayerChangeLightShards(50);
+                }
+
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    PlayerChangeLightShards(-50);
+                }
+
+                if (Input.GetKeyDown(KeyCode.V))
+                {
+                    PlayerTakeDamage(1);
+                }
+
+                if (Input.GetKeyDown(KeyCode.B))
+                {
+                    PlayerTakeHeal(1);
+                }
+
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GameObject teleporter = GameManager.GetGenerator().teleporter;
+                    if (teleporter != null) SendLightSphereFromPlayer(teleporter.transform.position);
+                }
+
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    HitInDirection(180, new Vector2(2, 1), new Vector2(0, -1f), "SwingUp");
+                    _animator.SetFloat(LastHorizontal, 0);
+                    _animator.SetFloat(LastVertical, 1);
+                }
+                else if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
+                    _animator.SetFloat(LastHorizontal, 1);
                     _animator.SetFloat(LastVertical, 0);
                 }
-
-                if (_change.y < 0 || _change.y > 0)
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    _animator.SetFloat(LastVertical, _change.y);
+                    HitInDirection(0, new Vector2(2, 1), new Vector2(0, -0.5f), "SwingDown");
                     _animator.SetFloat(LastHorizontal, 0);
+                    _animator.SetFloat(LastVertical, -1);
                 }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    HitInDirection(270, new Vector2(1, 1), new Vector2(-0.5f, -1f), "SwingLeft");
+                    _animator.SetFloat(LastHorizontal, -1);
+                    _animator.SetFloat(LastVertical, 0);
+                }
+                else
+                {
+                    _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
+                    _change.Normalize();
+                    if (_change.x < 0 || _change.x > 0)
+                    {
+                        _animator.SetFloat(LastHorizontal, _change.x);
+                        _animator.SetFloat(LastVertical, 0);
+                    }
+
+                    if (_change.y < 0 || _change.y > 0)
+                    {
+                        _animator.SetFloat(LastVertical, _change.y);
+                        _animator.SetFloat(LastHorizontal, 0);
+                    }
+                }
+
+                #endregion
             }
         }
 
@@ -174,8 +181,7 @@ namespace Assets.Player.Script
         }
 
         #endregion
-
-
+        
         private void SetUpEvents()
         {
             onPlayerTakeDamage = new UnityEvent();
@@ -428,6 +434,22 @@ namespace Assets.Player.Script
             _invulnerable = true;
             yield return new WaitForSeconds(invunerabilityTime);
             _invulnerable = false;
+        }
+
+        private void StopPlayer()
+        {
+            _change = new Vector3(0,0,0);
+        }
+
+        public void FreezeControls()
+        {
+            StopPlayer();
+            _frozen = true;
+        }
+
+        public void UnfreezeControls()
+        {
+            _frozen = false;
         }
     }
 }

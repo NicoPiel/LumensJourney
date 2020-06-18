@@ -42,7 +42,6 @@ namespace Assets.Items.Scripts
                 where (string) xElement.Attribute("name") == itemName
                 select xElement;
 
-        
             foreach (XElement itemData in items)
             {
                 item.ItemName = itemName;
