@@ -39,7 +39,7 @@ namespace Assets.Items.Scripts
             XElement rootNode = XElement.Load(PathToItemFile);
             var items =
                 from xElement in rootNode.Elements("item")
-                where (string) xElement.Attribute("name") == itemName
+                where xElement.Attribute("name")?.Value == itemName
                 select xElement;
 
             foreach (XElement itemData in items)

@@ -1,6 +1,5 @@
 ﻿using Assets.MenuManager.Scripts;
 using Core;
-using DialogueSystem.Scripts;
 using UnityEngine;
 using Utility;
 
@@ -11,19 +10,17 @@ namespace Assets.NPCs.Scripts
         public string npcName;
 
         private bool _inRange;
-        private MenuManagerScript _menuManagerScript;
 
         private void Start()
         {
             _inRange = false;
-            _menuManagerScript = GameManager.GetMenuManagerScript();
         }
 
-        private async void Update()
+        private void Update()
         {
             if (_inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
             {
-                await GameManager.GetDialogueManager().StartDialogue(npcName, "first");
+                StartCoroutine(GameManager.GetDialogueManager().StartDialogue(npcName, "first"));
                 
                 Tooltip.HideTooltip_Static();
             }

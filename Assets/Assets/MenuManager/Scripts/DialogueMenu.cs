@@ -42,11 +42,6 @@ namespace Assets.MenuManager.Scripts
             _dialogueMenuTransform = GetComponent<RectTransform>();
         }
 
-        private void Update()
-        {
-            if (IsShown() && Input.GetMouseButtonDown(0)) HideDialogueWindow();
-        }
-
         public static void ShowDialogueWindow()
         {
             if (IsShown()) return;
@@ -82,7 +77,7 @@ namespace Assets.MenuManager.Scripts
             {
                 builder.Append(c);
                 _instance.dialogueText.text = builder.ToString();
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.05f);
             }
         }
 

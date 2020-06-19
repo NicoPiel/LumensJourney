@@ -16,9 +16,8 @@ namespace DialogueSystem.Scripts
 
         private const string PathToDialogueFile = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
 
-        private XElement _dialoguesXML;
+        private XElement _dialoguesXml;
         private bool _inDialogue;
-        private bool _onHold;
 
         public UnityEvent onDialogueStart;
         public UnityEvent onDialogueEnd;
@@ -31,54 +30,53 @@ namespace DialogueSystem.Scripts
 
         private void Start()
         {
-            _dialoguesXML = XElement.Load(PathToDialogueFile);
+            _dialoguesXml = XElement.Load(PathToDialogueFile);
         }
 
-        public async Task StartDialogue(string npcName, string flag)
+        public IEnumerator StartDialogue(string npcName, string flag)
         {
             _inDialogue = true;
-            _onHold = false;
 
             Dialogue dialogue = BuildDialogueWithFlag(npcName, flag);
-            
-            //Test
+
+            //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
+
             DialogueMenu.SetNamePlate(npcName);
-            //
             DialogueMenu.ShowDialogueWindow();
+
+            Debug.Log($"Show dialogue for {npcName}");
 
             while (dialogue.HasNextLine())
             {
-                if (!_onHold)
-                {
-                    StartCoroutine(DialogueMenu.PrintLineToBox(dialogue.NextLine()));
-                    _onHold = true;
-                }
+                var newLine = dialogue.NextLine();
+                
+                StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
+                Debug.Log($"Showing line: {newLine}");
 
-                await Task.Yield();
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitForEndOfFrame();
             }
-            
+
             DialogueMenu.HideDialogueWindow();
+            Debug.Log("Hide dialogue window.");
         }
-        
+
         public IEnumerator StartDialogue(string npcName, int index)
         {
             yield return null;
         }
-        
+
         public IEnumerator StartDialogue(string npcName, int index, string flag)
         {
             yield return null;
         }
 
-        public void Next()
-        {
-            _onHold = true;
-        }
+        #region Build dialogues
 
         private List<Dialogue> GetAllDialoguesFromNpc(string npcName)
         {
             var dialogueList = new List<Dialogue>();
-            XElement root = _dialoguesXML;
+            XElement root = _dialoguesXml;
 
             var dialogues =
                 from element in root.Elements(npcName)
@@ -89,7 +87,7 @@ namespace DialogueSystem.Scripts
                 var lines =
                     (from line in dialogue.Elements()
                         select line.Value).ToList();
-                
+
                 dialogueList.Add(new Dialogue(lines));
             }
 
@@ -98,37 +96,60 @@ namespace DialogueSystem.Scripts
 
         private Dialogue BuildDialogueWithFlag(string npcName, string flag)
         {
-            XElement root = _dialoguesXML;
+            //Debug.Log($"Retrieving dialogue for {npcName} with flag: {flag}");
+
+            XElement root = _dialoguesXml;
 
             XElement dialogue =
-                (from element in root.Elements(npcName)
+                (from element in root.Elements(npcName).Elements()
                     where element.Attribute("flag")?.Value == flag
                     select element).First();
 
             var lines =
-                (from line in dialogue.Elements()
+                (from line in dialogue.Elements("line")
                     select line.Value).ToList();
 
-            return new Dialogue(lines);
+            return new Dialogue(lines, flag);
         }
 
         private Dialogue BuildDialogueWithIndex(string npcName, int index)
         {
-            XElement root = _dialoguesXML;
+            XElement root = _dialoguesXml;
 
             var dialogues =
-                from element in root.Elements(npcName)
+                from element in root.Elements(npcName).Elements()
                 where int.Parse(element.Attribute("index")?.Value
                                 ?? throw new ArgumentException($"Dialogue {element.ToString()} has no index attribute."))
                       == index
                 select element;
 
             var lines =
-                (from line in dialogues.Elements()
+                (from line in dialogues.Elements("line")
                     select line.Value).ToList();
 
 
-            return new Dialogue(lines);
+            return new Dialogue(lines, index);
         }
+
+        private Dialogue BuildDialogueWithIndexAndFlag(string npcName, int index, string flag)
+        {
+            XElement root = _dialoguesXml;
+
+            var dialogues =
+                from element in root.Elements(npcName).Elements()
+                where int.Parse(element.Attribute("index")?.Value
+                                ?? throw new ArgumentException($"Dialogue {element.ToString()} has no index attribute."))
+                    == index && element.Attribute("flag")?.Value == flag
+                select element;
+
+            var lines =
+                (from line in dialogues.Elements("line")
+                    select line.Value).ToList();
+
+
+            return new Dialogue(lines, index, flag);
+        }
+
+        #endregion
     }
 }

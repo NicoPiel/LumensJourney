@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace DialogueSystem.Scripts
 {
@@ -24,6 +25,13 @@ namespace DialogueSystem.Scripts
             Flag = flag;
         }
         
+        public Dialogue(List<string> lines, int index)
+        {
+            DialogueLines = lines;
+            LineIndex = 0;
+            Index = index;
+        }
+        
         public Dialogue(List<string> lines, int index, string flag)
         {
             DialogueLines = lines;
@@ -36,7 +44,7 @@ namespace DialogueSystem.Scripts
         {
             if (!HasNextLine()) throw new IndexOutOfRangeException("Tried to access dialogue lines out of range.");
             
-            var result = DialogueLines[LineIndex + 1];
+            var result = DialogueLines[LineIndex];
             LineIndex++;
                 
             return result;
@@ -44,7 +52,7 @@ namespace DialogueSystem.Scripts
 
         public bool HasNextLine()
         {
-            return (DialogueLines.Count - 1) < LineIndex;
+            return DialogueLines.Count != LineIndex;
         }
 
         public bool HasIndex()
@@ -55,6 +63,23 @@ namespace DialogueSystem.Scripts
         public bool HasFlag()
         {
             return Flag != null;
+        }
+
+        /// <summary>
+        /// Returns the dialogue nicely formatted.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            foreach (var line in DialogueLines)
+            {
+                builder.Append(line);
+                builder.Append("\n");
+            }
+
+            return builder.ToString();
         }
     }
 }
