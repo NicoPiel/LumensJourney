@@ -20,7 +20,7 @@ namespace Assets.NPCs.Scripts
         {
             if (_inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
             {
-                //StartCoroutine(GameManager.GetDialogueManager().StartDialogue(npcName, "first"));
+                GameManager.GetDialogueManager().StartCorrectDialogue(npcName);
                 
                 Tooltip.HideTooltip_Static();
             }

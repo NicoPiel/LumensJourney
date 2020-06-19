@@ -38,15 +38,20 @@ namespace DialogueSystem.Scripts
         {
             _gameManager = GameManager.GetGameManager();
             _saveSystem = GameManager.GetSaveSystem();
-            
+
             _dialoguesXml = XElement.Load(PathToDialogueFile);
+
             _gameManager.onGameLoaded.AddListener(OnGameLoaded);
             _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
+
+            _saveSystem.onBeforeSave.AddListener(OnBeforeSave);
         }
 
         public void StartCorrectDialogue(string npcName)
         {
-            
+            var nextFlag = NextFlag(npcName);
+
+            StartCoroutine(StartDialogue(npcName, nextFlag));
         }
 
         private IEnumerator StartDialogue(string npcName, string flag)
@@ -75,7 +80,7 @@ namespace DialogueSystem.Scripts
             }
 
             DialogueMenu.HideDialogueWindow();
-            Debug.Log("Hide dialogue window.");
+            //Debug.Log("Hide dialogue window.");
         }
 
         public IEnumerator StartDialogue(string npcName, int index)
@@ -88,37 +93,54 @@ namespace DialogueSystem.Scripts
             yield return null;
         }
 
-        private void OnNewGameStarted()
+        private string NextFlag(string npcName)
         {
-            _flags = new Dictionary<string, Dictionary<string, bool>>();
+            var currentFlag =
+                (from flags in _flags[npcName]
+                    where flags.Value
+                    select flags.Key).First();
 
-            var npcs =
-                from npc in _dialoguesXml.Elements()
-                select npc;
+            var newFlag =
+                (from dialogue in _dialoguesXml.Elements(npcName).Elements()
+                    where dialogue.Attribute("flag")?.Value == currentFlag
+                    select dialogue.Attribute("newFlag")?.Value).First();
 
-            foreach (XElement npc in npcs)
+            //Debug.Log($"Current flag for {npcName}: {currentFlag}");
+
+            if (currentFlag != "default")
             {
-                var flagDict = new Dictionary<string, bool>();
+                _flags[npcName][currentFlag] = false;
                 
-                var flags =
-                    from dialogue in npc.Elements("dialogue")
-                    select dialogue.Attribute("flag")?.Value.ToString();
-
-                foreach (var flag in flags)
+                if (newFlag != null)
                 {
-                    flagDict.Add(flag, false);
+                    if (_flags[npcName].ContainsKey(newFlag)) _flags[npcName][newFlag] = true;
+                    else _flags[npcName]["default"] = true;
+                    
+                    //Debug.Log($"New flag for {npcName}: {newFlag}");
                 }
-                
-                _flags.Add(npc.Name.ToString(), flagDict);
+                else _flags[npcName]["default"] = true;
             }
-            
-            _saveSystem.SaveFlags(_flags);
-            _saveSystem.CreateSave();
+
+            SaveFlags();
+
+            return currentFlag;
         }
 
-        private void OnGameLoaded()
+        public void SetFlag(string npcName, string flag, bool value)
         {
-            _flags = _saveSystem.DialogueFlags;
+            if (_flags[npcName].ContainsKey(flag)) _flags[npcName][flag] = value;
+            SaveFlags();
+        }
+
+        private bool IsFlagSet(string npcName, string flag)
+        {
+            return _flags[npcName].ContainsKey(flag) && _flags[npcName][flag];
+        }
+
+        private void SaveFlags()
+        {
+            _saveSystem.SaveFlags(_flags);
+            _saveSystem.CreateSave();
         }
 
         #region Build dialogues
@@ -198,6 +220,54 @@ namespace DialogueSystem.Scripts
 
 
             return new Dialogue(lines, index, flag);
+        }
+
+        private Dialogue GetDefaultDialog(string npcName)
+        {
+            return BuildDialogueWithFlag(npcName, "default");
+        }
+
+        #endregion
+
+        #region Event subscriptions
+
+        private void OnBeforeSave()
+        {
+            _saveSystem.SaveFlags(_flags);
+        }
+
+        private void OnNewGameStarted()
+        {
+            _flags = new Dictionary<string, Dictionary<string, bool>>();
+
+            var npcs =
+                from npc in _dialoguesXml.Elements()
+                select npc;
+
+            foreach (XElement npc in npcs)
+            {
+                var flagDict = new Dictionary<string, bool>();
+
+                var flags =
+                    from dialogue in npc.Elements("dialogue")
+                    select dialogue.Attribute("flag")?.Value.ToString();
+
+                foreach (var flag in flags)
+                {
+                    if (flag == "first" || flag == "default") flagDict.Add(flag, true);
+                    else flagDict.Add(flag, false);
+                }
+
+                _flags.Add(npc.Name.ToString(), flagDict);
+            }
+
+            _saveSystem.SaveFlags(_flags);
+            _saveSystem.CreateSave();
+        }
+
+        private void OnGameLoaded()
+        {
+            _flags = _saveSystem.DialogueFlags;
         }
 
         #endregion

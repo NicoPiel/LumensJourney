@@ -2,6 +2,7 @@
 using Core;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 #if UNITY_WINRT
 using File = UnityEngine.Windows.File;
 #else
@@ -13,6 +14,9 @@ namespace Assets.SaveSystem
 {
     public class SaveSystem : MonoBehaviour
     {
+        public UnityEvent onBeforeSave;
+        public UnityEvent onGameSaved;
+        
         private string _saveFilePath;
 
         #region Stuff to save
@@ -28,6 +32,9 @@ namespace Assets.SaveSystem
         {
             _saveFilePath = Application.persistentDataPath + "/save.json";
             DialogueFlags = new Dictionary<string, Dictionary<string, bool>>();
+            
+            onBeforeSave = new UnityEvent();
+            onGameSaved = new UnityEvent();
         }
 
         private void Start()
@@ -45,17 +52,11 @@ namespace Assets.SaveSystem
 
         public bool DeleteSave()
         {
-            if (File.Exists(_saveFilePath))
-            {
-                File.Delete(_saveFilePath);
+            if (!File.Exists(_saveFilePath)) return false;
+            
+            File.Delete(_saveFilePath);
 
-                if (!File.Exists(_saveFilePath))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return !File.Exists(_saveFilePath);
         }
 
         public void LoadSave()
@@ -69,13 +70,17 @@ namespace Assets.SaveSystem
 
         public void CreateSave()
         {
-            Debug.Log(DialogueFlags.Count);
+            onBeforeSave.Invoke();
+            
+            //Debug.Log(DialogueFlags.Count);
             Save save = CreateSaveGameObject();
             var json = JsonConvert.SerializeObject(save, Formatting.Indented);
 
             File.WriteAllText(_saveFilePath, json);
 
             Debug.Log($"Saved to {_saveFilePath}");
+            
+            onBeforeSave.Invoke();
         }
 
         private Save CreateSaveGameObject()
@@ -104,9 +109,9 @@ namespace Assets.SaveSystem
             CreateSave();
         }
 
-        public void SaveFlags(Dictionary<string, Dictionary<string, bool>> dic)
+        public void SaveFlags(Dictionary<string, Dictionary<string, bool>> dict)
         {
-            DialogueFlags = dic;
+            DialogueFlags = dict;
         }
     }
 }

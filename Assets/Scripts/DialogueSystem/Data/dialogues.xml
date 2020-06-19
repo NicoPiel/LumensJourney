@@ -1,25 +1,28 @@
 <dialogues>
     <Smith>
         <dialogue index="1" flag="first" newFlag="second">
-            <line>Welcome, young one.</line>
+            <line>Welcome, boy.</line>
             <line>I heard you will be trying to get out of here.</line>
             <line>Well, good luck.</line>
         </dialogue>
         <dialogue index="2" flag="second" newFlag="default">
             <line>Well, you should take this...</line>
         </dialogue>
-        <dialogue index="3" flag="default" >
+        <dialogue index="3" flag="default">
             <line>Welcome, what can I do for ye?</line>
         </dialogue>
     </Smith>
     <Witch>
         <dialogue index="1" flag="first" newFlag="second">
             <line>Hehe, greetings.</line>
-            <line>I am what they call a... witch, yes. Hehe.</line>
-            <line>I brew potions, yes? Hehe.</line>
+            <line>I am what they call a... witch, yes. Hehehe.</line>
+            <line>I brew potions, yes? Hehehe.</line>
         </dialogue>
         <dialogue index="2" flag="second" newFlag="default">
-            <line>Take this potion for free, yes? Hehe.</line>
+            <line>Take this potion for free, yes? Hehehe.</line>
+        </dialogue>
+        <dialogue index="3" flag="default">
+            <line>Welcome back my child, hehehe.</line>
         </dialogue>
     </Witch>
     <Sheldon>
@@ -27,4 +30,9 @@
             <line>Fuck you, Leonard.</line>
         </dialogue>
     </Sheldon>
+    <Bibsy>
+        <dialogue index="1" flag="default">
+            <line>Hey man. Like my library?</line>
+        </dialogue>
+    </Bibsy>
 </dialogues>
