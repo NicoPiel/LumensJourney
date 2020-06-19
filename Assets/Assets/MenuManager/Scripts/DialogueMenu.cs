@@ -47,7 +47,7 @@ namespace Assets.MenuManager.Scripts
             if (IsShown() && Input.GetMouseButtonDown(0)) HideDialogueWindow();
         }
 
-        public static void ShowDialogueMenu()
+        public static void ShowDialogueWindow()
         {
             if (IsShown()) return;
             
@@ -74,14 +74,14 @@ namespace Assets.MenuManager.Scripts
                 });
         }
 
-        public IEnumerator PrintLineToBox(string line)
+        public static IEnumerator PrintLineToBox(string line)
         {
             var builder = new StringBuilder();
             
             foreach (var c in line)
             {
                 builder.Append(c);
-                dialogueText.text = builder.ToString();
+                _instance.dialogueText.text = builder.ToString();
                 yield return new WaitForSeconds(0.1f);
             }
         }

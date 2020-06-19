@@ -27,7 +27,7 @@ namespace Assets.MenuManager.Scripts
                     break;
                 case "DialogueMenu":
                     _currentMenu = "DialogueMenu";
-                    DialogueMenu.ShowDialogueMenu();
+                    DialogueMenu.ShowDialogueWindow();
                     break;
                 default:
                     break;

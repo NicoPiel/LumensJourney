@@ -1,5 +1,6 @@
 ﻿using Assets.MenuManager.Scripts;
 using Core;
+using DialogueSystem.Scripts;
 using UnityEngine;
 using Utility;
 
@@ -18,15 +19,12 @@ namespace Assets.NPCs.Scripts
             _menuManagerScript = GameManager.GetMenuManagerScript();
         }
 
-        private void Update()
+        private async void Update()
         {
             if (_inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
             {
-                //Test
-                DialogueMenu.SetNamePlate(npcName);
-                DialogueMenu.SetText("Welcome.");
-                //
-                _menuManagerScript.LoadMenu("DialogueMenu");
+                await GameManager.GetDialogueManager().StartDialogue(npcName, "first");
+                
                 Tooltip.HideTooltip_Static();
             }
         }
