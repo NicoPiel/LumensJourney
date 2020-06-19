@@ -1,4 +1,5 @@
-﻿using Assets.Player.Script;
+﻿using System.Collections.Generic;
+using Assets.Player.Script;
 using Core;
 using UnityEngine;
 #if UNITY_WINRT
@@ -13,6 +14,7 @@ namespace Assets.SaveSystem
     {
         private string _saveFilePath;
         public int BankedShards { get; set; }
+        public Dictionary<string, Dictionary<string, bool>> DialogueFlags { get; set; }
 
         #region Stuff to save
 
@@ -23,7 +25,6 @@ namespace Assets.SaveSystem
         public void Awake()
         {
             _saveFilePath = Application.persistentDataPath + "/save.json";
-            
         }
 
         private void Start()
@@ -85,7 +86,8 @@ namespace Assets.SaveSystem
             {
                 lightShard = _playerScript.GetLightShardAmount(),
                 bankedLightShards = BankedShards,
-                smithProgress = 0 //TODO
+                smithProgress = 0,
+                flags = DialogueFlags
             };
 
             return save;
@@ -95,6 +97,7 @@ namespace Assets.SaveSystem
         {
             _playerScript.PlayerSetLightShards(load.lightShard);
             BankedShards = load.bankedLightShards;
+            DialogueFlags = load.flags;
         }
         
         private void OnApplicationQuit()
