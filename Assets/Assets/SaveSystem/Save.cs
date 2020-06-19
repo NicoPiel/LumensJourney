@@ -6,9 +6,9 @@ namespace Assets.SaveSystem
     [Serializable]
     public class Save
     {
-        public int lightShard;
-        public int smithProgress;
-        public int bankedLightShards;
-        public Dictionary<string, Dictionary<string, bool>> flags;
+        public int LightShard { get; set; }
+        public int SmithProgress { get; set; }
+        public int BankedLightShards { get; set; }
+        public Dictionary<string,  Dictionary<string, bool>> Flags { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Items.Scripts;
 using Assets.UI.ItemBar.Scripts;
+using Core;
 using Unity.Burst;
 
 namespace Assets.Player.Script
@@ -13,7 +14,7 @@ namespace Assets.Player.Script
         public Inventory()
         {
             Items = new List<GameItem>();
-            Lightshard = 0;
+            Lightshard = GameManager.GetSaveSystem().ShardsOnPlayer;
 
         }
         public void AddItem(GameItem item)

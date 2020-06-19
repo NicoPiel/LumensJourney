@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using Assets.Player.Script;
 using Core;
+using Newtonsoft.Json;
 using UnityEngine;
 #if UNITY_WINRT
 using File = UnityEngine.Windows.File;
 #else
 using File = System.IO.File;
+
 #endif
 
 namespace Assets.SaveSystem
@@ -13,81 +15,78 @@ namespace Assets.SaveSystem
     public class SaveSystem : MonoBehaviour
     {
         private string _saveFilePath;
-        public int BankedShards { get; set; }
-        public Dictionary<string, Dictionary<string, bool>> DialogueFlags { get; set; }
 
         #region Stuff to save
 
-        private PlayerScript _playerScript;
+        public int BankedShards { get; set; }
+        public int ShardsOnPlayer { get; set; }
+        public Dictionary<string, Dictionary<string, bool>> DialogueFlags { get; private set; }
 
         #endregion
+
 
         public void Awake()
         {
             _saveFilePath = Application.persistentDataPath + "/save.json";
+            DialogueFlags = new Dictionary<string, Dictionary<string, bool>>();
         }
 
         private void Start()
         {
             BankedShards = 0;
-            GameManager.GetGenerator().onDungeonGenerated.AddListener(OnDungeonGenerated);
-            GameManager.GetGameManager().onGameLoaded.AddListener(LoadSave);
+            ShardsOnPlayer = 0;
+
             GameManager.GetGameManager().onNewGameStarted.AddListener(CreateSave);
         }
 
         public bool SaveExists()
         {
-           return File.Exists(_saveFilePath);
+            return File.Exists(_saveFilePath);
         }
 
         public bool DeleteSave()
         {
             if (File.Exists(_saveFilePath))
             {
-                
                 File.Delete(_saveFilePath);
-                
+
                 if (!File.Exists(_saveFilePath))
                 {
                     return true;
                 }
             }
-            
+
             return false;
         }
 
         public void LoadSave()
         {
-            _playerScript = GameManager.GetPlayer().GetComponent<PlayerScript>();
-
             if (File.Exists(_saveFilePath))
             {
-                var saveToLoad = JsonUtility.FromJson<Save>(System.IO.File.ReadAllText(_saveFilePath));
+                var saveToLoad = JsonConvert.DeserializeObject<Save>(System.IO.File.ReadAllText(_saveFilePath));
                 LoadSaveGameObject(saveToLoad);
             }
         }
 
         public void CreateSave()
         {
+            Debug.Log(DialogueFlags.Count);
             Save save = CreateSaveGameObject();
-            var json = JsonUtility.ToJson(save);
+            var json = JsonConvert.SerializeObject(save);
+
             System.IO.File.WriteAllText(_saveFilePath, json);
-            
-            //Debug.Log(json);
-            
+
             Debug.Log($"Saved to {_saveFilePath}");
         }
 
         private Save CreateSaveGameObject()
         {
-            _playerScript = GameManager.GetPlayer().GetComponent<PlayerScript>();
-
             var save = new Save
             {
-                lightShard = _playerScript.GetLightShardAmount(),
-                bankedLightShards = BankedShards,
-                smithProgress = 0,
-                flags = DialogueFlags
+                LightShard = ShardsOnPlayer,
+                BankedLightShards = BankedShards,
+                SmithProgress = 0,
+                Flags = DialogueFlags
             };
 
             return save;
@@ -95,19 +94,21 @@ namespace Assets.SaveSystem
 
         private void LoadSaveGameObject(Save load)
         {
-            _playerScript.PlayerSetLightShards(load.lightShard);
-            BankedShards = load.bankedLightShards;
-            DialogueFlags = load.flags;
+            ShardsOnPlayer = load.LightShard;
+            BankedShards = load.BankedLightShards;
+            if (load.Flags.Count != 0)
+                DialogueFlags = load.Flags;
         }
-        
+
         private void OnApplicationQuit()
         {
             CreateSave();
         }
 
-        private void OnDungeonGenerated()
+
+        public void SetDialogueFlag(Dictionary<string, Dictionary<string, bool>> dic)
         {
-            CreateSave();
+            DialogueFlags = dic;
         }
     }
 }

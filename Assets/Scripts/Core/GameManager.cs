@@ -36,11 +36,12 @@ namespace Core
 
         #region Inspector variables
 
+        
+        [SerializeField] private SaveSystem saveSystem;
         [SerializeField] private Generator generator;
         [SerializeField] private GameObject player;
         [SerializeField] private PlayerScript playerScript;
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private SaveSystem saveSystem;
         [SerializeField] private MenuManagerScript menuManagerScript;
         [SerializeField] private DialogueManager dialogueManager;
 
@@ -83,7 +84,7 @@ namespace Core
 
             CurrentLevel = 0;
         }
-
+        
         /// <summary>
         /// Add event listeners here.
         /// </summary>
@@ -91,6 +92,7 @@ namespace Core
         {
             menuManagerScript = GetComponentInChildren<MenuManagerScript>();
             dialogueManager = GetComponent<DialogueManager>();
+            
             
             onPlayerSpawned.AddListener(OnPlayerSpawned);
         }
@@ -168,9 +170,8 @@ namespace Core
         /// </summary>
         private void LoadGame()
         {
-            Setup();
-
             saveSystem.LoadSave();
+            Setup();
             onGameLoaded.Invoke();
         }
 

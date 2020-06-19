@@ -189,11 +189,12 @@ MonoBehaviour:
   onNewLevel:
     m_PersistentCalls:
       m_Calls: []
+  saveSystem: {fileID: 5447485704310292839}
   generator: {fileID: 6029391063509343129}
   player: {fileID: 8759012663102982383, guid: e968301f1b4fce9488e840d8ebda0d1d, type: 3}
-  playerScript: {fileID: 0}
+  playerScript: {fileID: 8759012663102982377, guid: e968301f1b4fce9488e840d8ebda0d1d,
+    type: 3}
   mainCamera: {fileID: 0}
-  saveSystem: {fileID: 5447485704310292839}
   menuManagerScript: {fileID: 0}
   dialogueManager: {fileID: 0}
 --- !u!114 &4450038217365722209
@@ -504,7 +505,7 @@ PrefabInstance:
     - target: {fileID: 8785438388826000067, guid: 591d74454f27ca748adcb31cb8698c7c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 180
+      value: -180
       objectReference: {fileID: 0}
     - target: {fileID: 8891806231706653563, guid: 591d74454f27ca748adcb31cb8698c7c,
         type: 3}

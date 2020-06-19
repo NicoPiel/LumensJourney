@@ -191,6 +191,8 @@ namespace Assets.Player.Script
             onPlayerTakeHeal = new UnityEvent();
             onPlayerLifeChanged = new UnityEvent();
             onPlayerDied = new UnityEvent();
+            
+            onPlayerLightShardsChanged.AddListener(OnPlayerLightShardsChanged);
         }
 
         private void HitInDirection(float rotation, Vector2 size, Vector2 offset, string stateName)
@@ -418,6 +420,11 @@ namespace Assets.Player.Script
         public int GetLightShardAmount()
         {
             return _player.Inventory.Lightshard;
+        }
+
+        private void OnPlayerLightShardsChanged()
+        {
+            GameManager.GetSaveSystem().ShardsOnPlayer = GetLightShardAmount();
         }
 
         #endregion
