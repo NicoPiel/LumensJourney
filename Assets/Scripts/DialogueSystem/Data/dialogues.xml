@@ -9,7 +9,7 @@
             <line>Well, you should take this...</line>
         </dialogue>
         <dialogue index="3" flag="default" >
-            <line>Wellcome, what can me doo for'ya</line>
+            <line>Welcome, what can I do for ye?</line>
         </dialogue>
     </Smith>
 </dialogues>

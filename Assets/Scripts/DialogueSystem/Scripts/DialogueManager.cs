@@ -13,6 +13,8 @@ namespace DialogueSystem.Scripts
     {
         private static DialogueManager _instance;
 
+        private Dictionary<string, Dictionary<string, bool>> _flags;
+
         private const string PathToDialogueFile = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
 
         private XElement _dialoguesXml;
@@ -69,6 +71,11 @@ namespace DialogueSystem.Scripts
         public IEnumerator StartDialogue(string npcName, int index, string flag)
         {
             yield return null;
+        }
+
+        public void LoadSaveFile()
+        {
+            
         }
 
         #region Build dialogues
