@@ -1,9 +1,15 @@
 <dialogues>
     <Smith>
-        <dialogue index="1" flag="first">
+        <dialogue index="1" flag="first" newFlag="second">
             <line>Welcome, young one.</line>
             <line>I heard you will be trying to get out of here.</line>
             <line>Well, good luck.</line>
+        </dialogue>
+        <dialogue index="2" flag="second" newFlag="default">
+            <line>Well, you should take this...</line>
+        </dialogue>
+        <dialogue index="3" flag="default" >
+            <line>Wellcome, what can me doo for'ya</line>
         </dialogue>
     </Smith>
 </dialogues>
