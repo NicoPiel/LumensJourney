@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7036008095652229158}
   - component: {fileID: 458551362334274674}
   - component: {fileID: 1240230172221715013}
+  - component: {fileID: 1497073613524519446}
   m_Layer: 0
   m_Name: Sheldon
   m_TagString: Untagged
@@ -96,3 +97,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: Sheldon
+--- !u!70 &1497073613524519446
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3883001987662954039}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0036978754, y: -0.5238131}
+  m_Size: {x: 0.61390597, y: 0.2440404}
+  m_Direction: 1
