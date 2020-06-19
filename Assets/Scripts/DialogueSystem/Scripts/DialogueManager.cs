@@ -17,7 +17,6 @@ namespace DialogueSystem.Scripts
 
         private XElement _dialoguesXml;
         private bool _inDialogue;
-        private bool _beginNewLine;
 
         public UnityEvent onDialogueStart;
         public UnityEvent onDialogueEnd;
@@ -31,8 +30,6 @@ namespace DialogueSystem.Scripts
         private void Start()
         {
             _dialoguesXml = XElement.Load(PathToDialogueFile);
-            DialogueMenu.onStartOfLine.AddListener(CantShowNextLine);
-            DialogueMenu.onEndOfLine.AddListener(CanShowNextLine);
         }
 
         public IEnumerator StartDialogue(string npcName, string flag)
@@ -55,7 +52,7 @@ namespace DialogueSystem.Scripts
                 StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
                 //Debug.Log($"Showing line: {newLine}");
 
-                yield return new WaitUntil(() => _beginNewLine);
+                yield return new WaitUntil(DialogueMenu.AtEndOfLine);
                 yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
                 yield return new WaitForEndOfFrame();
             }
@@ -72,16 +69,6 @@ namespace DialogueSystem.Scripts
         public IEnumerator StartDialogue(string npcName, int index, string flag)
         {
             yield return null;
-        }
-
-        private void CantShowNextLine()
-        {
-            _beginNewLine = false;
-        }
-
-        private void CanShowNextLine()
-        {
-            _beginNewLine = true;
         }
 
         #region Build dialogues

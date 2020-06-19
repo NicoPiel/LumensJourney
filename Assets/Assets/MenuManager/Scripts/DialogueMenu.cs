@@ -32,7 +32,7 @@ namespace Assets.MenuManager.Scripts
         private void Awake()
         {
             _instance = this;
-            
+
             onDialogueShown = new UnityEvent();
             onDialogueHidden = new UnityEvent();
             onStartOfLine = new UnityEvent();
@@ -46,12 +46,15 @@ namespace Assets.MenuManager.Scripts
 
             _dialogueMenu = this.gameObject;
             _dialogueMenuTransform = GetComponent<RectTransform>();
+            
+            onStartOfLine.AddListener(OnStartOfLine);
+            onEndOfLine.AddListener(OnEndOfLine);
         }
 
         public static void ShowDialogueWindow()
         {
             if (IsShown()) return;
-            
+
             GameManager.GetPlayerScript().FreezeControls();
 
             _instance._dialogueMenuTransform.LeanMoveY(90, 0.5f)
@@ -79,15 +82,30 @@ namespace Assets.MenuManager.Scripts
         {
             onStartOfLine.Invoke();
             var builder = new StringBuilder();
-            
+
             foreach (var c in line)
             {
                 builder.Append(c);
                 _instance.dialogueText.text = builder.ToString();
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.04f);
             }
-            
+
             onEndOfLine.Invoke();
+        }
+
+        public void OnStartOfLine()
+        {
+            endOfLine = false;
+        }
+
+        public void OnEndOfLine()
+        {
+            endOfLine = true;
+        }
+
+        public static bool AtEndOfLine()
+        {
+            return _instance.endOfLine;
         }
 
         public static bool IsShown()
@@ -99,7 +117,7 @@ namespace Assets.MenuManager.Scripts
         {
             _instance.namePlate.text = text;
         }
-        
+
         public static string GetNamePlate()
         {
             return _instance.namePlate.text;
