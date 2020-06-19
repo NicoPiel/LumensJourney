@@ -451,5 +451,10 @@ namespace Assets.Player.Script
         {
             _frozen = false;
         }
+
+        public float GetTimeBetweenAttacks()
+        {
+            return timeBetweenAttacks;
+        }
     }
 }

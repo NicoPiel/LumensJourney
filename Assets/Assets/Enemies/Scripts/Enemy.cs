@@ -14,6 +14,7 @@ namespace Assets.Enemies.Scripts
         #region Events
 
         public UnityEvent onDeath;
+        public UnityEvent onDamageTaken;
 
         #endregion
 
@@ -32,6 +33,10 @@ namespace Assets.Enemies.Scripts
 
         [SerializeField] private GameObject lightShardPrefab;
 
+        [Space] [Header("Audio")] 
+        [SerializeField] private AudioClip soundOnHit;
+        [SerializeField] private AudioClip soundOnDeath;
+
         #endregion
 
         #region Private variables
@@ -43,8 +48,10 @@ namespace Assets.Enemies.Scripts
         private ParticleSystem _particleSystem;
         private CinemachineImpulseSource _impulseSource;
         private Animator _animator;
+        private AudioSource _audioSource;
 
         private bool _invulnerable;
+        private float _invulnerabilityTime;
         
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
@@ -57,6 +64,7 @@ namespace Assets.Enemies.Scripts
         private void Awake()
         {
             onDeath = new UnityEvent();
+            onDamageTaken = new UnityEvent();
         }
 
         private void Start()
@@ -71,15 +79,16 @@ namespace Assets.Enemies.Scripts
             _detectionRadius.onLostSight.AddListener(StopMoving);
             
             _innerRadius.onPlayerWalkIntoRange.AddListener(OnPlayerWalkIntoRange);
-            _innerRadius.onHit.AddListener(OnHit);
 
             _detectionRadius.GetComponent<CircleCollider2D>().radius = detectionRadius;
             _innerRadius.GetComponent<CircleCollider2D>().radius = innerRadius;
             _rigidbody = GetComponent<Rigidbody2D>();
             _particleSystem = GetComponent<ParticleSystem>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
+            _audioSource = GetComponent<AudioSource>();
 
             lightShardPrefab = Resources.Load<GameObject>("LightShard");
+            _invulnerabilityTime = GameManager.GetPlayerScript().GetTimeBetweenAttacks() - .5f;
         }
 
         #endregion
@@ -140,13 +149,6 @@ namespace Assets.Enemies.Scripts
             _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude,screenShakeMagnitude));
         }
 
-        // On InnerRadius.onHit
-        private void OnHit()
-        {
-            _particleSystem.Play();
-            _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude/2,screenShakeMagnitude/2));
-        }
-
         #endregion
 
         public void TakeDamage (int damageTaken)
@@ -158,16 +160,19 @@ namespace Assets.Enemies.Scripts
             if (health <= 0)
             {
                 health = 0;
-                StartCoroutine(Die());
+                Die();
             }
             else
             {
+                _audioSource.PlayOneShot(soundOnHit);
+                _particleSystem.Play();
+                _impulseSource.GenerateImpulse(new Vector2(screenShakeMagnitude/2,screenShakeMagnitude/2));
                 StartCoroutine(Invulnerable());
             }
         }
         
         // On this.onDeath
-        private IEnumerator Die()
+        private void Die()
         {
             Debug.Log($"{gameObject.name} died.");
             GameManager.GetPlayerScript().PlayerChangeLightLevel(health*10);
@@ -175,9 +180,9 @@ namespace Assets.Enemies.Scripts
             
             _particleSystem.Play();
             DropShards();
-            yield return new WaitForSeconds(0.2f);
+            _audioSource.PlayOneShot(soundOnDeath);
             onDeath.Invoke();
-            Destroy(gameObject);
+            Destroy(gameObject, 0.2f);
         }
 
         private void DropShards ()
@@ -212,7 +217,7 @@ namespace Assets.Enemies.Scripts
         private IEnumerator Invulnerable ()
         {
             _invulnerable = true;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(_invulnerabilityTime);
             _invulnerable = false;
         }
 

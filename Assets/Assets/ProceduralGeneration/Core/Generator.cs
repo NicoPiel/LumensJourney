@@ -333,7 +333,7 @@ namespace Assets.ProceduralGeneration.Core
                         var angleUpDown = Vector2.Angle(overlap.center - r.center, Vector2.up);
                         var angleLeftRight = Vector2.Angle(overlap.center - r.center, Vector2.left);
 
-                        if ((angleUpDown < 30 || angleUpDown > 150) ^ (angleLeftRight < 30 || angleLeftRight > 150))
+                        if ((angleUpDown < 27.5 || angleUpDown > 152.5) ^ (angleLeftRight < 27.5 || angleLeftRight > 152.5))
                         {
                             var results = new RaycastHit2D[100];
                             var size = Physics2D.LinecastNonAlloc(
