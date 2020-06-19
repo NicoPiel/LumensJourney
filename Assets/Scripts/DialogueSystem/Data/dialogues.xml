@@ -12,4 +12,19 @@
             <line>Welcome, what can I do for ye?</line>
         </dialogue>
     </Smith>
+    <Witch>
+        <dialogue index="1" flag="first" newFlag="second">
+            <line>Hehe, greetings.</line>
+            <line>I am what they call a... witch, yes. Hehe.</line>
+            <line>I brew potions, yes? Hehe.</line>
+        </dialogue>
+        <dialogue index="2" flag="second" newFlag="default">
+            <line>Take this potion for free, yes? Hehe.</line>
+        </dialogue>
+    </Witch>
+    <Sheldon>
+        <dialogue index="1" flag="default">
+            <line>Fuck you, Leonard.</line>
+        </dialogue>
+    </Sheldon>
 </dialogues>

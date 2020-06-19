@@ -71,7 +71,7 @@ namespace Assets.SaveSystem
         {
             Debug.Log(DialogueFlags.Count);
             Save save = CreateSaveGameObject();
-            var json = JsonConvert.SerializeObject(save);
+            var json = JsonConvert.SerializeObject(save, Formatting.Indented);
 
             File.WriteAllText(_saveFilePath, json);
 

@@ -44,7 +44,12 @@ namespace DialogueSystem.Scripts
             _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
         }
 
-        public IEnumerator StartDialogue(string npcName, string flag)
+        public void StartCorrectDialogue(string npcName)
+        {
+            
+        }
+
+        private IEnumerator StartDialogue(string npcName, string flag)
         {
             _inDialogue = true;
 
@@ -85,14 +90,30 @@ namespace DialogueSystem.Scripts
 
         private void OnNewGameStarted()
         {
+            _flags = new Dictionary<string, Dictionary<string, bool>>();
+
             var npcs =
                 from npc in _dialoguesXml.Elements()
                 select npc;
 
             foreach (XElement npc in npcs)
             {
+                var flagDict = new Dictionary<string, bool>();
                 
+                var flags =
+                    from dialogue in npc.Elements("dialogue")
+                    select dialogue.Attribute("flag")?.Value.ToString();
+
+                foreach (var flag in flags)
+                {
+                    flagDict.Add(flag, false);
+                }
+                
+                _flags.Add(npc.Name.ToString(), flagDict);
             }
+            
+            _saveSystem.SaveFlags(_flags);
+            _saveSystem.CreateSave();
         }
 
         private void OnGameLoaded()
