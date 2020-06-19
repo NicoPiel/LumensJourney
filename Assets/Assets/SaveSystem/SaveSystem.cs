@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.Player.Script;
 using Core;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -63,7 +62,7 @@ namespace Assets.SaveSystem
         {
             if (File.Exists(_saveFilePath))
             {
-                var saveToLoad = JsonConvert.DeserializeObject<Save>(System.IO.File.ReadAllText(_saveFilePath));
+                var saveToLoad = JsonConvert.DeserializeObject<Save>(File.ReadAllText(_saveFilePath));
                 LoadSaveGameObject(saveToLoad);
             }
         }
@@ -74,7 +73,7 @@ namespace Assets.SaveSystem
             Save save = CreateSaveGameObject();
             var json = JsonConvert.SerializeObject(save);
 
-            System.IO.File.WriteAllText(_saveFilePath, json);
+            File.WriteAllText(_saveFilePath, json);
 
             Debug.Log($"Saved to {_saveFilePath}");
         }
@@ -105,8 +104,7 @@ namespace Assets.SaveSystem
             CreateSave();
         }
 
-
-        public void SetDialogueFlag(Dictionary<string, Dictionary<string, bool>> dic)
+        public void SaveFlags(Dictionary<string, Dictionary<string, bool>> dic)
         {
             DialogueFlags = dic;
         }

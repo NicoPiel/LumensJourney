@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Assets.MenuManager.Scripts;
+using Assets.SaveSystem;
+using Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +22,9 @@ namespace DialogueSystem.Scripts
         private XElement _dialoguesXml;
         private bool _inDialogue;
 
+        private GameManager _gameManager;
+        private SaveSystem _saveSystem;
+
         public UnityEvent onDialogueStart;
         public UnityEvent onDialogueEnd;
 
@@ -31,7 +36,12 @@ namespace DialogueSystem.Scripts
 
         private void Start()
         {
+            _gameManager = GameManager.GetGameManager();
+            _saveSystem = GameManager.GetSaveSystem();
+            
             _dialoguesXml = XElement.Load(PathToDialogueFile);
+            _gameManager.onGameLoaded.AddListener(OnGameLoaded);
+            _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
         }
 
         public IEnumerator StartDialogue(string npcName, string flag)
@@ -73,9 +83,21 @@ namespace DialogueSystem.Scripts
             yield return null;
         }
 
-        public void LoadSaveFile()
+        private void OnNewGameStarted()
         {
-            
+            var npcs =
+                from npc in _dialoguesXml.Elements()
+                select npc;
+
+            foreach (XElement npc in npcs)
+            {
+                
+            }
+        }
+
+        private void OnGameLoaded()
+        {
+            _flags = _saveSystem.DialogueFlags;
         }
 
         #region Build dialogues
