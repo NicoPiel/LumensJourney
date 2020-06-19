@@ -8,9 +8,13 @@ namespace Assets.Hub.Bank.Script
     public class BankScript : MonoBehaviour
     {
         private BoxCollider2D _interactCollider2D;
+        private SpriteRenderer _spriteRenderer;
         private bool _entered;
         private bool _menuOpen;
         private int _storedLightShards;
+
+        public Sprite openChest;
+        public Sprite closedChest;
 
         public UnityEvent onLightShardsStoredInBank;
 
@@ -19,6 +23,7 @@ namespace Assets.Hub.Bank.Script
         {
         
             _interactCollider2D = transform.GetComponentInChildren<BoxCollider2D>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
             _entered = false;
             _menuOpen = false;
         
@@ -33,16 +38,18 @@ namespace Assets.Hub.Bank.Script
                 if (_menuOpen)
                 {
                     GameManager.GetMenuManagerScript().UnloadCurrentMenu();
+                    _spriteRenderer.sprite = closedChest;
                     _menuOpen = false;
                 }
                 else
                 {
                     Tooltip.HideTooltip_Static();
                     _menuOpen = true;
+                    _spriteRenderer.sprite = openChest;
                     GameManager.GetMenuManagerScript().LoadMenu("BankMenu");
                 }
             }
-        
+
         }
 
         // Update is called once per frame
@@ -61,6 +68,7 @@ namespace Assets.Hub.Bank.Script
             {
                 GameManager.GetMenuManagerScript().UnloadCurrentMenu();
                 _menuOpen = false;
+                _spriteRenderer.sprite = closedChest;
                 Tooltip.HideTooltip_Static();
                 _entered = false;
             }

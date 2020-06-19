@@ -123,6 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca5394dc8219854d820c6cacf60112c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openChest: {fileID: -4928412741307207006, guid: f3a059d76de2b4845bb280686b6052a6,
+    type: 3}
+  closedChest: {fileID: -859192627492676805, guid: f3a059d76de2b4845bb280686b6052a6,
+    type: 3}
   onLightShardsStoredInBank:
     m_PersistentCalls:
       m_Calls: []
