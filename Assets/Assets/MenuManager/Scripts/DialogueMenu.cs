@@ -14,14 +14,17 @@ namespace Assets.MenuManager.Scripts
     {
         private static DialogueMenu _instance;
 
-        public UnityEvent onDialogueShown;
-        public UnityEvent onDialogueHidden;
+        public static UnityEvent onDialogueShown;
+        public static UnityEvent onDialogueHidden;
+        public static UnityEvent onStartOfLine;
+        public static UnityEvent onEndOfLine;
 
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text namePlate;
         [SerializeField] private TMP_Text dialogueText;
 
         public bool shown;
+        public bool endOfLine;
 
         private GameObject _dialogueMenu;
         private Transform _dialogueMenuTransform;
@@ -31,6 +34,9 @@ namespace Assets.MenuManager.Scripts
             _instance = this;
             
             onDialogueShown = new UnityEvent();
+            onDialogueHidden = new UnityEvent();
+            onStartOfLine = new UnityEvent();
+            onEndOfLine = new UnityEvent();
         }
 
         private void Start()
@@ -52,7 +58,7 @@ namespace Assets.MenuManager.Scripts
                 .setOnComplete(() =>
                 {
                     _instance.shown = true;
-                    _instance.onDialogueShown.Invoke();
+                    onDialogueShown.Invoke();
                 });
         }
 
@@ -65,12 +71,13 @@ namespace Assets.MenuManager.Scripts
                 {
                     GameManager.GetPlayerScript().UnfreezeControls();
                     _instance.shown = false;
-                    _instance.onDialogueHidden.Invoke();
+                    onDialogueHidden.Invoke();
                 });
         }
 
         public static IEnumerator PrintLineToBox(string line)
         {
+            onStartOfLine.Invoke();
             var builder = new StringBuilder();
             
             foreach (var c in line)
@@ -79,6 +86,8 @@ namespace Assets.MenuManager.Scripts
                 _instance.dialogueText.text = builder.ToString();
                 yield return new WaitForSeconds(0.05f);
             }
+            
+            onEndOfLine.Invoke();
         }
 
         public static bool IsShown()

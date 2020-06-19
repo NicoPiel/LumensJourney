@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Assets.MenuManager.Scripts;
 using UnityEngine;
@@ -18,6 +17,7 @@ namespace DialogueSystem.Scripts
 
         private XElement _dialoguesXml;
         private bool _inDialogue;
+        private bool _beginNewLine;
 
         public UnityEvent onDialogueStart;
         public UnityEvent onDialogueEnd;
@@ -31,6 +31,8 @@ namespace DialogueSystem.Scripts
         private void Start()
         {
             _dialoguesXml = XElement.Load(PathToDialogueFile);
+            DialogueMenu.onStartOfLine.AddListener(CantShowNextLine);
+            DialogueMenu.onEndOfLine.AddListener(CanShowNextLine);
         }
 
         public IEnumerator StartDialogue(string npcName, string flag)
@@ -44,15 +46,16 @@ namespace DialogueSystem.Scripts
             DialogueMenu.SetNamePlate(npcName);
             DialogueMenu.ShowDialogueWindow();
 
-            Debug.Log($"Show dialogue for {npcName}");
+            //Debug.Log($"Show dialogue for {npcName}");
 
             while (dialogue.HasNextLine())
             {
                 var newLine = dialogue.NextLine();
-                
-                StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
-                Debug.Log($"Showing line: {newLine}");
 
+                StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
+                //Debug.Log($"Showing line: {newLine}");
+
+                yield return new WaitUntil(() => _beginNewLine);
                 yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
                 yield return new WaitForEndOfFrame();
             }
@@ -69,6 +72,16 @@ namespace DialogueSystem.Scripts
         public IEnumerator StartDialogue(string npcName, int index, string flag)
         {
             yield return null;
+        }
+
+        private void CantShowNextLine()
+        {
+            _beginNewLine = false;
+        }
+
+        private void CanShowNextLine()
+        {
+            _beginNewLine = true;
         }
 
         #region Build dialogues
