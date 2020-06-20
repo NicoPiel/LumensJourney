@@ -15,7 +15,6 @@ namespace Assets.Player.Script
         {
             Items = new List<GameItem>();
             Lightshard = GameManager.GetSaveSystem().ShardsOnPlayer;
-
         }
         public void AddItem(GameItem item)
         {

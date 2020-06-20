@@ -31,7 +31,10 @@ namespace Assets.SaveSystem
         public void Awake()
         {
             _saveFilePath = Application.persistentDataPath + "/save.json";
+            
             DialogueFlags = new Dictionary<string, Dictionary<string, bool>>();
+            BankedShards = 0;
+            ShardsOnPlayer = 0;
             
             onBeforeSave = new UnityEvent();
             onGameSaved = new UnityEvent();
@@ -39,9 +42,6 @@ namespace Assets.SaveSystem
 
         private void Start()
         {
-            BankedShards = 0;
-            ShardsOnPlayer = 0;
-
             GameManager.GetGameManager().onNewGameStarted.AddListener(CreateSave);
         }
 
@@ -100,7 +100,7 @@ namespace Assets.SaveSystem
         {
             ShardsOnPlayer = load.LightShard;
             BankedShards = load.BankedLightShards;
-            if (load.Flags.Count != 0)
+            if (load.Flags?.Count != 0)
                 DialogueFlags = load.Flags;
         }
 

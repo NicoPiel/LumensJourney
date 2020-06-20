@@ -39,7 +39,7 @@ namespace Assets.Player.Script
         private Vector3 _change;
         private AudioSource _audioSource;
         private Animator _animator;
-        private Player _player = new Player("Pacolos");
+        private Player _player; 
 
         private Dictionary<string, AudioClip> _audioClips;
         private bool _invulnerable;
@@ -78,6 +78,7 @@ namespace Assets.Player.Script
 
         private void Start()
         {
+            _player = new Player("Pacolos");
             _playerRigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _audioClips = new Dictionary<string, AudioClip>();
