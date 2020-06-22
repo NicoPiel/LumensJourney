@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using System.Security.Cryptography;
 using Assets.MenuManager.Scripts;
 using Assets.Player.Script;
@@ -64,6 +65,11 @@ namespace Core
         private bool _ingame = false;
         private bool _paused = false;
 
+        private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
+        public static string persistentItemFilePath;
+        private const string PathToDialogueFileInProject = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
+        public static string persistentDialogueFilePath;
+
         #endregion
 
         #region UnityEvent functions
@@ -83,6 +89,20 @@ namespace Core
             onNewLevel = new UnityEvent();
 
             CurrentLevel = 0;
+
+            persistentDialogueFilePath = Application.persistentDataPath + "/dialogues.xml";
+            persistentItemFilePath = Application.persistentDataPath + "/items.xml";
+            
+            // Files
+            if (!File.Exists(persistentDialogueFilePath))
+            {
+                File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
+            }
+            
+            if (!File.Exists(persistentItemFilePath))
+            {
+                File.Copy(PathToItemFileInProject, persistentItemFilePath);
+            }
         }
         
         /// <summary>
@@ -411,6 +431,11 @@ namespace Core
         public static GameManager GetGameManager()
         {
             return _instance;
+        }
+
+        public static string GetItemFilePath()
+        {
+            return Application.persistentDataPath + "/items.xml";
         }
 
         #endregion

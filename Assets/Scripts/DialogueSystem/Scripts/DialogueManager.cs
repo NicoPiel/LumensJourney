@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Assets.MenuManager.Scripts;
@@ -16,8 +17,8 @@ namespace DialogueSystem.Scripts
         private static DialogueManager _instance;
 
         private Dictionary<string, Dictionary<string, bool>> _flags;
-
-        private const string PathToDialogueFile = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
+        
+        private string _persistentPathToFile;
 
         private XElement _dialoguesXml;
         private bool _inDialogue;
@@ -38,8 +39,10 @@ namespace DialogueSystem.Scripts
         {
             _gameManager = GameManager.GetGameManager();
             _saveSystem = GameManager.GetSaveSystem();
+            
+            _persistentPathToFile = GameManager.persistentDialogueFilePath;
 
-            _dialoguesXml = XElement.Load(PathToDialogueFile);
+            _dialoguesXml = XElement.Load(_persistentPathToFile);
 
             _gameManager.onGameLoaded.AddListener(OnGameLoaded);
             _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
