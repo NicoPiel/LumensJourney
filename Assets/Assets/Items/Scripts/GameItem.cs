@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Core;
 using Unity.Burst;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Items.Scripts
@@ -11,16 +12,13 @@ namespace Assets.Items.Scripts
     [BurstCompile]
     public class GameItem
     {
-    
         public Dictionary<string, int> ValueIncreases {get; set;}
         public string ItemName {get; set;}
         
-        public static string persistentPathToItemFile;
-        
+        private static string persistentPathToItemFile;
+
         public GameItem()
         {
-            persistentPathToItemFile = GameManager.persistentItemFilePath;
-            
             ValueIncreases = new Dictionary<string, int>();
             ItemName = null;
         }
@@ -40,6 +38,8 @@ namespace Assets.Items.Scripts
         
         public static GameItem ConstructItem(string itemName)
         {
+            persistentPathToItemFile = GameManager.persistentItemFilePath;
+            
             var item = new GameItem();
             XElement rootNode = XElement.Load(persistentPathToItemFile);
             var items =
@@ -69,6 +69,8 @@ namespace Assets.Items.Scripts
 
         public static List<string> GetItemNames()
         {
+            persistentPathToItemFile = GameManager.persistentItemFilePath;
+            
             XElement rootNode = XElement.Load(persistentPathToItemFile);
             var items =
                 from xElement in rootNode.Elements("item")

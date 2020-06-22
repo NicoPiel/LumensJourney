@@ -41,7 +41,6 @@ namespace DialogueSystem.Scripts
             _saveSystem = GameManager.GetSaveSystem();
             
             _persistentPathToFile = GameManager.persistentDialogueFilePath;
-
             _dialoguesXml = XElement.Load(_persistentPathToFile);
 
             _gameManager.onGameLoaded.AddListener(OnGameLoaded);
@@ -60,22 +59,23 @@ namespace DialogueSystem.Scripts
         private IEnumerator StartDialogue(string npcName, string flag)
         {
             _inDialogue = true;
+            onDialogueStart.Invoke();
 
             Dialogue dialogue = BuildDialogueWithFlag(npcName, flag);
 
-            //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
+            Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
 
             DialogueMenu.SetNamePlate(npcName);
             DialogueMenu.ShowDialogueWindow();
 
-            //Debug.Log($"Show dialogue for {npcName}");
+            Debug.Log($"Show dialogue for {npcName}");
 
             while (dialogue.HasNextLine())
             {
                 var newLine = dialogue.NextLine();
 
                 StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
-                //Debug.Log($"Showing line: {newLine}");
+                Debug.Log($"Showing line: {newLine}");
 
                 yield return new WaitUntil(DialogueMenu.AtEndOfLine);
                 yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
@@ -83,7 +83,8 @@ namespace DialogueSystem.Scripts
             }
 
             DialogueMenu.HideDialogueWindow();
-            //Debug.Log("Hide dialogue window.");
+            onDialogueEnd.Invoke();
+            Debug.Log("Hide dialogue window.");
         }
 
         public IEnumerator StartDialogue(string npcName, int index)
@@ -265,7 +266,6 @@ namespace DialogueSystem.Scripts
             }
 
             _saveSystem.SaveFlags(_flags);
-            _saveSystem.CreateSave();
         }
 
         private void OnGameLoaded()
