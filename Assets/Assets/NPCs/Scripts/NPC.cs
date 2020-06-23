@@ -2,6 +2,7 @@
 using Core;
 using UnityEngine;
 using Utility;
+using Utility.Tooltip;
 
 namespace Assets.NPCs.Scripts
 {

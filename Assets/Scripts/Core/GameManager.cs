@@ -5,6 +5,7 @@ using Assets.MenuManager.Scripts;
 using Assets.Player.Script;
 using Assets.ProceduralGeneration.Core;
 using Assets.SaveSystem;
+using Assets.UI.PauseMenu.Scripts;
 using Assets.UI.PlayerUI.Scripts;
 using DialogueSystem.Scripts;
 using TMPro;
@@ -24,7 +25,7 @@ namespace Core
     {
         // Singleton instance of the game manager
         private static GameManager _instance;
-        
+
         #region Events
 
         // Events
@@ -37,7 +38,6 @@ namespace Core
 
         #region Inspector variables
 
-        
         [SerializeField] private SaveSystem saveSystem;
         [SerializeField] private Generator generator;
         [SerializeField] private GameObject player;
@@ -63,7 +63,7 @@ namespace Core
         private AudioClip _menuSound;
 
         private bool _ingame = false;
-        private bool _paused = false;
+        public bool Paused { get; set; } = false;
 
         private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
         public static string persistentItemFilePath;
@@ -92,19 +92,19 @@ namespace Core
 
             persistentDialogueFilePath = Application.persistentDataPath + "/dialogues.xml";
             persistentItemFilePath = Application.persistentDataPath + "/items.xml";
-            
+
             // Files
             if (!File.Exists(persistentDialogueFilePath))
             {
                 File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
             }
-            
+
             if (!File.Exists(persistentItemFilePath))
             {
                 File.Copy(PathToItemFileInProject, persistentItemFilePath);
             }
         }
-        
+
         /// <summary>
         /// Add event listeners here.
         /// </summary>
@@ -112,11 +112,10 @@ namespace Core
         {
             menuManagerScript = GetComponentInChildren<MenuManagerScript>();
             dialogueManager = GetComponent<DialogueManager>();
-            
-            
+
             onPlayerSpawned.AddListener(OnPlayerSpawned);
         }
-        
+
         /// <summary>
         /// Use this to listen for global input.
         /// </summary>
@@ -125,16 +124,15 @@ namespace Core
             // Pause Menu
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (_ingame)
+                if (!_ingame) return;
+                
+                if (Paused)
                 {
-                    if (_paused)
-                    {
-                        Resume();
-                    }
-                    else
-                    {
-                        Pause();
-                    }
+                    PauseMenu.Resume();
+                }
+                else
+                {
+                    PauseMenu.Pause();
                 }
             }
         }
@@ -156,7 +154,7 @@ namespace Core
         {
             _instance.StartNewGame();
         }
-        
+
         /// <summary>
         /// Uses the GameManager's singleton to load a game from file.
         /// <see cref="LoadGame"/>
@@ -165,7 +163,7 @@ namespace Core
         {
             _instance.LoadGame();
         }
-        
+
         #endregion
 
         #region Game setup
@@ -202,13 +200,10 @@ namespace Core
         private void Setup()
         {
             StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
-            
+
             ModifyGenerator();
             InstantiatePlayer();
-            
-            _canvas = GameObject.Find("PauseMenu");
-            _canvas.gameObject.SetActive(false);
-            
+
             SceneManager.sceneLoaded += (scene, mode) =>
             {
                 if (scene.name == "Dungeon")
@@ -216,10 +211,10 @@ namespace Core
                     player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
                 }
             };
-            
+
             _ingame = true;
         }
-        
+
         /// <summary>
         /// Modifies the generator's properties and adds listeners.
         /// </summary>
@@ -229,15 +224,14 @@ namespace Core
             generator.name = "DungeonGenerator";
             generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
         }
-        
+
         /// <summary>
         /// Instantiates player and related objects, such as some UI elements.
         /// Also finds and sets the <see cref="playerScript"/>
         /// </summary>
         private void InstantiatePlayer()
         {
-            GameObject pauseMenu = Instantiate(Resources.Load<GameObject>("PauseMenu"), new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-            pauseMenu.name = "PauseMenu";
+            _canvas = GetMenuManagerScript().pauseMenu;
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
@@ -304,57 +298,7 @@ namespace Core
 
         #endregion
 
-        #region Pause menu
-
-        /// <summary>
-        /// Pauses the game and opens the pause menu.
-        /// </summary>
-        private void Pause()
-        {
-            Time.timeScale = 0.0f;
-            _canvas = transform.Find("PauseMenu").gameObject;
-            if (_canvas != null)
-            {
-                _canvas.SetActive(true);
-                GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(false);
-            }
-            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = false;
-            _paused = true;
-        }
-
-        /// <summary>
-        /// Resumes the game and closes the pause menu.
-        /// </summary>
-        private void Resume()
-        {
-            Time.timeScale = 1.0f;
-            _canvas = transform.Find("PauseMenu").gameObject;
-            if (_canvas != null)
-            {
-                _canvas.SetActive(false);
-                GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(true);
-            }
-            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
-            _paused = false;
-        }
-
-        /// <summary>
-        /// Resumes the game when a button is clicked and closes the pause menu.
-        /// </summary>
-        public void ResumeOnClick()
-        {
-            Time.timeScale = 1.0f;
-            _canvas = transform.Find("PauseMenu").gameObject;
-            if (_canvas != null)
-            {
-                _canvas.SetActive(false);
-                GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(true);
-            }
-            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
-            _paused = false;
-        }
-
-        #endregion
+        
 
         #region Global sounds
 
@@ -370,7 +314,7 @@ namespace Core
         }
 
         #endregion
-        
+
         #region Utility
 
         /// <summary>
@@ -407,7 +351,7 @@ namespace Core
         {
             return _instance.generator;
         }
-        
+
         public static SaveSystem GetSaveSystem()
         {
             return _instance.saveSystem;
@@ -422,7 +366,7 @@ namespace Core
         {
             return _instance.dialogueManager;
         }
-        
+
         public static Camera GetMainCamera()
         {
             return _instance._camera;
@@ -436,31 +380,6 @@ namespace Core
         public static string GetItemFilePath()
         {
             return Application.persistentDataPath + "/items.xml";
-        }
-
-        #endregion
-
-        #region Quit
-
-        /// <summary>
-        /// Quits the application.
-        /// If in editor, ends play mode.
-        /// </summary>
-        public void Quit()
-        {
-            Time.timeScale = 1.0f;
-            _canvas = transform.Find("PauseMenu").gameObject;
-            
-            if (_canvas != null)
-            {
-                _canvas.SetActive(false);
-                Destroy(GetPlayer());
-            }
-            
-            if (_camera != null) _camera.GetComponent<AudioListener>().enabled = true;
-            _paused = false;
-            
-            SceneManager.LoadScene("MainMenu");
         }
 
         #endregion

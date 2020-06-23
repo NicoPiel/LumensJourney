@@ -5,6 +5,7 @@ using Core;
 using Unity.Burst;
 using UnityEngine;
 using Utility;
+using Utility.Tooltip;
 
 namespace Assets.PickUps.Scripts
 {

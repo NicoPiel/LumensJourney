@@ -6,6 +6,7 @@ namespace Assets.MenuManager.Scripts
     {
         public GameObject bankMenu;
         public GameObject dialogueMenu;
+        public GameObject pauseMenu;
         
         private string _currentMenu;
         // Start is called before the first frame update
@@ -29,6 +30,9 @@ namespace Assets.MenuManager.Scripts
                     _currentMenu = "DialogueMenu";
                     DialogueMenu.ShowDialogueWindow();
                     break;
+                case "PauseMenu":
+                    _currentMenu = "PauseMenu";
+                    break;
                 default:
                     break;
             }
@@ -44,6 +48,9 @@ namespace Assets.MenuManager.Scripts
                     break;
                 case "DialogueMenu":
                     DialogueMenu.HideDialogueWindow();
+                    _currentMenu = null;
+                    break;
+                case "PauseMenu":
                     _currentMenu = null;
                     break;
                 default:

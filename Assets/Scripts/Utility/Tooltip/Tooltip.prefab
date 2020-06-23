@@ -280,3 +280,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040d5c210c5828e44b3639a1c4598520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tooltipText: {fileID: 2152664705349086711}
+  backgroundRectTransform: {fileID: 8236009176332786168}

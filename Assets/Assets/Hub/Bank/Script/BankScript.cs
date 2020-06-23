@@ -3,6 +3,7 @@ using Core;
 using UnityEngine;
 using UnityEngine.Events;
 using Utility;
+using Utility.Tooltip;
 
 namespace Assets.Hub.Bank.Script
 {

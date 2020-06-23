@@ -64,7 +64,7 @@ namespace Utility
         {
             if (other.CompareTag("Player"))
             {
-                Tooltip.ShowTooltip_Static("Press E");
+                Tooltip.Tooltip.ShowTooltip_Static("Press E");
                 _entered = true;
             }
         }
@@ -73,7 +73,7 @@ namespace Utility
         {
             if (other.CompareTag("Player"))
             {
-                Tooltip.HideTooltip_Static();
+                Tooltip.Tooltip.HideTooltip_Static();
                 _entered = false;
             }
         }

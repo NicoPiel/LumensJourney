@@ -82,7 +82,6 @@ namespace Assets.ProceduralGeneration.Core
 
         private void Awake()
         {
-            DontDestroyOnLoad(this);
             onDungeonGenerated = new UnityEvent();
             onDungeonChanged = new UnityEvent();
         }

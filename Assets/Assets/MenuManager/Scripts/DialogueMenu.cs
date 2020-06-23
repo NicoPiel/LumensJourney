@@ -57,7 +57,7 @@ namespace Assets.MenuManager.Scripts
 
             GameManager.GetPlayerScript().FreezeControls();
 
-            _instance._dialogueMenuTransform.LeanMoveY(90, 0.5f)
+            _instance._dialogueMenuTransform.LeanMoveY(120, 0.5f)
                 .setOnComplete(() =>
                 {
                     _instance.shown = true;
@@ -69,7 +69,7 @@ namespace Assets.MenuManager.Scripts
         {
             if (!IsShown()) return;
 
-            _instance._dialogueMenuTransform.LeanMoveY(-180, 0.5f)
+            _instance._dialogueMenuTransform.LeanMoveY(-360, 0.5f)
                 .setOnComplete(() =>
                 {
                     GameManager.GetPlayerScript().UnfreezeControls();
