@@ -2,43 +2,43 @@
 
 <objects>
     <stones>
-        <stone index="1" req="1">
+        <stone index="1" req="0">
             <line>We, the Firstborn, created these stones to bear our legacy.</line>
         </stone>
-        <stone index="2" req="1">
+        <stone index="2" req="0">
             <line>We were doomed by the Apae to be forever separated from the sun.</line>
         </stone>
-        <stone index="3" req="1">
+        <stone index="3" req="0">
             <line>Centuries ago, all races lived under the sun.</line>
         </stone>
-        <stone index="4" req="1">
+        <stone index="4" req="0">
             <line>Now only legends remain.</line>
         </stone>
-        <stone index="5" req="1">
+        <stone index="5" req="0">
             <line>The legends tell of the sun's glory and its warm embrace.</line>
         </stone>
-        <stone index="6" req="1">
+        <stone index="6" req="0">
             <line>We are locked in an eternal battle for light and life.</line>
         </stone>
     </stones>
 
     <diary>
-        <entry index="1" req="1">
+        <entry index="1" req="0">
             <line>It's bright here. Why?</line>
         </entry>
-        <entry index="2" req="1">
+        <entry index="2" req="0">
             <line>There is so much light. Where is it coming from?</line>
         </entry>
-        <entry index="3" req="1">
+        <entry index="3" req="0">
             <line>In the legends the light came from the great "outside", whatever that may be.</line>
         </entry>
-        <entry index="4" req="1">
+        <entry index="4" req="0">
             <line>I found a stone tablet farther down. It had the word "sun" inscribed on it, whatever that may mean.</line>
         </entry>
-        <entry index="5" req="1">
+        <entry index="5" req="0">
             <line>I heard of a gang called " ", I should be wary of them.</line>
         </entry>
-        <entry index="6" req="1">
+        <entry index="6" req="0">
             <line>That gang collects lightshards as protection money.</line>
         </entry>
     </diary>

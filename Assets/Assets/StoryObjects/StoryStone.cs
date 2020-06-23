@@ -22,16 +22,7 @@ namespace Assets.StoryObjects
             {
                 if (!_isRead)
                 {
-                    GameManager.GetDialogueManager().StartNextStoryStone();
-                    _isRead = true;
-                }
-                else
-                {
-                    StartCoroutine(GameManager.GetDialogueManager()
-                        .StartDialogue("Ancient Stone", new List<string>
-                        {
-                            "You have already read this inscription.",
-                        }));
+                    if (GameManager.GetDialogueManager().StartNextStoryStone()) _isRead = true;
                 }
 
                 Tooltip.HideTooltip_Static();

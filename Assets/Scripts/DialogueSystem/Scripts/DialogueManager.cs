@@ -24,6 +24,8 @@ namespace DialogueSystem.Scripts
         private XElement _dialoguesXml;
         private XElement _objectsXml;
         private bool _inDialogue;
+        private const string DefaultStoryStoneText = "There is is something written on this stone, but you can't decipher it.";
+        private Dialogue _currentStoryStone;
 
         private GameManager _gameManager;
         private SaveSystem _saveSystem;
@@ -64,12 +66,18 @@ namespace DialogueSystem.Scripts
             StartCoroutine(StartDialogue(npcName, nextFlag));
         }
 
-        public void StartNextStoryStone()
+        public bool StartNextStoryStone()
         {
             StartCoroutine(StartDialogueStoryStone(_saveSystem.StoryStoneProgression));
             
-            // Get the next stone next time.
-            _saveSystem.StoryStoneProgression++;
+            if (!_currentStoryStone.DialogueLines.Contains(DefaultStoryStoneText))
+            {
+                // Get the next stone next time.
+                _saveSystem.StoryStoneProgression++;
+                return true;
+            }
+
+            return false;
         }
 
         private IEnumerator StartDialogue(string npcName, string flag)
@@ -102,7 +110,7 @@ namespace DialogueSystem.Scripts
             onDialogueEnd.Invoke();
             //Debug.Log("Hide dialogue window.");
         }
-        
+
         public IEnumerator StartDialogue(string npcName, int index)
         {
             throw new NotImplementedException("TODO");
@@ -112,7 +120,7 @@ namespace DialogueSystem.Scripts
         {
             throw new NotImplementedException("TODO");
         }
-        
+
         public IEnumerator StartDialogue(string name, List<string> lines)
         {
             _inDialogue = true;
@@ -143,20 +151,21 @@ namespace DialogueSystem.Scripts
             onDialogueEnd.Invoke();
             //Debug.Log("Hide dialogue window.");
         }
-        
+
         private IEnumerator StartDialogueStoryStone(int storyStoneindex)
         {
             _inDialogue = true;
             onDialogueStart.Invoke();
 
             Dialogue dialogue = BuildDialogueStoryStone(storyStoneindex);
+            _currentStoryStone = dialogue;
 
             //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
 
             DialogueMenu.SetNamePlate("Ancient Stone");
             DialogueMenu.ShowDialogueWindow();
 
-            //Debug.Log($"Show dialogue for {npcName}");
+            //Debug.Log($"Show dialogue for {storyStoneindex}");
 
             while (dialogue.HasNextLine())
             {
@@ -311,16 +320,24 @@ namespace DialogueSystem.Scripts
 
         private Dialogue BuildDialogueStoryStone(int index)
         {
-            XElement stone =
-                (from element in _objectsXml.Elements("stones").Elements("stone")
-                    where int.Parse(element.Attribute("index")?.Value
-                                    ?? throw new ArgumentException("Storystone doesn't have an index"))
-                          == index
-                          && int.Parse(element.Attribute("req")?.Value
-                                       ?? "0")
-                          <= _saveSystem.RunsCompleted
-                    select element).First();
+            XElement root = _objectsXml;
+
+            var stones =
+                from element in root.Elements("stones").Elements()
+                let elementIndex = int.Parse(element.Attribute("index")?.Value ?? throw new ArgumentException("Storystone doesn't have an index"))
+                let elementRequire = int.Parse(element.Attribute("req")?.Value ?? "0")
+                where elementIndex == index && elementRequire <= _saveSystem.RunsCompleted
+                select element;
             
+            Debug.Log($"Runs completed: {_saveSystem.RunsCompleted}");
+
+            XElement stone = null;
+
+            if (stones.Any())
+            {
+                stone = stones.First();
+            }
+
             var lines = new List<string>();
 
             if (stone != null && !stone.IsEmpty)
@@ -331,7 +348,8 @@ namespace DialogueSystem.Scripts
             }
             else
             {
-                lines.Add("There is is something written on this stone, but you can't decipher it.");
+                Debug.Log($"Couldn't find a stone with index {index}");
+                lines.Add(DefaultStoryStoneText);
             }
 
             return new Dialogue(lines, index);

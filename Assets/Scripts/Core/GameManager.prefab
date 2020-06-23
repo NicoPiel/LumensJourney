@@ -337,6 +337,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 845780113571387581}
     m_Modifications:
+    - target: {fileID: 7236828888663524412, guid: 591d74454f27ca748adcb31cb8698c7c,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236828888663524412, guid: 591d74454f27ca748adcb31cb8698c7c,
+        type: 3}
+      propertyPath: m_fontSizeMax
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8371654214052392240, guid: 591d74454f27ca748adcb31cb8698c7c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -462,6 +472,16 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 845780113571387582}
+    - target: {fileID: 8785861642275518297, guid: 591d74454f27ca748adcb31cb8698c7c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8785861642275518297, guid: 591d74454f27ca748adcb31cb8698c7c,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -90.00001
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 591d74454f27ca748adcb31cb8698c7c, type: 3}
 --- !u!224 &6281830894799739679 stripped

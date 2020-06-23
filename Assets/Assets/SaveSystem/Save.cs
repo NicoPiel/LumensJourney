@@ -7,7 +7,6 @@ namespace Assets.SaveSystem
     public class Save
     {
         public int LightShard { get; set; }
-        public int SmithProgress { get; set; }
         public int BankedLightShards { get; set; }
         public Dictionary<string,  Dictionary<string, bool>> Flags { get; set; }
         public int StoryStoneProgression { get; set; }

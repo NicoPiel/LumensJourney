@@ -95,7 +95,6 @@ namespace Assets.SaveSystem
             {
                 LightShard = ShardsOnPlayer,
                 BankedLightShards = BankedShards,
-                SmithProgress = 0,
                 Flags = DialogueFlags,
                 StoryStoneProgression = this.StoryStoneProgression,
                 DiaryProgression = this.DiaryProgression,
