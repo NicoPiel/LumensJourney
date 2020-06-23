@@ -10,5 +10,8 @@ namespace Assets.SaveSystem
         public int SmithProgress { get; set; }
         public int BankedLightShards { get; set; }
         public Dictionary<string,  Dictionary<string, bool>> Flags { get; set; }
+        public int StoryStoneProgression { get; set; }
+        public int DiaryProgression { get; set; }
+        public int RunsCompleted { get; set; }
     }
 }

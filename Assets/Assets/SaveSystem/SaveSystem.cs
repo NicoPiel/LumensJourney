@@ -24,6 +24,9 @@ namespace Assets.SaveSystem
         public int BankedShards { get; set; }
         public int ShardsOnPlayer { get; set; }
         public Dictionary<string, Dictionary<string, bool>> DialogueFlags { get; private set; }
+        public int StoryStoneProgression { get; set; }
+        public int DiaryProgression { get; set; }
+        public int RunsCompleted { get; set; }
 
         #endregion
 
@@ -35,6 +38,9 @@ namespace Assets.SaveSystem
             DialogueFlags = new Dictionary<string, Dictionary<string, bool>>();
             BankedShards = 0;
             ShardsOnPlayer = 0;
+            StoryStoneProgression = 1;
+            DiaryProgression = 1;
+            RunsCompleted = 0;
             
             onBeforeSave = new UnityEvent();
             onGameSaved = new UnityEvent();
@@ -90,7 +96,10 @@ namespace Assets.SaveSystem
                 LightShard = ShardsOnPlayer,
                 BankedLightShards = BankedShards,
                 SmithProgress = 0,
-                Flags = DialogueFlags
+                Flags = DialogueFlags,
+                StoryStoneProgression = this.StoryStoneProgression,
+                DiaryProgression = this.DiaryProgression,
+                RunsCompleted = this.RunsCompleted
             };
 
             return save;
@@ -102,6 +111,9 @@ namespace Assets.SaveSystem
             BankedShards = load.BankedLightShards;
             if (load.Flags?.Count != 0)
                 DialogueFlags = load.Flags;
+            StoryStoneProgression = load.StoryStoneProgression;
+            DiaryProgression = load.DiaryProgression;
+            RunsCompleted = load.RunsCompleted;
         }
 
         private void OnApplicationQuit()

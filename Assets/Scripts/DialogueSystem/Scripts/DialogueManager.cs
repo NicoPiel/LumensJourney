@@ -17,10 +17,12 @@ namespace DialogueSystem.Scripts
         private static DialogueManager _instance;
 
         private Dictionary<string, Dictionary<string, bool>> _flags;
-        
-        private string _persistentPathToFile;
+
+        private string _persistentPathToDialogueFile;
+        private string _persistentPathToObjectsFile;
 
         private XElement _dialoguesXml;
+        private XElement _objectsXml;
         private bool _inDialogue;
 
         private GameManager _gameManager;
@@ -39,11 +41,15 @@ namespace DialogueSystem.Scripts
         {
             _gameManager = GameManager.GetGameManager();
             _saveSystem = GameManager.GetSaveSystem();
-            
-            _persistentPathToFile = GameManager.persistentDialogueFilePath;
-            _dialoguesXml = XElement.Load(_persistentPathToFile);
-            if (_dialoguesXml != null) Debug.Log($"Loaded dialogues.xml from {_persistentPathToFile}");
+
+            _persistentPathToDialogueFile = GameManager.persistentDialogueFilePath;
+            _dialoguesXml = XElement.Load(_persistentPathToDialogueFile);
+            _persistentPathToObjectsFile = GameManager.persistentObjectsFilePath;
+            _objectsXml = XElement.Load(_persistentPathToObjectsFile);
+            if (_dialoguesXml != null) Debug.Log($"Loaded dialogues.xml from {_persistentPathToDialogueFile}");
             else throw new NullReferenceException("diaolgues.xml could not be found.");
+            if (_objectsXml != null) Debug.Log($"Loaded storyobjects.xml from {_persistentPathToObjectsFile}");
+            else throw new NullReferenceException("storyobjects.xml could not be found.");
 
             _gameManager.onGameLoaded.AddListener(OnGameLoaded);
             _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
@@ -56,6 +62,14 @@ namespace DialogueSystem.Scripts
             var nextFlag = NextFlag(npcName);
 
             StartCoroutine(StartDialogue(npcName, nextFlag));
+        }
+
+        public void StartNextStoryStone()
+        {
+            StartCoroutine(StartDialogueStoryStone(_saveSystem.StoryStoneProgression));
+            
+            // Get the next stone next time.
+            _saveSystem.StoryStoneProgression++;
         }
 
         private IEnumerator StartDialogue(string npcName, string flag)
@@ -88,15 +102,82 @@ namespace DialogueSystem.Scripts
             onDialogueEnd.Invoke();
             //Debug.Log("Hide dialogue window.");
         }
-
+        
         public IEnumerator StartDialogue(string npcName, int index)
         {
-            yield return null;
+            throw new NotImplementedException("TODO");
         }
 
         public IEnumerator StartDialogue(string npcName, int index, string flag)
         {
-            yield return null;
+            throw new NotImplementedException("TODO");
+        }
+        
+        public IEnumerator StartDialogue(string name, List<string> lines)
+        {
+            _inDialogue = true;
+            onDialogueStart.Invoke();
+
+            var dialogue = new Dialogue(lines);
+
+            //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
+
+            DialogueMenu.SetNamePlate(name);
+            DialogueMenu.ShowDialogueWindow();
+
+            //Debug.Log($"Show dialogue for {npcName}");
+
+            while (dialogue.HasNextLine())
+            {
+                var newLine = dialogue.NextLine();
+
+                StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
+                //Debug.Log($"Showing line: {newLine}");
+
+                yield return new WaitUntil(DialogueMenu.AtEndOfLine);
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitForEndOfFrame();
+            }
+
+            DialogueMenu.HideDialogueWindow();
+            onDialogueEnd.Invoke();
+            //Debug.Log("Hide dialogue window.");
+        }
+        
+        private IEnumerator StartDialogueStoryStone(int storyStoneindex)
+        {
+            _inDialogue = true;
+            onDialogueStart.Invoke();
+
+            Dialogue dialogue = BuildDialogueStoryStone(storyStoneindex);
+
+            //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
+
+            DialogueMenu.SetNamePlate("Ancient Stone");
+            DialogueMenu.ShowDialogueWindow();
+
+            //Debug.Log($"Show dialogue for {npcName}");
+
+            while (dialogue.HasNextLine())
+            {
+                var newLine = dialogue.NextLine();
+
+                StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
+                //Debug.Log($"Showing line: {newLine}");
+
+                yield return new WaitUntil(DialogueMenu.AtEndOfLine);
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitForEndOfFrame();
+            }
+
+            DialogueMenu.HideDialogueWindow();
+            onDialogueEnd.Invoke();
+            //Debug.Log("Hide dialogue window.");
+        }
+
+        private IEnumerator StartDialogueDiaryEntry(int diaryEntryindex)
+        {
+            throw new NotImplementedException("TODO");
         }
 
         private string NextFlag(string npcName)
@@ -116,12 +197,12 @@ namespace DialogueSystem.Scripts
             if (currentFlag != "default")
             {
                 _flags[npcName][currentFlag] = false;
-                
+
                 if (newFlag != null)
                 {
                     if (_flags[npcName].ContainsKey(newFlag)) _flags[npcName][newFlag] = true;
                     else _flags[npcName]["default"] = true;
-                    
+
                     //Debug.Log($"New flag for {npcName}: {newFlag}");
                 }
                 else _flags[npcName]["default"] = true;
@@ -217,15 +298,48 @@ namespace DialogueSystem.Scripts
                 from element in root.Elements(npcName).Elements()
                 where int.Parse(element.Attribute("index")?.Value
                                 ?? throw new ArgumentException($"Dialogue {element.ToString()} has no index attribute."))
-                    == index && element.Attribute("flag")?.Value == flag
+                      == index
+                      && element.Attribute("flag")?.Value == flag
                 select element;
 
             var lines =
                 (from line in dialogues.Elements("line")
                     select line.Value).ToList();
 
-
             return new Dialogue(lines, index, flag);
+        }
+
+        private Dialogue BuildDialogueStoryStone(int index)
+        {
+            XElement stone =
+                (from element in _objectsXml.Elements("stones").Elements("stone")
+                    where int.Parse(element.Attribute("index")?.Value
+                                    ?? throw new ArgumentException("Storystone doesn't have an index"))
+                          == index
+                          && int.Parse(element.Attribute("req")?.Value
+                                       ?? "0")
+                          <= _saveSystem.RunsCompleted
+                    select element).First();
+            
+            var lines = new List<string>();
+
+            if (stone != null && !stone.IsEmpty)
+            {
+                lines =
+                    (from line in stone.Elements("line")
+                        select line.Value).ToList();
+            }
+            else
+            {
+                lines.Add("There is is something written on this stone, but you can't decipher it.");
+            }
+
+            return new Dialogue(lines, index);
+        }
+
+        private Dialogue BuildDialogueDiaryEntry(int index)
+        {
+            throw new NotImplementedException("TODO");
         }
 
         private Dialogue GetDefaultDialog(string npcName)

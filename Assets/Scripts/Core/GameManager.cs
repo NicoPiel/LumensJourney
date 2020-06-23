@@ -51,6 +51,15 @@ namespace Core
         #region Public variables
 
         public int CurrentLevel { get; set; }
+        public int StoryStoneProgression { get; set; }
+        public int DiaryProgression { get; set; }
+        public int RunsCompleted { get; set; }
+        
+        public static string persistentItemFilePath;
+        public static string persistentDialogueFilePath;
+        public static string persistentObjectsFilePath;
+        
+        
 
         #endregion
 
@@ -59,16 +68,14 @@ namespace Core
         private GameObject _canvas;
         private Camera _camera;
 
-
         private AudioClip _menuSound;
 
         private bool _ingame = false;
         public bool Paused { get; set; } = false;
 
         private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
-        public static string persistentItemFilePath;
         private const string PathToDialogueFileInProject = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
-        public static string persistentDialogueFilePath;
+        private const string PathToObjectsFileInProject = "Assets/Scripts/DialogueSystem/Data/storyobjects.xml";
 
         #endregion
 
@@ -92,6 +99,7 @@ namespace Core
 
             persistentDialogueFilePath = Application.persistentDataPath + "/dialogues.xml";
             persistentItemFilePath = Application.persistentDataPath + "/items.xml";
+            persistentObjectsFilePath = Application.persistentDataPath + "/storyobjects.xml";
 
             // Files
             if (!File.Exists(persistentDialogueFilePath))
@@ -102,6 +110,11 @@ namespace Core
             if (!File.Exists(persistentItemFilePath))
             {
                 File.Copy(PathToItemFileInProject, persistentItemFilePath);
+            }
+            
+            if (!File.Exists(persistentObjectsFilePath))
+            {
+                File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
             }
         }
 
