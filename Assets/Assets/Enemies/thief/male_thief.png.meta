@@ -1,0 +1,1685 @@
+fileFormatVersion: 2
+guid: 801871aa58291e1438bcbf763c941a3c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 426453063406372262
+    second: male_thief_0
+  - first:
+      213: -6212576798825810008
+    second: male_thief_1
+  - first:
+      213: 2782605192809121439
+    second: male_thief_2
+  - first:
+      213: -6972667118234900603
+    second: male_thief_3
+  - first:
+      213: -1053516245836680873
+    second: male_thief_4
+  - first:
+      213: 3219980868844214059
+    second: male_thief_5
+  - first:
+      213: -4795454175374899203
+    second: male_thief_6
+  - first:
+      213: 4743900797073800891
+    second: male_thief_7
+  - first:
+      213: 4621098476533306199
+    second: male_thief_8
+  - first:
+      213: -999041104491189842
+    second: male_thief_9
+  - first:
+      213: 4136708774587447176
+    second: male_thief_10
+  - first:
+      213: -730524112093231504
+    second: male_thief_11
+  - first:
+      213: -51637335986365329
+    second: male_thief_12
+  - first:
+      213: 6723327482062951160
+    second: male_thief_13
+  - first:
+      213: -5896236318182633631
+    second: male_thief_14
+  - first:
+      213: -789332276216773152
+    second: male_thief_15
+  - first:
+      213: 2197032072562643882
+    second: male_thief_16
+  - first:
+      213: -2921582880120489173
+    second: male_thief_17
+  - first:
+      213: 1438580825176134229
+    second: male_thief_18
+  - first:
+      213: -419310848336383591
+    second: male_thief_19
+  - first:
+      213: -392070558378513413
+    second: male_thief_20
+  - first:
+      213: 3028321522399655483
+    second: male_thief_21
+  - first:
+      213: -682524316049887666
+    second: male_thief_22
+  - first:
+      213: 6632897826278402198
+    second: male_thief_23
+  - first:
+      213: -7112078554546808314
+    second: male_thief_24
+  - first:
+      213: -6247144622626577815
+    second: male_thief_25
+  - first:
+      213: -1697591827706932737
+    second: male_thief_26
+  - first:
+      213: 6736605956495197495
+    second: male_thief_27
+  - first:
+      213: 2258134301722451383
+    second: male_thief_28
+  - first:
+      213: 2524801986813057750
+    second: male_thief_29
+  - first:
+      213: -4525037076015472631
+    second: male_thief_30
+  - first:
+      213: -2582763027155025070
+    second: male_thief_31
+  - first:
+      213: -8368479207796373922
+    second: male_thief_32
+  - first:
+      213: -1904567406952381550
+    second: male_thief_33
+  - first:
+      213: 1019076780315555142
+    second: male_thief_34
+  - first:
+      213: 674188493794300302
+    second: male_thief_35
+  - first:
+      213: 7540907105316388749
+    second: male_thief_36
+  - first:
+      213: -1698802599522903483
+    second: male_thief_37
+  - first:
+      213: -3218865434094712778
+    second: male_thief_38
+  - first:
+      213: 2015878124912665136
+    second: male_thief_39
+  - first:
+      213: -5089779812431714208
+    second: male_thief_40
+  - first:
+      213: -6756328046073792199
+    second: male_thief_41
+  - first:
+      213: -1194885520625822729
+    second: male_thief_42
+  - first:
+      213: -7500956942715358806
+    second: male_thief_43
+  - first:
+      213: -6040993356296716850
+    second: male_thief_44
+  - first:
+      213: 3444391633349861549
+    second: male_thief_45
+  - first:
+      213: -2153731086533914153
+    second: male_thief_46
+  - first:
+      213: 1199731645614391991
+    second: male_thief_47
+  - first:
+      213: 1738944067021241330
+    second: male_thief_48
+  - first:
+      213: 2136427042912082743
+    second: male_thief_49
+  - first:
+      213: 7277827272439676071
+    second: male_thief_50
+  - first:
+      213: -8023717582247413883
+    second: male_thief_51
+  - first:
+      213: 361956912909830256
+    second: male_thief_52
+  - first:
+      213: 7248980711786740076
+    second: male_thief_53
+  - first:
+      213: -2116320991764862803
+    second: male_thief_54
+  - first:
+      213: -6657507440738323354
+    second: male_thief_55
+  - first:
+      213: -9132816188208684648
+    second: male_thief_56
+  - first:
+      213: 5950550311782616729
+    second: male_thief_57
+  - first:
+      213: 4095192313661368157
+    second: male_thief_58
+  - first:
+      213: 1401577441576856250
+    second: male_thief_59
+  - first:
+      213: 7438851492579119956
+    second: male_thief_60
+  - first:
+      213: -1361465652438878063
+    second: male_thief_61
+  - first:
+      213: 5161927044092942402
+    second: male_thief_62
+  - first:
+      213: -6822146164993917456
+    second: male_thief_63
+  - first:
+      213: 1143692451129043418
+    second: male_thief_64
+  - first:
+      213: 999928711894398262
+    second: male_thief_65
+  - first:
+      213: -8437929507787307328
+    second: male_thief_66
+  - first:
+      213: -7486416846945547568
+    second: male_thief_67
+  - first:
+      213: 1296220136255361186
+    second: male_thief_68
+  - first:
+      213: 2557194244621989626
+    second: male_thief_69
+  - first:
+      213: -4504563616947922820
+    second: male_thief_70
+  - first:
+      213: 6631896350433566024
+    second: male_thief_71
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 296
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: male_thief_0
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 7736
+        width: 276
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a5c6bd3dc01be500800000000000000
+      internalID: 426453063406372262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_1
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 7736
+        width: 272
+        height: 400
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a7772e215e78c9a0800000000000000
+      internalID: -6212576798825810008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_2
+      rect:
+        serializedVersion: 2
+        x: 1136
+        y: 7736
+        width: 264
+        height: 404
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f968b831eaccd9620800000000000000
+      internalID: 2782605192809121439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_3
+      rect:
+        serializedVersion: 2
+        x: 1640
+        y: 7736
+        width: 272
+        height: 400
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 587ef80e23c1c3f90800000000000000
+      internalID: -6972667118234900603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_4
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 7224
+        width: 280
+        height: 404
+      alignment: 9
+      pivot: {x: 0.52393025, y: 0.061199527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7513dc16e882161f0800000000000000
+      internalID: -1053516245836680873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_5
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 7216
+        width: 284
+        height: 434
+      alignment: 9
+      pivot: {x: 0.5597779, y: 0.06495941}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b27530f3a8bafac20800000000000000
+      internalID: 3219980868844214059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_6
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 7224
+        width: 296
+        height: 380
+      alignment: 9
+      pivot: {x: 0.60621434, y: 0.057943564}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df78d1cb5df137db0800000000000000
+      internalID: -4795454175374899203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_7
+      rect:
+        serializedVersion: 2
+        x: 1636
+        y: 7224
+        width: 272
+        height: 368
+      alignment: 9
+      pivot: {x: 0.5814869, y: 0.05941905}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbeb64304a8b5d140800000000000000
+      internalID: 4743900797073800891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_9
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 6712
+        width: 256
+        height: 404
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea9e9ca9861b222f0800000000000000
+      internalID: -999041104491189842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_10
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 6712
+        width: 248
+        height: 412
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 887b68896ba886930800000000000000
+      internalID: 4136708774587447176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_11
+      rect:
+        serializedVersion: 2
+        x: 1180
+        y: 6692
+        width: 228
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07643d6c038acd5f0800000000000000
+      internalID: -730524112093231504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_12
+      rect:
+        serializedVersion: 2
+        x: 1692
+        y: 6696
+        width: 224
+        height: 384
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6c9263dd1c884ff0800000000000000
+      internalID: -51637335986365329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_13
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 6200
+        width: 228
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f2dbf429be0e4d50800000000000000
+      internalID: 6723327482062951160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_14
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 6194
+        width: 320
+        height: 446
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16f87f6ee4c5c2ea0800000000000000
+      internalID: -5896236318182633631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_15
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 6200
+        width: 332
+        height: 300
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e549521a7abb05f0800000000000000
+      internalID: -789332276216773152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_16
+      rect:
+        serializedVersion: 2
+        x: 1608
+        y: 6156
+        width: 328
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa39c35970d6d7e10800000000000000
+      internalID: 2197032072562643882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_18
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 5688
+        width: 224
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 552df4973add6f310800000000000000
+      internalID: 1438580825176134229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_19
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 5688
+        width: 224
+        height: 400
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 991317a410f4e2af0800000000000000
+      internalID: -419310848336383591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_20
+      rect:
+        serializedVersion: 2
+        x: 1172
+        y: 5688
+        width: 220
+        height: 404
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfba5f887e51f8af0800000000000000
+      internalID: -392070558378513413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_21
+      rect:
+        serializedVersion: 2
+        x: 1684
+        y: 5688
+        width: 224
+        height: 400
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b363d404162c60a20800000000000000
+      internalID: 3028321522399655483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_22
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 5176
+        width: 244
+        height: 412
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4ea74f20cf2786f0800000000000000
+      internalID: -682524316049887666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_23
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 5174
+        width: 224
+        height: 426
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 698e8ce2e69cc0c50800000000000000
+      internalID: 6632897826278402198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_24
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 5176
+        width: 224
+        height: 396
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60a509d6c32dc4d90800000000000000
+      internalID: -7112078554546808314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_25
+      rect:
+        serializedVersion: 2
+        x: 1668
+        y: 5176
+        width: 240
+        height: 380
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 962e9d3801fad49a0800000000000000
+      internalID: -6247144622626577815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_27
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 4664
+        width: 216
+        height: 396
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7354da4ec6b3d7d50800000000000000
+      internalID: 6736605956495197495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_28
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 4664
+        width: 220
+        height: 396
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bd9a4dee21865f10800000000000000
+      internalID: 2258134301722451383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_29
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 4664
+        width: 360
+        height: 376
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6da5130b706e90320800000000000000
+      internalID: 2524801986813057750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_30
+      rect:
+        serializedVersion: 2
+        x: 1684
+        y: 4664
+        width: 364
+        height: 384
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90020a801c6d331c0800000000000000
+      internalID: -4525037076015472631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_31
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 4152
+        width: 244
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 253896bf5be282cd0800000000000000
+      internalID: -2582763027155025070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_32
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 4149
+        width: 240
+        height: 391
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e560e05af703ddb80800000000000000
+      internalID: -8368479207796373922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_33
+      rect:
+        serializedVersion: 2
+        x: 1136
+        y: 4152
+        width: 304
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29301d1c80e9195e0800000000000000
+      internalID: -1904567406952381550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_34
+      rect:
+        serializedVersion: 2
+        x: 1636
+        y: 4116
+        width: 328
+        height: 236
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 645be81beec742e00800000000000000
+      internalID: 1019076780315555142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_36
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 3640
+        width: 328
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8f3a901f0fa6a860800000000000000
+      internalID: 7540907105316388749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_37
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 3640
+        width: 324
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54a5def4904ac68e0800000000000000
+      internalID: -1698802599522903483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_38
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 3640
+        width: 320
+        height: 388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 638400521fa4453d0800000000000000
+      internalID: -3218865434094712778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_39
+      rect:
+        serializedVersion: 2
+        x: 1688
+        y: 3640
+        width: 324
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03266e95976d9fb10800000000000000
+      internalID: 2015878124912665136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_40
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 3136
+        width: 332
+        height: 400
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 068ad073a387d59b0800000000000000
+      internalID: -5089779812431714208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_41
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 3132
+        width: 340
+        height: 416
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93933cb4073bc32a0800000000000000
+      internalID: -6756328046073792199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_42
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 3136
+        width: 364
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f317d323f9ea6fe0800000000000000
+      internalID: -1194885520625822729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_43
+      rect:
+        serializedVersion: 2
+        x: 1672
+        y: 3136
+        width: 332
+        height: 376
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa173f1076f37e790800000000000000
+      internalID: -7500956942715358806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_45
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 2616
+        width: 312
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da0652df0ffeccf20800000000000000
+      internalID: 3444391633349861549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_46
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 2616
+        width: 296
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d11e6ddcf86c12e0800000000000000
+      internalID: -2153731086533914153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_47
+      rect:
+        serializedVersion: 2
+        x: 1096
+        y: 2616
+        width: 284
+        height: 380
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b204a2439d46a010800000000000000
+      internalID: 1199731645614391991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_48
+      rect:
+        serializedVersion: 2
+        x: 1616
+        y: 2616
+        width: 276
+        height: 384
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fbf2176a68f12810800000000000000
+      internalID: 1738944067021241330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_49
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 2104
+        width: 212
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73b1055831d16ad10800000000000000
+      internalID: 2136427042912082743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_50
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 2101
+        width: 300
+        height: 423
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7acba6e3859000560800000000000000
+      internalID: 7277827272439676071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_51
+      rect:
+        serializedVersion: 2
+        x: 1068
+        y: 2104
+        width: 328
+        height: 312
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5873614de5706a090800000000000000
+      internalID: -8023717582247413883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_52
+      rect:
+        serializedVersion: 2
+        x: 1544
+        y: 2092
+        width: 348
+        height: 212
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 078ccf105ede50500800000000000000
+      internalID: 361956912909830256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_54
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1592
+        width: 328
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da8272f454151a2e0800000000000000
+      internalID: -2116320991764862803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_55
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 1592
+        width: 324
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 664b5417148cb93a0800000000000000
+      internalID: -6657507440738323354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_56
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 1592
+        width: 320
+        height: 388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89162e68018b14180800000000000000
+      internalID: -9132816188208684648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_57
+      rect:
+        serializedVersion: 2
+        x: 1572
+        y: 1592
+        width: 324
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99e84ef2bf9949250800000000000000
+      internalID: 5950550311782616729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_58
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 1088
+        width: 332
+        height: 400
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5722b646bb05d830800000000000000
+      internalID: 4095192313661368157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_59
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 1081
+        width: 340
+        height: 419
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abaa36ad147637310800000000000000
+      internalID: 1401577441576856250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_60
+      rect:
+        serializedVersion: 2
+        x: 1044
+        y: 1088
+        width: 364
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4531010150c1c3760800000000000000
+      internalID: 7438851492579119956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_61
+      rect:
+        serializedVersion: 2
+        x: 1580
+        y: 1088
+        width: 332
+        height: 376
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1983c74d33a1b1de0800000000000000
+      internalID: -1361465652438878063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_63
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 568
+        width: 312
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fd7ebd453ed251a0800000000000000
+      internalID: -6822146164993917456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_64
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 568
+        width: 300
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad9a7d989363fdf00800000000000000
+      internalID: 1143692451129043418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_65
+      rect:
+        serializedVersion: 2
+        x: 1180
+        y: 568
+        width: 284
+        height: 380
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 635fd299dd570ed00800000000000000
+      internalID: 999928711894398262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_66
+      rect:
+        serializedVersion: 2
+        x: 1692
+        y: 568
+        width: 276
+        height: 384
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c60d8891d376ea80800000000000000
+      internalID: -8437929507787307328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_67
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 56
+        width: 208
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0da8f4dda87ea1890800000000000000
+      internalID: -7486416846945547568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_68
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 104
+        width: 300
+        height: 372
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a09534a8591df110800000000000000
+      internalID: 1296220136255361186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_69
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 56
+        width: 324
+        height: 312
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af6fd5ced9afc7320800000000000000
+      internalID: 2557194244621989626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_70
+      rect:
+        serializedVersion: 2
+        x: 1692
+        y: 44
+        width: 348
+        height: 212
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c789bafa1439c71c0800000000000000
+      internalID: -4504563616947922820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_thief_71
+      rect:
+        serializedVersion: 2
+        x: 668
+        y: 56
+        width: 204
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84d5dcae79a390c50800000000000000
+      internalID: 6631896350433566024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
