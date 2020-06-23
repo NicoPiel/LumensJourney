@@ -93,12 +93,12 @@ namespace Assets.SaveSystem
         {
             var save = new Save
             {
-                LightShard = ShardsOnPlayer,
-                BankedLightShards = BankedShards,
-                Flags = DialogueFlags,
-                StoryStoneProgression = this.StoryStoneProgression,
-                DiaryProgression = this.DiaryProgression,
-                RunsCompleted = this.RunsCompleted
+                LightShardSave = ShardsOnPlayer,
+                BankedLightShardsSave = BankedShards,
+                FlagsSave = DialogueFlags,
+                StoryStoneProgressionSave = this.StoryStoneProgression,
+                DiaryProgressionSave = this.DiaryProgression,
+                RunsCompletedSave = this.RunsCompleted
             };
 
             return save;
@@ -106,13 +106,13 @@ namespace Assets.SaveSystem
 
         private void LoadSaveGameObject(Save load)
         {
-            ShardsOnPlayer = load.LightShard;
-            BankedShards = load.BankedLightShards;
-            if (load.Flags?.Count != 0)
-                DialogueFlags = load.Flags;
-            StoryStoneProgression = load.StoryStoneProgression;
-            DiaryProgression = load.DiaryProgression;
-            RunsCompleted = load.RunsCompleted;
+            ShardsOnPlayer = load.LightShardSave;
+            BankedShards = load.BankedLightShardsSave;
+            if (load.FlagsSave?.Count != 0)
+                DialogueFlags = load.FlagsSave;
+            StoryStoneProgression = load.StoryStoneProgressionSave;
+            DiaryProgression = load.DiaryProgressionSave;
+            RunsCompleted = load.RunsCompletedSave;
         }
 
         private void OnApplicationQuit()

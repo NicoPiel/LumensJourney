@@ -306,6 +306,11 @@ namespace Core
             _camera = GetPlayer().transform.Find("MainCamera").GetComponent<Camera>();
         }
 
+        private void OnRunCompleted()
+        {
+            saveSystem.RunsCompleted++;
+        }
+
         #endregion
 
         #region Global sounds

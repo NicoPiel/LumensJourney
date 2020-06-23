@@ -17,10 +17,13 @@ namespace Assets.Items.Scripts
         
         private static string persistentPathToItemFile;
 
+        public Sprite ItemSprite { get; set; }
+
         public GameItem()
         {
             ValueIncreases = new Dictionary<string, int>();
             ItemName = null;
+            ItemSprite = null;
         }
 
         public override bool Equals(object obj)
@@ -39,6 +42,10 @@ namespace Assets.Items.Scripts
         public static GameItem ConstructItem(string itemName)
         {
             persistentPathToItemFile = GameManager.persistentItemFilePath;
+            if (!File.Exists(persistentPathToItemFile))
+            {
+                Debug.Log("File not found:" + persistentPathToItemFile);
+            }
             
             var item = new GameItem();
             XElement rootNode = XElement.Load(persistentPathToItemFile);
@@ -63,6 +70,8 @@ namespace Assets.Items.Scripts
                     item.ValueIncreases.Add(attribute, val);
                 }
             }
+            Debug.Log("Itemgeneration:"+ itemName);
+            item.ItemSprite = Resources.Load<Sprite>(itemName);
             
             return item;
         }
@@ -74,8 +83,8 @@ namespace Assets.Items.Scripts
             XElement rootNode = XElement.Load(persistentPathToItemFile);
             var items =
                 from xElement in rootNode.Elements("item")
-                select xElement.Attribute("name")?.ToString();
-
+                select xElement.Attribute("name")?.Value.ToString();
+            
             return items.ToList();
         }
 

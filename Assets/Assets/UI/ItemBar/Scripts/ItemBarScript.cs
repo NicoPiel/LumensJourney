@@ -9,6 +9,7 @@ namespace Assets.UI.ItemBar.Scripts
     public class ItemBarScript : MonoBehaviour
     {
         private static ItemBarScript _instance;
+        [SerializeField] private GameObject ItemIcon;
 
         public void Awake()
         {
@@ -29,16 +30,9 @@ namespace Assets.UI.ItemBar.Scripts
             float y = -32f;
             foreach(var item in inv.Items)
             {
-                var obj = UnityEngine.Resources.Load<GameObject>("ItemIcon");
-                if (obj == null)
-                {
-                    Debug.Log("Object could not be loaded");
-                }
-            
-                var newItem = Instantiate(obj);
-                newItem.GetComponentInChildren<RawImage>().texture = UnityEngine.Resources.Load<Texture>("Tiles/" + item.ItemName);
-                newItem.GetComponent<RectTransform>().SetParent(transform);
-                newItem.GetComponent<RectTransform>().anchoredPosition =  new Vector3(x, y, 0);
+                var itemIcon = Instantiate(ItemIcon, transform);
+                itemIcon.transform.Find("ItemBackground").transform.Find("ItemSprite").GetComponent<Image>().sprite = item.ItemSprite;
+                itemIcon.GetComponent<RectTransform>().anchoredPosition =  new Vector3(x, y, 0);
                 x += 47f;
             }
         }

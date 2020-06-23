@@ -15,12 +15,19 @@ namespace Assets.PickUps.Scripts
         private GameItem _item;
         private bool _entered;
         private PlayerScript _player;
-    
+        
+        [SerializeField]
+        private SpriteRenderer itemSprite;
+
+        [SerializeField] private Sprite test;
+
         public void SetPickUpItem(string itemName)
         {
+            Debug.Log("Incomming: "+itemName);
             _item = GameItem.ConstructItem(itemName);
-            SpriteRenderer re = transform.Find("Item")?.GetComponent<SpriteRenderer>();
-            re.sprite = UnityEngine.Resources.Load<Sprite>("Tiles/" + _item.ItemName);
+            Debug.Log("Generated Item:"+_item.ItemName);
+            itemSprite.sprite = _item.ItemSprite;
+            
         }
 
         public void Start()

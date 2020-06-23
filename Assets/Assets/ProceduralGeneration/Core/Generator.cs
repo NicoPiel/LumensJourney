@@ -281,8 +281,7 @@ namespace Assets.ProceduralGeneration.Core
                     MoveSpawner(probability);
                     //Debug.Log("Generation didn't work, recalibrating.");
                 }
-
-                // Places a teleporter object, which upon activation generates a new dungeon.
+                
 
 
                 bool IsTouchingAnotherRoom(Rect other)
@@ -393,21 +392,7 @@ namespace Assets.ProceduralGeneration.Core
 
             #endregion
         }
-
-        private void GenerateRoomsJob()
-        {
-            var generateRoomsTask = new GenerateRoomsTask();
-        }
-
-        private struct GenerateRoomsTask : IJob
-        {
-            public int numberOfRooms;
-
-            public void Execute()
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
 
         #endregion
 
