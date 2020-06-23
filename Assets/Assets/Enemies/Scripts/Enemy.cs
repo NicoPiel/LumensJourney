@@ -49,6 +49,7 @@ namespace Assets.Enemies.Scripts
         private CinemachineImpulseSource _impulseSource;
         private Animator _animator;
         private AudioSource _audioSource;
+        private SpriteRenderer _spriteRenderer;
 
         private bool _invulnerable;
         private float _invulnerabilityTime;
@@ -86,6 +87,7 @@ namespace Assets.Enemies.Scripts
             _particleSystem = GetComponent<ParticleSystem>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
             _audioSource = GetComponent<AudioSource>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
 
             lightShardPrefab = Resources.Load<GameObject>("LightShard");
             _invulnerabilityTime = GameManager.GetPlayerScript().GetTimeBetweenAttacks() - .5f;
@@ -217,8 +219,11 @@ namespace Assets.Enemies.Scripts
         private IEnumerator Invulnerable ()
         {
             _invulnerable = true;
+            _spriteRenderer.color = Color.red;
             yield return new WaitForSeconds(_invulnerabilityTime);
             _invulnerable = false;
+            yield return new WaitForSeconds(_invulnerabilityTime*4);
+            _spriteRenderer.color = Color.white;
         }
 
         public Rigidbody2D GetRigidbody ()
