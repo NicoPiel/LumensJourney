@@ -90,7 +90,7 @@ namespace Assets.Enemies.Scripts
             _spriteRenderer = GetComponent<SpriteRenderer>();
 
             lightShardPrefab = Resources.Load<GameObject>("LightShard");
-            _invulnerabilityTime = GameManager.GetPlayerScript().GetTimeBetweenAttacks() - .5f;
+            _invulnerabilityTime = GameManager.GetPlayerScript().GetTimeBetweenAttacks();
         }
 
         #endregion
@@ -220,10 +220,11 @@ namespace Assets.Enemies.Scripts
         {
             _invulnerable = true;
             _spriteRenderer.color = Color.red;
-            yield return new WaitForSeconds(_invulnerabilityTime);
-            _invulnerable = false;
-            yield return new WaitForSeconds(_invulnerabilityTime*4);
+            yield return new WaitForSeconds(_invulnerabilityTime/2);
             _spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(_invulnerabilityTime/2);
+            _invulnerable = false;
+            
         }
 
         public Rigidbody2D GetRigidbody ()
