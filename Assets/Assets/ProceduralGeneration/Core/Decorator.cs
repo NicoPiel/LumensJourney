@@ -4,7 +4,6 @@ using Assets.Items.Scripts;
 using Assets.PickUps.Scripts;
 using Core;
 using JetBrains.Annotations;
-using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,18 +16,29 @@ namespace Assets.ProceduralGeneration.Core
     {
         #region Public variables
 
-        public float enemySpawnRateInPercent;
-        public float roomPerEnemy;
-        public List<GameObject> enemies;
-        
-        public float itemSpawnRateInPercent;
-        public int maxItemsPerRoom;
-        public List<string> items;
+        [Header("Enemy settings")]
+        [SerializeField] private float enemySpawnRateInPercent;
+        [SerializeField] private float roomPerEnemy;
+        [SerializeField] private List<GameObject> enemies;
 
-        public float minimumDistanceToPlayer;
+        [Space]
+        [Header("Item settings")]
+        [SerializeField] private float itemSpawnRateInPercent;
+        [SerializeField] private int maxItemsPerRoom;
+        [Utility.ReadOnly] public int globalItemCount;
+        [SerializeField] private List<string> items;
         
-        [ReadOnly]
-        public int globalItemCount;
+
+        [Space]
+        [Header("Storystone settings")]
+        [SerializeField] private GameObject storyStone;
+        [SerializeField] private int storyStonesPerLevel;
+        [Utility.ReadOnly] public int storyStonesInLevel;
+        [SerializeField] private float storyStonesProbability;
+
+        [Space]
+        [Header("Other settings")]
+        [SerializeField] private float minimumDistanceToPlayer;
 
         #endregion
 
@@ -67,27 +77,28 @@ namespace Assets.ProceduralGeneration.Core
             _levelItemCount = 0;
 
             var spawnedRooms = _generator.GetSpawnedRooms();
-            
+
             if (spawnedRooms == null) return;
-            
+
             foreach (Rect room in spawnedRooms)
             {
                 SpawnEnemies(room, enemyDecorator.transform);
                 SpawnItems(room, itemDecorator.transform);
+                SpawnStoryStones(room);
             }
-            
+
             Debug.Log("Dungeon decorated.");
         }
 
         private void SpawnEnemies(Rect room, [NotNull] Transform enemyDecorator)
         {
             if (enemyDecorator == null) throw new ArgumentNullException(nameof(enemyDecorator));
-            
+
             Debug.Log($"Spawning enemies in {room.ToString()}");
             SpawnRandomly(GetRandomEnemy(), room, enemyDecorator);
-                
+
             var numberOfEnemies = room.width * room.height / roomPerEnemy;
-                
+
             for (var i = 1; i < numberOfEnemies; i++)
             {
                 if (GetProbability(enemySpawnRateInPercent))
@@ -105,11 +116,27 @@ namespace Assets.ProceduralGeneration.Core
                 {
                     GameObject pickUp = SpawnRandomlyAwayFromPlayer("PickUp", room, itemDecorator);
                     pickUp.GetComponent<PickUpScript>().SetPickUpItem(GetRandomItemName());
-                    
+
                     _levelItemCount++;
                     globalItemCount++;
                 }
             }
+        }
+
+        private void SpawnStoryStones(Rect room)
+        {
+            var count = 0;
+            
+            for (var i = storyStonesInLevel; i < storyStonesPerLevel; i++)
+            {
+                if (GetProbability(storyStonesProbability))
+                {
+                    SpawnRandomlyAwayFromPlayer(storyStone, room);
+                    count++;
+                }
+            }
+
+            storyStonesInLevel += count;
         }
 
         #endregion
@@ -123,50 +150,50 @@ namespace Assets.ProceduralGeneration.Core
         /// <param name="position">Position to spawn at</param>
         /// <param name="parent">Parent object</param>
         /// <returns></returns>
-        private GameObject Spawn (string resourcesPath, Vector2 position, Transform parent = null)
+        private GameObject Spawn(string resourcesPath, Vector2 position, Transform parent = null)
         {
-            return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath), 
+            return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath),
                 new Vector3(position.x, position.y, 0),
                 Quaternion.identity,
                 parent);
         }
-        
-        private GameObject Spawn (GameObject prefab, Vector2 position, Transform parent)
+
+        private GameObject Spawn(GameObject prefab, Vector2 position, Transform parent = null)
         {
-            return Instantiate(prefab, 
+            return Instantiate(prefab,
                 new Vector3(position.x, position.y, 0),
                 Quaternion.identity,
                 parent);
         }
-        
-        private GameObject SpawnRandomly (string resourcesPath, Rect room, Transform parent)
+
+        private GameObject SpawnRandomly(string resourcesPath, Rect room, Transform parent = null)
         {
             return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath),
-                GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                GetRandomPosition((int) room.x + 1, (int) room.xMax, (int) room.y + 1, (int) room.yMax),
                 Quaternion.identity,
                 parent);
         }
-        
-        private GameObject SpawnRandomly (GameObject prefab, Rect room, Transform parent)
+
+        private GameObject SpawnRandomly(GameObject prefab, Rect room, Transform parent = null)
         {
             return Instantiate(prefab,
-                GetRandomPosition((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                GetRandomPosition((int) room.x + 1, (int) room.xMax, (int) room.y + 1, (int) room.yMax),
                 Quaternion.identity,
                 parent);
         }
-        
-        private GameObject SpawnRandomlyAwayFromPlayer (string resourcesPath, Rect room, Transform parent)
+
+        private GameObject SpawnRandomlyAwayFromPlayer(string resourcesPath, Rect room, Transform parent = null)
         {
             return (GameObject) Instantiate(UnityEngine.Resources.Load(resourcesPath),
-                GetRandomPositionAwayFromPlayer((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                GetRandomPositionAwayFromPlayer((int) room.x + 1, (int) room.xMax, (int) room.y + 1, (int) room.yMax),
                 Quaternion.identity,
                 parent);
         }
-        
-        private GameObject SpawnRandomlyAwayFromPlayer (GameObject prefab, Rect room, Transform parent)
+
+        private GameObject SpawnRandomlyAwayFromPlayer(GameObject prefab, Rect room, Transform parent = null)
         {
             return Instantiate(prefab,
-                GetRandomPositionAwayFromPlayer((int) room.x+1, (int) room.xMax, (int) room.y+1, (int) room.yMax),
+                GetRandomPositionAwayFromPlayer((int) room.x + 1, (int) room.xMax, (int) room.y + 1, (int) room.yMax),
                 Quaternion.identity,
                 parent);
         }
@@ -175,17 +202,17 @@ namespace Assets.ProceduralGeneration.Core
         {
             return enemies?[Random.Range(0, enemies.Count)];
         }
-        
+
         private string GetRandomItemName()
         {
             return items?[Random.Range(0, items.Count)];
         }
 
-        private Vector2 GetRandomPosition(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary) 
+        private Vector2 GetRandomPosition(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary)
         {
             return new Vector2(Random.Range(leftXBoundary, rightXBoundary), Random.Range(leftYBoundary, rightYBoundary));
         }
-        
+
         private Vector2 GetRandomPositionAwayFromPlayer(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary)
         {
             Vector2 playerPosition = GameManager.GetPlayer().transform.position;

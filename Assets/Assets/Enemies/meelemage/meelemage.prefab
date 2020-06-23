@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 6034098033884028566}
   - component: {fileID: 251269662927953133}
   m_Layer: 12
-  m_Name: Thief
+  m_Name: meelemage
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   detectionRadius: 7
-  innerRadius: 0.8
+  innerRadius: 0.75
   speed: 2
   maxShardsOnDrop: 4
   health: 3
@@ -5148,9 +5148,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.05, y: 0}
+  m_Offset: {x: -0.05, y: 0}
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Radius: 0.75
 --- !u!114 &8808417019805977548
 MonoBehaviour:
   m_ObjectHideFlags: 0

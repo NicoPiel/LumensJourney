@@ -452,6 +452,11 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 845780113571387582}
+    - target: {fileID: 8762307177869049197, guid: 591d74454f27ca748adcb31cb8698c7c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 8762307179099810296, guid: 591d74454f27ca748adcb31cb8698c7c,
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -475,7 +480,7 @@ PrefabInstance:
     - target: {fileID: 1985767065388695032, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
         type: 3}
       propertyPath: m_Name
-      value: DungeonGeneratorV2
+      value: DungeonGenerator
       objectReference: {fileID: 0}
     - target: {fileID: 1985767065388695034, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
         type: 3}
@@ -532,59 +537,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: enemies.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: spawnRateInPercent
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: enemies.Array.data[1]
-      value: 
-      objectReference: {fileID: 5111081116285643832, guid: 163d601ff0abf4449ab037bfcbc4fc1a,
-        type: 3}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: roomPerEnemy
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: enemySpawnRateInPercent
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: itemSpawnRateInPercent
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: maxItemsPerRoom
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: minimumDistanceToPlayer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: enemies.Array.data[2]
-      value: 
-      objectReference: {fileID: 5111081116285643832, guid: 30f369363e9bb3348bd3b5cb0991c007,
-        type: 3}
-    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
-        type: 3}
-      propertyPath: enemies.Array.data[3]
-      value: 
-      objectReference: {fileID: 1026012428613985740, guid: 4c089f34715f5ea4e8f211b9810a280a,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f61b24f5298cc54daae4ebef9fd6f62, type: 3}
 --- !u!4 &6029391063509343128 stripped

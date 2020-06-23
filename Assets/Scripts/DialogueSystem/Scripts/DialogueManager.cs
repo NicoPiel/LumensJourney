@@ -42,6 +42,8 @@ namespace DialogueSystem.Scripts
             
             _persistentPathToFile = GameManager.persistentDialogueFilePath;
             _dialoguesXml = XElement.Load(_persistentPathToFile);
+            if (_dialoguesXml != null) Debug.Log($"Loaded dialogues.xml from {_persistentPathToFile}");
+            else throw new NullReferenceException("diaolgues.xml could not be found.");
 
             _gameManager.onGameLoaded.AddListener(OnGameLoaded);
             _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
@@ -63,19 +65,19 @@ namespace DialogueSystem.Scripts
 
             Dialogue dialogue = BuildDialogueWithFlag(npcName, flag);
 
-            Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
+            //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
 
             DialogueMenu.SetNamePlate(npcName);
             DialogueMenu.ShowDialogueWindow();
 
-            Debug.Log($"Show dialogue for {npcName}");
+            //Debug.Log($"Show dialogue for {npcName}");
 
             while (dialogue.HasNextLine())
             {
                 var newLine = dialogue.NextLine();
 
                 StartCoroutine(DialogueMenu.PrintLineToBox(newLine));
-                Debug.Log($"Showing line: {newLine}");
+                //Debug.Log($"Showing line: {newLine}");
 
                 yield return new WaitUntil(DialogueMenu.AtEndOfLine);
                 yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
@@ -84,7 +86,7 @@ namespace DialogueSystem.Scripts
 
             DialogueMenu.HideDialogueWindow();
             onDialogueEnd.Invoke();
-            Debug.Log("Hide dialogue window.");
+            //Debug.Log("Hide dialogue window.");
         }
 
         public IEnumerator StartDialogue(string npcName, int index)
@@ -109,7 +111,7 @@ namespace DialogueSystem.Scripts
                     where dialogue.Attribute("flag")?.Value == currentFlag
                     select dialogue.Attribute("newFlag")?.Value).First();
 
-            //Debug.Log($"Current flag for {npcName}: {currentFlag}");
+            Debug.Log($"Current flag for {npcName}: {currentFlag}");
 
             if (currentFlag != "default")
             {

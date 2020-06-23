@@ -131,7 +131,7 @@ MonoBehaviour:
       m_Calls: []
   detectionRadius: 7
   innerRadius: 0.6
-  speed: 4
+  speed: 3
   maxShardsOnDrop: 7
   health: 3
   damage: 1

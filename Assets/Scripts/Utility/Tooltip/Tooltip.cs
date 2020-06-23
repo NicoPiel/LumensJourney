@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using Unity.Burst;
 using UnityEngine;
 
@@ -33,12 +34,14 @@ namespace Utility.Tooltip
 
         public static void ShowTooltip_Static(string tooltipString)
         {
-            _instance.ShowTooltip(tooltipString);
+            if (_instance != null) _instance.ShowTooltip(tooltipString);
+            else throw new NullReferenceException("Tooltip instance was null.");
         }
 
         public static void HideTooltip_Static()
         {
-            _instance.HideTooltip();
+            if (_instance != null) _instance.HideTooltip();
+            else throw new NullReferenceException("Tooltip instance was null.");
         }
     }
 }

@@ -80,7 +80,7 @@ namespace Assets.SaveSystem
 
             Debug.Log($"Saved to {_saveFilePath}");
             
-            onBeforeSave.Invoke();
+            onGameSaved.Invoke();
         }
 
         private Save CreateSaveGameObject()

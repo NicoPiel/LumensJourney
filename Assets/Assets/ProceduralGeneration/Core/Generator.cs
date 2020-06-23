@@ -48,7 +48,6 @@ namespace Assets.ProceduralGeneration.Core
 
         [SerializeField] private GameObject standardFloorTile;
         [SerializeField] private List<GameObject> otherFloorTiles;
-        [SerializeField] private GameObject door;
 
         [Space]
 
@@ -57,8 +56,6 @@ namespace Assets.ProceduralGeneration.Core
         private GameObject wallTile;
 
         [SerializeField] private GameObject wallTileTopDown;
-
-        [Space] [Header("Doors")] private List<int[]> _leftDoors;
 
         #endregion
 

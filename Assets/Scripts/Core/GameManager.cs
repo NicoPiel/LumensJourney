@@ -273,9 +273,6 @@ namespace Core
         /// </summary>
         private void OnDungeonGenerated()
         {
-            _canvas = transform.Find("PauseMenu").gameObject;
-            _canvas.gameObject.SetActive(false);
-
             CurrentLevel += 1;
 
             var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
@@ -297,8 +294,6 @@ namespace Core
         }
 
         #endregion
-
-        
 
         #region Global sounds
 
