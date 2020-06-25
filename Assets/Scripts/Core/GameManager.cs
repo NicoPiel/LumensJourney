@@ -254,7 +254,7 @@ namespace Core
         /// </summary>
         private void Setup()
         {
-            StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
+            SceneManager.LoadScene("Hub");
 
             ModifyGenerator();
             InstantiatePlayer();
@@ -443,7 +443,8 @@ namespace Core
 
                 if (SceneManager.GetActiveScene().name != "Dungeon")
                 {
-                    _instance.StartCoroutine(Methods.LoadYourSceneAsync("Dungeon"));
+                    SceneManager.LoadScene("Dungeon");
+                    
                     SceneManager.sceneLoaded += (scene, mode) =>
                     {
                         if (scene.name == "Dungeon")
@@ -467,7 +468,7 @@ namespace Core
         public static void StartLastLevel()
         {
             _instance.StartCoroutine(FadeTextInAndOut("The End"));
-            _instance.StartCoroutine(Methods.LoadYourSceneAsync("LastLevel"));
+            SceneManager.LoadScene("LastLevel");
             GetPlayer().transform.position = new Vector2(8, 1);
         }
 

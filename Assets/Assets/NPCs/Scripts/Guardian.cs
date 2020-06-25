@@ -45,8 +45,8 @@ namespace Assets.NPCs.Scripts
             {
                 GameManager.cameFromGuardian = true;
                 GameManager.GetSaveSystem().RunsCompleted++;
-                
-                StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
+
+                SceneManager.LoadScene("Hub");
                 GameManager.GetPlayerScript().transform.position = new Vector3(-2, -2, 0);
             }
         }
