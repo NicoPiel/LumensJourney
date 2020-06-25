@@ -71,6 +71,7 @@ namespace Core
 
         private bool _ingame = false;
         public bool Paused { get; set; } = false;
+        public static bool cameFromGuardian;
 
         private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
         private const string PathToDialogueFileInProject = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
@@ -150,6 +151,8 @@ namespace Core
             dialogueManager = GetComponent<DialogueManager>();
 
             onPlayerSpawned.AddListener(OnPlayerSpawned);
+
+            cameFromGuardian = false;
         }
 
         /// <summary>
@@ -246,6 +249,22 @@ namespace Core
                 {
                     player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
                 }
+
+                if (scene.name == "Hub")
+                {
+                    CurrentLevel = 0;
+                    
+                    if (cameFromGuardian)
+                    {
+                        var runsCompleted = GameManager.GetSaveSystem().RunsCompleted;
+                        
+                        StartCoroutine(runsCompleted == 1
+                            ? FadeTextInAndOut("You just met The Guardian for the first time.")
+                            : FadeTextInAndOut($"You have met the Guardian {runsCompleted} times."));
+
+                        cameFromGuardian = false;
+                    }
+                }
             };
 
             _ingame = true;
@@ -311,7 +330,7 @@ namespace Core
         {
             CurrentLevel += 1;
 
-            var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
+            var text = PlayerUiScript.GetPlayerUiScript().GetLevelTooltip().GetComponent<TMP_Text>();
             if (text != null)
             {
                 text.text = $"Level {CurrentLevel}";
@@ -359,9 +378,11 @@ namespace Core
         /// <returns></returns>
         private IEnumerator FadeLevelTextInAndOut()
         {
-            var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
+            var text = PlayerUiScript.GetPlayerUiScript().GetLevelTooltip().GetComponent<TMP_Text>();
 
             if (text == null) yield break;
+            
+            text.gameObject.SetActive(true);
 
             StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
             yield return new WaitForSeconds(3f);
@@ -369,6 +390,28 @@ namespace Core
             yield return new WaitForSeconds(2f);
 
             text.gameObject.SetActive(false);
+        }
+        
+        /// <summary>
+        /// Uses an alpha effect to fade text (Level 1, 2, 3, etc) in and out.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerator FadeTextInAndOut(string text, float fadeInTime = 3f, float fadeOutTime = 2f)
+        {
+            var textObject = PlayerUiScript.GetPlayerUiScript().GetLevelTooltip().GetComponent<TMP_Text>();
+
+            if (textObject == null) yield break;
+
+            textObject.text = text;
+            
+            textObject.gameObject.SetActive(true);
+
+            _instance.StartCoroutine(TextFade.FadeTextToFullAlpha(fadeInTime, textObject));
+            yield return new WaitForSeconds(fadeInTime);
+            _instance.StartCoroutine(TextFade.FadeTextToZeroAlpha(fadeOutTime, textObject));
+            yield return new WaitForSeconds(fadeOutTime);
+
+            textObject.gameObject.SetActive(false);
         }
 
         public static void GenerateNextLevel()
@@ -401,6 +444,7 @@ namespace Core
 
         public static void StartLastLevel()
         {
+            _instance.StartCoroutine(FadeTextInAndOut("The End"));
             _instance.StartCoroutine(Methods.LoadYourSceneAsync("LastLevel"));
             GetPlayer().transform.position = new Vector2(8, 1);
         }

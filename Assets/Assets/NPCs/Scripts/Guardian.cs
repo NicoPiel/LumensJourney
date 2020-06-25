@@ -1,7 +1,9 @@
-﻿using System;
-using Assets.MenuManager.Scripts;
+﻿using System.Collections;
+using Assets.UI.PlayerUI.Scripts;
 using Core;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utility;
 using Utility.Tooltip;
 
@@ -41,8 +43,11 @@ namespace Assets.NPCs.Scripts
         {
             if (inRange)
             {
+                GameManager.cameFromGuardian = true;
+                GameManager.GetSaveSystem().RunsCompleted++;
+                
                 StartCoroutine(Methods.LoadYourSceneAsync("Hub"));
-                GameManager.GetPlayerScript().GetRigidbody().MovePosition(new Vector2(-2, -2));
+                GameManager.GetPlayerScript().transform.position = new Vector3(-2, -2, 0);
             }
         }
     }

@@ -557,6 +557,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1985767065388695035, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: minRooms
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985767065388695035, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: maxRooms
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041375325285382235, guid: 2f61b24f5298cc54daae4ebef9fd6f62,
+        type: 3}
+      propertyPath: roomPerEnemy
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f61b24f5298cc54daae4ebef9fd6f62, type: 3}
 --- !u!4 &6029391063509343128 stripped

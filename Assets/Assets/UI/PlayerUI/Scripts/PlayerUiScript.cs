@@ -51,7 +51,7 @@ namespace Assets.UI.PlayerUI.Scripts
             return lightShardCounter.GetComponent<LightShardDisplayScript>();
         }
 
-        public GameObject GetTooltip()
+        public GameObject GetLevelTooltip()
         {
             return levelTooltip;
         }
