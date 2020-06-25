@@ -27,10 +27,8 @@ namespace Assets.Player.Script
             PlayerStats.Add("MaxHealth", maxHealth);
             PlayerStats.Add("CurrentHealth", maxHealth);
             PlayerStats.Add("AttackDamage", attackDamage);
-            PlayerStats.Add("FireDamage", 0);
-            PlayerStats.Add("IceDamage", 0);
             PlayerStats.Add("Defense", defense);
-            PlayerStats.Add("ElementalDefense", 0);
+            PlayerStats.Add("Speed", 4);
             PlayerStats.Add("MaxLightLevel", 1000);
             PlayerStats.Add("CurrentLightLevel", 1000);
         }

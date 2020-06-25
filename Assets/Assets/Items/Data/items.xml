@@ -1,35 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Items>
-    <item name="DragonsClaw">
+    <item name="Sword">
         <Values>
-            <value name="MaxHealth">18</value>
-            <value name="AttackDamage">12</value>
-            <value name="FireDamage">12</value>
+            <value name="AttackDamage">2</value>
         </Values>
     </item>
-    <item name="WaterRing">
+    <item name="SpellBook">
         <Values>
             <value name="MaxHealth">1</value>
-            <value name="Defense">7</value>
-            <value name="ElementalDefense">2</value>
+            <value name="AttackDamage">1</value>
         </Values>
     </item>
-    <item name="DeadlyTooth">
+    <item name="SpeedBelt">
         <Values>
-            <value name="MaxHealth">4</value>
-            <value name="AttackDamage">12</value>
-        </Values>
-    </item>
-    <item name="PoshSlug">
-        <Values>
-            <value name="MaxHealth">1</value>
-            <value name="ElementalDefense">9</value>
+            <value name="Speed">1</value>
         </Values>
     </item>
     <item name="RedPotion">
         <Values>
-            <value name="MaxHealth">7</value>
-            <value name="FireResistance">20</value>
+            <value name="MaxHealth">2</value>
         </Values>
     </item>
 </Items>

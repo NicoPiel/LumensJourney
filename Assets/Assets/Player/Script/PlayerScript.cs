@@ -24,7 +24,6 @@ namespace Assets.Player.Script
         [SerializeField] private float lightSphereCooldown;
 
         public int lightLoss;
-        public float speed;
         public BoxCollider2D hitCollider;
 
         #endregion
@@ -263,7 +262,7 @@ namespace Assets.Player.Script
             _animator.SetFloat(Horizontal, _change.x);
             _animator.SetFloat(Vertical, _change.y);
             _animator.SetFloat(Speed, _change.magnitude);
-            _playerRigidbody2D.MovePosition(transform.position + (_change * speed * Time.fixedDeltaTime));
+            _playerRigidbody2D.MovePosition(transform.position + (_change * _player.PlayerStats["Speed"] * Time.fixedDeltaTime));
         }
 
         public void AddToInventory(GameItem item)

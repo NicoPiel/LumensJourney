@@ -27,13 +27,13 @@ namespace Assets.UI.ItemBar.Scripts
                 Destroy(child.gameObject);
             }
             float x = 33f;
-            float y = -32f;
+            float y = -40f;
             foreach(var item in inv.Items)
             {
                 var itemIcon = Instantiate(ItemIcon, transform);
                 itemIcon.transform.Find("ItemBackground").transform.Find("ItemSprite").GetComponent<Image>().sprite = item.ItemSprite;
                 itemIcon.GetComponent<RectTransform>().anchoredPosition =  new Vector3(x, y, 0);
-                x += 47f;
+                x += 102f;
             }
         }
     }
