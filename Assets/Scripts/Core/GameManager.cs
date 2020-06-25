@@ -116,8 +116,23 @@ namespace Core
                 File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
             }
 #else
+            // Files
+            if (File.Exists(persistentDialogueFilePath))
+            {
+                File.Delete(persistentDialogueFilePath);
+            }
             File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
+
+            if (File.Exists(persistentItemFilePath))
+            {
+                File.Delete(persistentItemFilePath);
+            }
             File.Copy(PathToItemFileInProject, persistentItemFilePath);
+            
+            if (File.Exists(persistentObjectsFilePath))
+            {
+                File.Delete(persistentObjectsFilePath);
+            }
             File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
 #endif
         }
