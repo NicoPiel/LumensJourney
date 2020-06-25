@@ -324,7 +324,7 @@ namespace DialogueSystem.Scripts
 
             var stones =
                 from element in root.Elements("stones").Elements()
-                let elementIndex = int.Parse(element.Attribute("index")?.Value ?? throw new ArgumentException("Storystone doesn't have an index"))
+                let elementIndex = int.Parse(element.Attribute("index")?.Value ?? throw new ArgumentException("Storystone doesn't have an index."))
                 let elementRequire = int.Parse(element.Attribute("req")?.Value ?? "0")
                 where elementIndex == index && elementRequire <= _saveSystem.RunsCompleted
                 select element;
