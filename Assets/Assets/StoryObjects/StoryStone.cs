@@ -24,6 +24,10 @@ namespace Assets.StoryObjects
                 {
                     if (GameManager.GetDialogueManager().StartNextStoryStone()) _isRead = true;
                 }
+                else
+                {
+                    GameManager.GetDialogueManager().StartCurrentStoryStone();
+                }
 
                 Tooltip.HideTooltip_Static();
             }

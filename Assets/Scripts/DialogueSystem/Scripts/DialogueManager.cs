@@ -80,6 +80,11 @@ namespace DialogueSystem.Scripts
             return false;
         }
 
+        public void StartCurrentStoryStone()
+        {
+            StartCoroutine(StartDialogueStoryStone(_saveSystem.StoryStoneProgression - 1));
+        }
+
         private IEnumerator StartDialogue(string npcName, string flag)
         {
             _inDialogue = true;
