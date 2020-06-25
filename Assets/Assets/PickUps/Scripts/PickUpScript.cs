@@ -27,7 +27,6 @@ namespace Assets.PickUps.Scripts
             _item = GameItem.ConstructItem(itemName);
             Debug.Log("Generated Item:"+_item.ItemName);
             itemSprite.sprite = _item.ItemSprite;
-            
         }
 
         public void Start()

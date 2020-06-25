@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Player.Script
 {
+    public class OnPlayerStatChanged : UnityEvent<string>{}
     [BurstCompile]
     public class PlayerScript : MonoBehaviour
     {
@@ -65,6 +66,7 @@ namespace Assets.Player.Script
         public UnityEvent onPlayerLightShardsChanged;
         public UnityEvent onPlayerLifeChanged;
         public UnityEvent onPlayerDied;
+        public OnPlayerStatChanged onPlayerStatChanged;
 
         #endregion
 
@@ -192,6 +194,7 @@ namespace Assets.Player.Script
             onPlayerTakeHeal = new UnityEvent();
             onPlayerLifeChanged = new UnityEvent();
             onPlayerDied = new UnityEvent();
+            onPlayerStatChanged = new OnPlayerStatChanged();
             
             onPlayerLightShardsChanged.AddListener(OnPlayerLightShardsChanged);
         }
@@ -265,7 +268,9 @@ namespace Assets.Player.Script
 
         public void AddToInventory(GameItem item)
         {
+            
             _player.Inventory.AddItem(item);
+            OnItemChange(item, false);
         }
 
         public Collider2D GetCollider()
@@ -463,6 +468,35 @@ namespace Assets.Player.Script
         public float GetTimeBetweenAttacks()
         {
             return timeBetweenAttacks;
+        }
+        public void OnItemChange(GameItem item, bool removed)
+        {
+            foreach (var itemStat in item.ValueIncreases)
+            {
+                if (removed)
+                {
+                    if (_player.PlayerStats.ContainsKey(itemStat.Key))
+                    {
+                        
+                        _player.PlayerStats[itemStat.Key] -= itemStat.Value;
+                        onPlayerStatChanged.Invoke(itemStat.Key);
+                    }
+                }
+                else
+                {
+                    if (_player.PlayerStats.ContainsKey(itemStat.Key))
+                    {
+                        Debug.Log(itemStat.Key);
+                        _player.PlayerStats[itemStat.Key] += itemStat.Value;
+                        onPlayerStatChanged.Invoke(itemStat.Key);
+                    }
+                    else
+                    {
+                        _player.PlayerStats.Add(itemStat.Key, itemStat.Value);
+                        onPlayerStatChanged.Invoke(itemStat.Key);
+                    }
+                }
+            }
         }
     }
 }

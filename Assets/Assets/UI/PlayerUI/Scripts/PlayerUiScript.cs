@@ -61,5 +61,6 @@ namespace Assets.UI.PlayerUI.Scripts
         {
             return _instance;
         }
+        
     }
 }
