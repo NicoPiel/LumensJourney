@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 namespace Assets.Player.Script
 {
     public class OnPlayerStatChanged : UnityEvent<string>{}
+    
     [BurstCompile]
     public class PlayerScript : MonoBehaviour
     {
@@ -197,6 +198,14 @@ namespace Assets.Player.Script
             onPlayerStatChanged = new OnPlayerStatChanged();
             
             onPlayerLightShardsChanged.AddListener(OnPlayerLightShardsChanged);
+            onPlayerStatChanged.AddListener((key)=>
+            {
+                if (key == "MaxHealth")
+                {
+                    HealPlayerFull();
+                }
+                
+            });
         }
 
         private void HitInDirection(float rotation, Vector2 size, Vector2 offset, string stateName)
@@ -499,6 +508,12 @@ namespace Assets.Player.Script
                     }
                 }
             }
+        }
+
+        private void HealPlayerFull()
+        {
+            _player.PlayerStats["CurrentHealth"] = _player.PlayerStats["MaxHealth"];
+            onPlayerLifeChanged.Invoke();
         }
     }
 }

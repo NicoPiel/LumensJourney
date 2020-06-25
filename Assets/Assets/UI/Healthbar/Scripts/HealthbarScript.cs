@@ -62,6 +62,7 @@ namespace Assets.UI.Healthbar.Scripts
                 x += 75;
             }
 
+            
             ChangeHearts();
         }
 
