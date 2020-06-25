@@ -12,7 +12,7 @@
             <line>...</line>
             <line>Oh und du solltest dich wohl von allen verabschieden...</line>
         </dialogue>
-        <dialogue index="2" flag="default">
+        <dialogue index="2" flag="default" newFlag="default">
             <line>Welcome, what can I do for ye?</line>
         </dialogue>
     </Smith>
@@ -25,18 +25,18 @@
         <dialogue index="2" flag="second" newFlag="default">
             <line>Hehe, solltest du wieder kommen, bring wenigstens Kräuter mit. Hehehe</line>
         </dialogue>
-        <dialogue index="3" flag="default">
+        <dialogue index="3" flag="default" newFlag="default">
             <line>Welcome back my child, hehehe.</line>
         </dialogue>
     </Witch>
     <Sheldon>
-        <dialogue index="1" flag="default">
+        <dialogue index="1" flag="default" newFlag="default">
             <line>Du gehst? Tja war schön dich gekannt zu haben</line>
             <line>Ich wette 100 Kristalle, dass du eh drauf gehst</line>
         </dialogue>
     </Sheldon>
     <Bibsy>
-        <dialogue index="1" flag="default">
+        <dialogue index="1" flag="default" newFlag="default">
             <line>Hey man. Like my library?</line>
         </dialogue>
     </Bibsy>
@@ -57,7 +57,7 @@
             <line>If you manage to find me again, perhaps I will change my mind.</line>
             <line>Now, go. Fare thee well.</line>
         </dialogue>
-        <dialogue index="2" flag="default">
+        <dialogue index="2" flag="default" newFlag="default">
             <line>Hello again.</line>
         </dialogue>
     </Guardian>

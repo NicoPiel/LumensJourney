@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.IO;
-using System.Security.Cryptography;
 using Assets.MenuManager.Scripts;
 using Assets.Player.Script;
 using Assets.ProceduralGeneration.Core;
@@ -9,8 +8,6 @@ using Assets.UI.PauseMenu.Scripts;
 using Assets.UI.PlayerUI.Scripts;
 using DialogueSystem.Scripts;
 using TMPro;
-using Unity.Burst;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -160,8 +157,10 @@ namespace Core
         /// </summary>
         private void Update()
         {
+            var escape = (int) Input.GetAxis("Escape");
+            
             // Pause Menu
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (escape == 1)
             {
                 if (!_ingame) return;
 
@@ -256,7 +255,7 @@ namespace Core
                     
                     if (cameFromGuardian)
                     {
-                        var runsCompleted = GameManager.GetSaveSystem().RunsCompleted;
+                        var runsCompleted = GetSaveSystem().RunsCompleted;
                         
                         StartCoroutine(runsCompleted == 1
                             ? FadeTextInAndOut("You just met The Guardian for the first time.")
@@ -287,6 +286,7 @@ namespace Core
         private void InstantiatePlayer()
         {
             _canvas = GetMenuManagerScript().pauseMenu;
+            
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
@@ -336,6 +336,8 @@ namespace Core
                 text.text = $"Level {CurrentLevel}";
                 text.gameObject.SetActive(true);
             }
+            
+            playerScript.PlayerTakeHeal(playerScript.GetPlayerMaxHealth() - playerScript.GetPlayerCurrentHealth());
 
             StartCoroutine(FadeLevelTextInAndOut());
         }

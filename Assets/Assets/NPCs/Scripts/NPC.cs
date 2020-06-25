@@ -1,8 +1,6 @@
-﻿using Assets.MenuManager.Scripts;
-using Core;
+﻿using Core;
 using DialogueSystem.Scripts;
 using UnityEngine;
-using Utility;
 using Utility.Tooltip;
 
 namespace Assets.NPCs.Scripts
@@ -20,7 +18,9 @@ namespace Assets.NPCs.Scripts
 
         protected void Update()
         {
-            if (inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
+            var e = (int) Input.GetAxis("Interact");
+            
+            if (inRange && e == 1 && !DialogueMenu.IsShown())
             {
                 GameManager.GetDialogueManager().StartCorrectDialogue(npcName);
 

@@ -88,6 +88,7 @@ namespace Assets.Player.Script
             _playerCollider = GetComponent<CapsuleCollider2D>();
             hitCollider = transform.Find("HitCollider").GetComponent<BoxCollider2D>();
             _audioSource = GetComponent<AudioSource>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
 
             AddAudioClips();
             GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
@@ -108,51 +109,69 @@ namespace Assets.Player.Script
             {
                 #region Controls
 
-                if (Input.GetKeyDown(KeyCode.J))
+#if UNITY_EDITOR
+                var j = Input.GetKeyDown(KeyCode.J);
+                var k = Input.GetKeyDown(KeyCode.K);
+                var v = Input.GetKeyDown(KeyCode.V);
+                var b = Input.GetKeyDown(KeyCode.B);
+                
+                if (j)
                 {
                     PlayerChangeLightShards(50);
                 }
 
-                if (Input.GetKeyDown(KeyCode.K))
+                if (k)
                 {
                     PlayerChangeLightShards(-50);
                 }
 
-                if (Input.GetKeyDown(KeyCode.V))
+                if (v)
                 {
                     PlayerTakeDamage(1);
                 }
 
-                if (Input.GetKeyDown(KeyCode.B))
+                if (b)
                 {
                     PlayerTakeHeal(1);
                 }
+#endif
 
-                if (Input.GetKeyDown(KeyCode.F))
+                var f = (int) Input.GetAxis("LightSphere");
+                var upDown = (int) Input.GetAxis("SwingUpDown");
+                //var up = Input.GetKeyDown(KeyCode.UpArrow);
+                //var down = Input.GetKeyDown(KeyCode.DownArrow);
+                var leftRight = (int) Input.GetAxis("SwingLeftRight");
+                //var left = Input.GetKeyDown(KeyCode.LeftArrow);
+                //var right = Input.GetKeyDown(KeyCode.RightArrow);
+                
+                Debug.Log($"upDown={upDown}");
+                Debug.Log($"leftRight={leftRight}");
+                
+                if (f == 1)
                 {
                     GameObject teleporter = GameManager.GetGenerator().teleporter;
                     if (teleporter != null) SendLightSphereFromPlayer(teleporter.transform.position);
                 }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow))
+                if (upDown == 1)
                 {
                     HitInDirection(180, new Vector2(2, 1), new Vector2(0, -1f), "SwingUp");
                     _animator.SetFloat(LastHorizontal, 0);
                     _animator.SetFloat(LastVertical, 1);
                 }
-                else if (Input.GetKeyDown(KeyCode.RightArrow))
+                else if (leftRight == 1)
                 {
                     HitInDirection(90, new Vector2(1, 1), new Vector2(0.5f, -1f), "SwingRight");
                     _animator.SetFloat(LastHorizontal, 1);
                     _animator.SetFloat(LastVertical, 0);
                 }
-                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                else if (upDown == -1)
                 {
                     HitInDirection(0, new Vector2(2, 1), new Vector2(0, -0.5f), "SwingDown");
                     _animator.SetFloat(LastHorizontal, 0);
                     _animator.SetFloat(LastVertical, -1);
                 }
-                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                else if (leftRight == -1)
                 {
                     HitInDirection(270, new Vector2(1, 1), new Vector2(-0.5f, -1f), "SwingLeft");
                     _animator.SetFloat(LastHorizontal, -1);
@@ -160,7 +179,7 @@ namespace Assets.Player.Script
                 }
                 else
                 {
-                    _change = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
+                    _change = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
                     _change.Normalize();
                     if (_change.x < 0 || _change.x > 0)
                     {
@@ -185,7 +204,7 @@ namespace Assets.Player.Script
         }
 
         #endregion
-        
+
         private void SetUpEvents()
         {
             onPlayerTakeDamage = new UnityEvent();
@@ -260,7 +279,7 @@ namespace Assets.Player.Script
         private void SetStateExit()
         {
             if (!_animator.GetBool(StateExit)) return;
-            
+
             //Debug.Log("State exit.");
 
             hitCollider.gameObject.SetActive(false);
@@ -388,7 +407,7 @@ namespace Assets.Player.Script
         //Getter
         public float GetPlayerLightLevel()
         {
-            return (float) _player.PlayerStats["CurrentLightLevel"] / (float) _player.PlayerStats["MaxLightLevel"];
+            return _player.PlayerStats["CurrentLightLevel"] / (float) _player.PlayerStats["MaxLightLevel"];
         }
 
         public int GetPlayerCurrentLightValue()
@@ -462,7 +481,7 @@ namespace Assets.Player.Script
 
         private void StopPlayer()
         {
-            _change = new Vector3(0,0,0);
+            _change = new Vector3(0, 0, 0);
         }
 
         public void FreezeControls()
