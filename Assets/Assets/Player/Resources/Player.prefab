@@ -246,7 +246,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 10
   m_Sprite: {fileID: -2311659948842064771, guid: 49c7c9190abbec942add2e6a9abdc252,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -279,7 +279,6 @@ MonoBehaviour:
   lightSphereSpeed: 4
   lightSphereCooldown: 20
   lightLoss: 2
-  speed: 4
   hitCollider: {fileID: 0}
   onPlayerTakeDamage:
     m_PersistentCalls:
