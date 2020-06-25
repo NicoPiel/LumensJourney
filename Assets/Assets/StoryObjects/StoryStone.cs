@@ -19,7 +19,7 @@ namespace Assets.StoryObjects
 
         private void Update()
         {
-            if (_inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
+            if (_inRange && GameManager.isPressingInteractButton && !DialogueMenu.IsShown())
             {
                 if (!_isRead)
                 {

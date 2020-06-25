@@ -519,6 +519,11 @@ namespace Assets.ProceduralGeneration.Core
             return _spawnedRooms;
         }
 
+        public void DestroyDungeon()
+        {
+            if (dungeonObject != null) Destroy(dungeonObject);
+        }
+
         #endregion
     }
 }

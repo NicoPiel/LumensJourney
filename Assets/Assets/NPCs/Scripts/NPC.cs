@@ -18,9 +18,7 @@ namespace Assets.NPCs.Scripts
 
         protected void Update()
         {
-            var e = (int) Input.GetAxis("Interact");
-            
-            if (inRange && e == 1 && !DialogueMenu.IsShown())
+            if (inRange && GameManager.isPressingInteractButton && !DialogueMenu.IsShown())
             {
                 GameManager.GetDialogueManager().StartCorrectDialogue(npcName);
 

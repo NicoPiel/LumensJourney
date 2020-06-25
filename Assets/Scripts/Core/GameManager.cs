@@ -67,8 +67,9 @@ namespace Core
         private AudioClip _menuSound;
 
         private bool _ingame = false;
-        public bool isPressingInteractButton;
         public bool Paused { get; set; } = false;
+        
+        public static bool isPressingInteractButton;
         public static bool cameFromGuardian;
 
         private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
@@ -151,6 +152,7 @@ namespace Core
             onPlayerSpawned.AddListener(OnPlayerSpawned);
 
             cameFromGuardian = false;
+            isPressingInteractButton = false;
         }
 
         /// <summary>
@@ -159,6 +161,7 @@ namespace Core
         private void Update()
         {
             var escape = (int) Input.GetAxis("Escape");
+            var e = (int) Input.GetAxis("Interact");
             
             // Pause Menu
             if (escape == 1)
@@ -174,8 +177,9 @@ namespace Core
                     PauseMenu.Pause();
                 }
             }
-            
-            
+
+            if (e == 1) isPressingInteractButton = true;
+            else isPressingInteractButton = false;
         }
 
         #endregion
@@ -443,6 +447,7 @@ namespace Core
             }
             else
             {
+                GetGenerator().DestroyDungeon();
                 StartLastLevel();
             }
         }
