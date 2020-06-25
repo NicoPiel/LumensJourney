@@ -30,6 +30,7 @@ namespace Core
         public UnityEvent onGameLoaded;
         public UnityEvent onPlayerSpawned;
         public UnityEvent onNewLevel;
+        public UnityEvent onHubEntered;
 
         #endregion
 
@@ -93,6 +94,7 @@ namespace Core
             // Events
             onNewGameStarted = new UnityEvent();
             onNewLevel = new UnityEvent();
+            onHubEntered = new UnityEvent();
 
             CurrentLevel = 0;
 
@@ -150,6 +152,8 @@ namespace Core
             dialogueManager = GetComponent<DialogueManager>();
 
             onPlayerSpawned.AddListener(OnPlayerSpawned);
+
+            onHubEntered.AddListener(HubEntered);
 
             cameFromGuardian = false;
             isPressingInteractButton = false;
@@ -256,28 +260,29 @@ namespace Core
             {
                 if (scene.name == "Dungeon")
                 {
-                    player.GetComponent<PlayerScript>().onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
-                }
-
-                if (scene.name == "Hub")
-                {
-                    CurrentLevel = 0;
-                    GetPlayerScript().ResetPlayer();
-                    
-                    if (cameFromGuardian)
-                    {
-                        var runsCompleted = GetSaveSystem().RunsCompleted;
-                        
-                        StartCoroutine(runsCompleted == 1
-                            ? FadeTextInAndOut("You just met The Guardian for the first time.")
-                            : FadeTextInAndOut($"You have met the Guardian {runsCompleted} times."));
-
-                        cameFromGuardian = false;
-                    }
+                    player.GetComponent<PlayerScript>().onPlayerLightLevelChanged
+                        .AddListener(OnPlayerLightLevelChanged);
                 }
             };
 
             _ingame = true;
+        }
+
+        private void HubEntered()
+        {
+            CurrentLevel = 0;
+            Debug.Log("CurrentLevel should be 0");
+            GetPlayerScript().ResetPlayer();
+            if (cameFromGuardian)
+            {
+                var runsCompleted = GetSaveSystem().RunsCompleted;
+
+                StartCoroutine(runsCompleted == 1
+                    ? FadeTextInAndOut("You just met The Guardian for the first time.")
+                    : FadeTextInAndOut($"You have met the Guardian {runsCompleted} times."));
+
+                cameFromGuardian = false;
+            }
         }
 
         /// <summary>
@@ -297,7 +302,7 @@ namespace Core
         private void InstantiatePlayer()
         {
             _canvas = GetMenuManagerScript().pauseMenu;
-            
+
             player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
             player.name = "Player";
             if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
@@ -347,7 +352,7 @@ namespace Core
                 text.text = $"Level {CurrentLevel}";
                 text.gameObject.SetActive(true);
             }
-            
+
             playerScript.PlayerTakeHeal(playerScript.GetPlayerMaxHealth() - playerScript.GetPlayerCurrentHealth());
 
             StartCoroutine(FadeLevelTextInAndOut());
@@ -394,7 +399,7 @@ namespace Core
             var text = PlayerUiScript.GetPlayerUiScript().GetLevelTooltip().GetComponent<TMP_Text>();
 
             if (text == null) yield break;
-            
+
             text.gameObject.SetActive(true);
 
             StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
@@ -404,7 +409,7 @@ namespace Core
 
             text.gameObject.SetActive(false);
         }
-        
+
         /// <summary>
         /// Uses an alpha effect to fade text (Level 1, 2, 3, etc) in and out.
         /// </summary>
@@ -416,7 +421,7 @@ namespace Core
             if (textObject == null) yield break;
 
             textObject.text = text;
-            
+
             textObject.gameObject.SetActive(true);
 
             _instance.StartCoroutine(TextFade.FadeTextToFullAlpha(fadeInTime, textObject));
