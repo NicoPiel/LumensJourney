@@ -65,7 +65,6 @@ namespace DialogueSystem.Scripts
         public void StartCorrectDialogue(string npcName)
         {
             var nextFlag = NextFlag(npcName);
-            
             StartCoroutine(StartDialogue(npcName, nextFlag));
         }
 
@@ -110,7 +109,7 @@ namespace DialogueSystem.Scripts
                 //Debug.Log($"Showing line: {newLine}");
 
                 yield return new WaitUntil(DialogueMenu.AtEndOfLine);
-                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitUntil(() => GameManager.isPressingInteractButton);
                 yield return new WaitForEndOfFrame();
             }
 
@@ -129,7 +128,7 @@ namespace DialogueSystem.Scripts
             throw new NotImplementedException("TODO");
         }
 
-        public IEnumerator StartDialogue(string name, List<string> lines)
+        public IEnumerator StartDialogue(string nameplate, List<string> lines)
         {
             _inDialogue = true;
             onDialogueStart.Invoke();
@@ -138,7 +137,7 @@ namespace DialogueSystem.Scripts
 
             //Debug.Log($"Dialogue found:\n {dialogue.ToString()}");
 
-            DialogueMenu.SetNamePlate(name);
+            DialogueMenu.SetNamePlate(nameplate);
             DialogueMenu.ShowDialogueWindow();
 
             //Debug.Log($"Show dialogue for {npcName}");
@@ -151,7 +150,7 @@ namespace DialogueSystem.Scripts
                 //Debug.Log($"Showing line: {newLine}");
 
                 yield return new WaitUntil(DialogueMenu.AtEndOfLine);
-                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitUntil(() => GameManager.isPressingInteractButton);
                 yield return new WaitForEndOfFrame();
             }
 
@@ -183,7 +182,7 @@ namespace DialogueSystem.Scripts
                 //Debug.Log($"Showing line: {newLine}");
 
                 yield return new WaitUntil(DialogueMenu.AtEndOfLine);
-                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitUntil(() => GameManager.isPressingInteractButton);
                 yield return new WaitForEndOfFrame();
             }
 

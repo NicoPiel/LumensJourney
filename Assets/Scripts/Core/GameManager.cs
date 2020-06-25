@@ -160,11 +160,11 @@ namespace Core
         /// </summary>
         private void Update()
         {
-            var escape = (int) Input.GetAxis("Escape");
-            var e = (int) Input.GetAxis("Interact");
+            var escape = Input.GetButtonDown("Escape");
+            var e = Input.GetButtonDown("Interact");
             
             // Pause Menu
-            if (escape == 1)
+            if (escape)
             {
                 if (!_ingame) return;
 
@@ -178,7 +178,10 @@ namespace Core
                 }
             }
 
-            if (e == 1) isPressingInteractButton = true;
+            if (e)
+            {
+                isPressingInteractButton = true;
+            }
             else isPressingInteractButton = false;
         }
 
@@ -260,6 +263,7 @@ namespace Core
                 {
                     CurrentLevel = 0;
                     GetPlayerScript().ResetPlayer();
+                    
                     if (cameFromGuardian)
                     {
                         var runsCompleted = GetSaveSystem().RunsCompleted;

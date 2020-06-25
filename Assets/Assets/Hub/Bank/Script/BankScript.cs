@@ -35,49 +35,41 @@ namespace Assets.Hub.Bank.Script
 
         void Start()
         {
-        
             _interactCollider2D = transform.GetComponentInChildren<BoxCollider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
             _entered = false;
             _menuOpen = false;
-        
+
             _storedLightShards = GameManager.GetSaveSystem().BankedShards;
-            
+
             onChestClosed.AddListener(OnChestClosed);
             onChestOpened.AddListener(OnChestOpened);
-            
-            
-            
-            
         }
 
         public void Update()
         {
-            if (_entered && Input.GetKeyDown(KeyCode.E))
+            if (_entered && GameManager.isPressingInteractButton)
             {
                 if (_menuOpen)
                 {
                     Tooltip.ShowTooltip_Static("Press E");
                     onChestClosed.Invoke();
-                    
                 }
                 else
                 {
                     onChestOpened.Invoke();
                 }
             }
-
         }
 
         private void OnChestClosed()
         {
             GameManager.GetMenuManagerScript().UnloadCurrentMenu();
             _spriteRenderer.sprite = closedChestSprite;
-            if(_menuOpen)
+            if (_menuOpen)
                 _audioSource.Play();
             _menuOpen = false;
-
         }
 
         private void OnChestOpened()
@@ -115,9 +107,9 @@ namespace Assets.Hub.Bank.Script
             _storedLightShards += GameManager.GetPlayerScript().GetLightShardAmount();
             GameManager.GetPlayerScript().PlayerSetLightShards(0);
             GameManager.GetSaveSystem().BankedShards = _storedLightShards;
-        
+
             onLightShardsStoredInBank.Invoke();
-        
+
             GameManager.GetSaveSystem().CreateSave();
         }
 

@@ -21,7 +21,6 @@ namespace Assets.NPCs.Scripts
             if (inRange && GameManager.isPressingInteractButton && !DialogueMenu.IsShown())
             {
                 GameManager.GetDialogueManager().StartCorrectDialogue(npcName);
-
                 Tooltip.HideTooltip_Static();
             }
         }
