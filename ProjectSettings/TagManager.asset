@@ -27,7 +27,7 @@ TagManager:
   - Walls
   - Enemies
   - Drops
-  - 
+  - Guardian
   - 
   - 
   - 
@@ -69,4 +69,7 @@ TagManager:
     locked: 0
   - name: InFrontOfPlayer
     uniqueID: 3726432155
+    locked: 0
+  - name: Guardian
+    uniqueID: 3449267121
     locked: 0

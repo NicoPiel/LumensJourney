@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.MenuManager.Scripts;
 using Core;
+using DialogueSystem.Scripts;
 using UnityEngine;
 using Utility.Tooltip;
 

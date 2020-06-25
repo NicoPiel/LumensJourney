@@ -57,12 +57,15 @@ namespace DialogueSystem.Scripts
             _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
 
             _saveSystem.onBeforeSave.AddListener(OnBeforeSave);
+            
+            onDialogueStart.AddListener(OnDialogueStarted);
+            onDialogueEnd.AddListener(OnDialogueEnded);
         }
 
         public void StartCorrectDialogue(string npcName)
         {
             var nextFlag = NextFlag(npcName);
-
+            
             StartCoroutine(StartDialogue(npcName, nextFlag));
         }
 
@@ -410,6 +413,16 @@ namespace DialogueSystem.Scripts
         private void OnGameLoaded()
         {
             _flags = _saveSystem.DialogueFlags;
+        }
+
+        private void OnDialogueStarted()
+        {
+            Time.timeScale = 0.00001f;
+        }
+
+        private void OnDialogueEnded()
+        {
+            Time.timeScale = 1f;
         }
 
         #endregion

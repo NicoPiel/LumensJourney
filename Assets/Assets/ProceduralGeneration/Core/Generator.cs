@@ -30,8 +30,9 @@ namespace Assets.ProceduralGeneration.Core
 
         #region Editor variables
 
-        [Header("Room Settings")] [Range(1, 30)]
-        public int roomNumber;
+        [Header("Room Settings")] 
+        [Range(1, 30)] public int minRooms;
+        [Range(1, 30)] public int maxRooms;
 
         [Space] [SerializeField] [Range(5, 30)]
         private int minWidth;
@@ -106,7 +107,8 @@ namespace Assets.ProceduralGeneration.Core
             Time.timeScale = 0f;
 
             if ((minWidth > maxWidth)
-                || (minHeight > maxHeight))
+                || (minHeight > maxHeight)
+                || (minRooms > maxRooms))
             {
                 Debug.LogError(
                     "Parameters were misconfigured. Check, if all your 'min..' values are less than or equal to your 'max..' values");
@@ -115,8 +117,8 @@ namespace Assets.ProceduralGeneration.Core
 
             dungeonObject = CreateDungeonObject();
 
-            roomNumber = numberOfRooms;
-            GenerateRooms(roomNumber);
+            maxRooms = numberOfRooms;
+            GenerateRooms(maxRooms);
 
             PlacePlayer();
 

@@ -37,4 +37,25 @@
             <line>Hey man. Like my library?</line>
         </dialogue>
     </Bibsy>
+    <Guardian>
+        <dialogue index="1" flag="first" newFlag="default">
+            <line>...</line>
+            <line>I knew you would come, eventually.</line>
+            <line>...</line>
+            <line>You have come far.</line>
+            <line>You are close to the end.</line>
+            <line>But...</line>
+            <line>There are so many things yet unknown to you.</line>
+            <line>...</line>
+            <line>I cannot let you pass just yet.</line>
+            <line>The world out there is like nothing you have ever seen before.</line>
+            <line>It is dangerous.</line>
+            <line>I will send you back home; back where you belong.</line>
+            <line>If you manage to find me again, perhaps I will change my mind.</line>
+            <line>Now, go. Fare thee well.</line>
+        </dialogue>
+        <dialogue index="2" flag="default">
+            <line>Hello again.</line>
+        </dialogue>
+    </Guardian>
 </dialogues>

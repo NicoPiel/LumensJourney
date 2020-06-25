@@ -50,7 +50,8 @@ namespace Core
 
         #region Public variables
 
-        public int CurrentLevel { get; set; }
+        public static int CurrentLevel { get; set; }
+        public static int MaxLevels { get; set; } = 1;
         public int StoryStoneProgression { get; set; }
         public int DiaryProgression { get; set; }
         public int RunsCompleted { get; set; }
@@ -121,18 +122,21 @@ namespace Core
             {
                 File.Delete(persistentDialogueFilePath);
             }
+
             File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
 
             if (File.Exists(persistentItemFilePath))
             {
                 File.Delete(persistentItemFilePath);
             }
+
             File.Copy(PathToItemFileInProject, persistentItemFilePath);
-            
+
             if (File.Exists(persistentObjectsFilePath))
             {
                 File.Delete(persistentObjectsFilePath);
             }
+
             File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
 #endif
         }
@@ -357,12 +361,48 @@ namespace Core
         {
             var text = PlayerUiScript.GetPlayerUiScript().GetTooltip().GetComponent<TMP_Text>();
 
+            if (text == null) yield break;
+
             StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
             yield return new WaitForSeconds(3f);
             StartCoroutine(TextFade.FadeTextToZeroAlpha(2f, text));
             yield return new WaitForSeconds(2f);
 
-            if (text != null) text.gameObject.SetActive(false);
+            text.gameObject.SetActive(false);
+        }
+
+        public static void GenerateNextLevel()
+        {
+            if (CurrentLevel < MaxLevels)
+            {
+                var numberOfRooms = Random.Range(15, 30);
+
+                if (SceneManager.GetActiveScene().name != "Dungeon")
+                {
+                    _instance.StartCoroutine(Methods.LoadYourSceneAsync("Dungeon"));
+                    SceneManager.sceneLoaded += (scene, mode) =>
+                    {
+                        if (scene.name == "Dungeon")
+                        {
+                            _instance.generator.Generate(numberOfRooms);
+                        }
+                    };
+                }
+                else
+                {
+                    _instance.generator.Generate(numberOfRooms);
+                }
+            }
+            else
+            {
+                StartLastLevel();
+            }
+        }
+
+        public static void StartLastLevel()
+        {
+            _instance.StartCoroutine(Methods.LoadYourSceneAsync("LastLevel"));
+            GetPlayer().transform.position = new Vector2(8, 1);
         }
 
         #endregion

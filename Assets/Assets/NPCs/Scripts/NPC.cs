@@ -1,5 +1,6 @@
 ﻿using Assets.MenuManager.Scripts;
 using Core;
+using DialogueSystem.Scripts;
 using UnityEngine;
 using Utility;
 using Utility.Tooltip;
@@ -10,16 +11,16 @@ namespace Assets.NPCs.Scripts
     {
         public string npcName;
 
-        private bool _inRange;
+        protected bool inRange;
 
-        private void Start()
+        protected void Start()
         {
-            _inRange = false;
+            inRange = false;
         }
 
-        private void Update()
+        protected void Update()
         {
-            if (_inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
+            if (inRange && Input.GetKeyDown(KeyCode.E) && !DialogueMenu.IsShown())
             {
                 GameManager.GetDialogueManager().StartCorrectDialogue(npcName);
 
@@ -27,21 +28,21 @@ namespace Assets.NPCs.Scripts
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        protected void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player"))
             {
                 Tooltip.ShowTooltip_Static("Press E to talk.");
-                _inRange = true;
+                inRange = true;
             }
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        protected void OnTriggerExit2D(Collider2D other)
         {
             if (other.CompareTag("Player"))
             {
                 Tooltip.HideTooltip_Static();
-                _inRange = false;
+                inRange = false;
             }
         }
     }

@@ -39,7 +39,8 @@ namespace Assets.Player.Script
         private Vector3 _change;
         private AudioSource _audioSource;
         private Animator _animator;
-        private Player _player; 
+        private Player _player;
+        private SpriteRenderer _spriteRenderer;
 
         private Dictionary<string, AudioClip> _audioClips;
         private bool _invulnerable;
@@ -262,12 +263,11 @@ namespace Assets.Player.Script
             _animator.SetFloat(Horizontal, _change.x);
             _animator.SetFloat(Vertical, _change.y);
             _animator.SetFloat(Speed, _change.magnitude);
-            _playerRigidbody2D.MovePosition(transform.position + (_change * _player.PlayerStats["Speed"] * Time.fixedDeltaTime));
+            _playerRigidbody2D.MovePosition(transform.position + _change * (_player.PlayerStats["Speed"] * Time.fixedDeltaTime));
         }
 
         public void AddToInventory(GameItem item)
         {
-            
             _player.Inventory.AddItem(item);
             OnItemChange(item, false);
         }
@@ -444,7 +444,10 @@ namespace Assets.Player.Script
         private IEnumerator Invulnerable()
         {
             _invulnerable = true;
-            yield return new WaitForSeconds(invunerabilityTime);
+            _spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(invunerabilityTime/4);
+            _spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(3*(invunerabilityTime/4));
             _invulnerable = false;
         }
 
