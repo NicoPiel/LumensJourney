@@ -153,7 +153,10 @@ namespace Core
 
             onPlayerSpawned.AddListener(OnPlayerSpawned);
 
-            onHubEntered.AddListener(HubEntered);
+            onHubEntered.AddListener(() =>
+            {
+                HubEntered();
+            });
 
             cameFromGuardian = false;
             isPressingInteractButton = false;
