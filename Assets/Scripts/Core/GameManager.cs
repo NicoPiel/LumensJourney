@@ -67,6 +67,7 @@ namespace Core
         private AudioClip _menuSound;
 
         private bool _ingame = false;
+        public bool isPressingInteractButton;
         public bool Paused { get; set; } = false;
         public static bool cameFromGuardian;
 
@@ -173,6 +174,8 @@ namespace Core
                     PauseMenu.Pause();
                 }
             }
+            
+            
         }
 
         #endregion
