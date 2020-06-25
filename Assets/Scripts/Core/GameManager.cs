@@ -252,7 +252,7 @@ namespace Core
                 if (scene.name == "Hub")
                 {
                     CurrentLevel = 0;
-                    
+                    GetPlayerScript().ResetPlayer();
                     if (cameFromGuardian)
                     {
                         var runsCompleted = GetSaveSystem().RunsCompleted;

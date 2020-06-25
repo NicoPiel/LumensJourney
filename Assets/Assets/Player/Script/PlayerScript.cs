@@ -98,6 +98,11 @@ namespace Assets.Player.Script
             _canSendLightSphere = true;
         }
 
+        public void ResetPlayer()
+        {
+            _player = new Player("Pacolos");
+        }
+
         #endregion
 
         #region Update
