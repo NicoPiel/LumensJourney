@@ -54,12 +54,10 @@ namespace Core
         public int StoryStoneProgression { get; set; }
         public int DiaryProgression { get; set; }
         public int RunsCompleted { get; set; }
-        
+
         public static string persistentItemFilePath;
         public static string persistentDialogueFilePath;
         public static string persistentObjectsFilePath;
-        
-        
 
         #endregion
 
@@ -101,6 +99,7 @@ namespace Core
             persistentItemFilePath = Application.persistentDataPath + "/items.xml";
             persistentObjectsFilePath = Application.persistentDataPath + "/storyobjects.xml";
 
+#if !UNITY_EDITOR
             // Files
             if (!File.Exists(persistentDialogueFilePath))
             {
@@ -116,6 +115,11 @@ namespace Core
             {
                 File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
             }
+#else
+            File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
+            File.Copy(PathToItemFileInProject, persistentItemFilePath);
+            File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
+#endif
         }
 
         /// <summary>
@@ -138,7 +142,7 @@ namespace Core
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (!_ingame) return;
-                
+
                 if (Paused)
                 {
                     PauseMenu.Resume();
