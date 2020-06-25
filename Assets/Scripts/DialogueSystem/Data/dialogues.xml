@@ -2,15 +2,17 @@
 
 <dialogues>
     <Smith>
-        <dialogue index="1" flag="first" newFlag="second">
-            <line>Welcome, boy.</line>
-            <line>I heard you will be trying to get out of here.</line>
-            <line>Well, good luck.</line>
+        <dialogue index="1" flag="first" newFlag="default">
+            <line>Na jungchen, immer noch vor den Rest des Knasts zu erkunden? </line>
+            <line>Dir ist aber klar, dass du vermutlich da draußen umkommen wirst.</line>
+            <line>Es ist vermutlich besser, wenn du einfach hier in Sanctuary bleibst, hier ist es wohl am sichersten.</line>
+            <line>...</line>
+            <line>Du lässt dich von dem Gedanken wohl nicht mehr abhalten, oder?</line>
+            <line>Nun gut, wenn du etwas brauchst, frag mich einfach.</line>
+            <line>...</line>
+            <line>Oh und du solltest dich wohl von allen verabschieden...</line>
         </dialogue>
-        <dialogue index="2" flag="second" newFlag="default">
-            <line>Well, you should take this...</line>
-        </dialogue>
-        <dialogue index="3" flag="default">
+        <dialogue index="2" flag="default">
             <line>Welcome, what can I do for ye?</line>
         </dialogue>
     </Smith>
@@ -21,7 +23,7 @@
             <line>I brew potions, yes? Hehehe.</line>
         </dialogue>
         <dialogue index="2" flag="second" newFlag="default">
-            <line>Take this potion for free, yes? Hehehe.</line>
+            <line>Hehe, solltest du wieder kommen, bring wenigstens Kräuter mit. Hehehe</line>
         </dialogue>
         <dialogue index="3" flag="default">
             <line>Welcome back my child, hehehe.</line>
@@ -29,7 +31,8 @@
     </Witch>
     <Sheldon>
         <dialogue index="1" flag="default">
-            <line>Fuck you, Leonard.</line>
+            <line>Du gehst? Tja war schön dich gekannt zu haben</line>
+            <line>Ich wette 100 Kristalle, dass du eh drauf gehst</line>
         </dialogue>
     </Sheldon>
     <Bibsy>
