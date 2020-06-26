@@ -94,7 +94,7 @@ namespace Assets.ProceduralGeneration.Core
         {
             if (enemyDecorator == null) throw new ArgumentNullException(nameof(enemyDecorator));
 
-            Debug.Log($"Spawning enemies in {room.ToString()}");
+            //Debug.Log($"Spawning enemies in {room.ToString()}");
             SpawnRandomly(GetRandomEnemy(), room, enemyDecorator);
 
             var numberOfEnemies = room.width * room.height / roomPerEnemy;

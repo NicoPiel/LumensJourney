@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Assets.Items.Scripts;
+using Core;
 using Unity.Burst;
-using UnityEngine.Events;
 
 namespace Assets.Player.Script
 {
@@ -32,8 +31,6 @@ namespace Assets.Player.Script
             PlayerStats.Add("MaxLightLevel", 1000);
             PlayerStats.Add("CurrentLightLevel", 1000);
         }
-
-        
     }
 }
  

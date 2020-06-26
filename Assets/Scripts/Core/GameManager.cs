@@ -9,6 +9,7 @@ using Assets.UI.PlayerUI.Scripts;
 using DialogueSystem.Scripts;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
@@ -72,6 +73,7 @@ namespace Core
         
         public static bool isPressingInteractButton;
         public static bool cameFromGuardian;
+        public static bool playerDied;
 
         private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
         private const string PathToDialogueFileInProject = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
@@ -160,6 +162,7 @@ namespace Core
 
             cameFromGuardian = false;
             isPressingInteractButton = false;
+            playerDied = false;
         }
 
         /// <summary>
@@ -274,8 +277,14 @@ namespace Core
         private void HubEntered()
         {
             CurrentLevel = 0;
-            Debug.Log("CurrentLevel should be 0");
+            Debug.Log("Hub Loaded.");
+            Debug.Assert(CurrentLevel == 0, "CurrentLevel is not 0");
             GetPlayerScript().ResetPlayer();
+
+            player.transform.position = new Vector3(-2,-2,0);
+
+            SceneManager.sceneLoaded -= GenerateDungeon;
+
             if (cameFromGuardian)
             {
                 var runsCompleted = GetSaveSystem().RunsCompleted;
@@ -285,6 +294,13 @@ namespace Core
                     : FadeTextInAndOut($"You have met the Guardian {runsCompleted} times."));
 
                 cameFromGuardian = false;
+            }
+
+            if (playerDied)
+            {
+                StartCoroutine(FadeTextInAndOut("You Died."));
+                playerScript.UnfreezeControls();
+                playerDied = false;
             }
         }
 
@@ -347,7 +363,7 @@ namespace Core
         /// </summary>
         private void OnDungeonGenerated()
         {
-            CurrentLevel += 1;
+            CurrentLevel++;
 
             var text = PlayerUiScript.GetPlayerUiScript().GetLevelTooltip().GetComponent<TMP_Text>();
             if (text != null)
@@ -356,7 +372,7 @@ namespace Core
                 text.gameObject.SetActive(true);
             }
 
-            playerScript.PlayerTakeHeal(playerScript.GetPlayerMaxHealth() - playerScript.GetPlayerCurrentHealth());
+            playerScript.HealPlayerFull();
 
             StartCoroutine(FadeLevelTextInAndOut());
         }
@@ -405,10 +421,10 @@ namespace Core
 
             text.gameObject.SetActive(true);
 
-            StartCoroutine(TextFade.FadeTextToFullAlpha(3f, text));
-            yield return new WaitForSeconds(3f);
-            StartCoroutine(TextFade.FadeTextToZeroAlpha(2f, text));
-            yield return new WaitForSeconds(2f);
+            StartCoroutine(TextFade.FadeTextToFullAlpha(3f*Time.timeScale, text));
+            yield return new WaitForSeconds(3f*Time.timeScale);
+            StartCoroutine(TextFade.FadeTextToZeroAlpha(2f*Time.timeScale, text));
+            yield return new WaitForSeconds(2f*Time.timeScale);
 
             text.gameObject.SetActive(false);
         }
@@ -427,10 +443,10 @@ namespace Core
 
             textObject.gameObject.SetActive(true);
 
-            _instance.StartCoroutine(TextFade.FadeTextToFullAlpha(fadeInTime, textObject));
-            yield return new WaitForSeconds(fadeInTime);
-            _instance.StartCoroutine(TextFade.FadeTextToZeroAlpha(fadeOutTime, textObject));
-            yield return new WaitForSeconds(fadeOutTime);
+            _instance.StartCoroutine(TextFade.FadeTextToFullAlpha(fadeInTime*Time.timeScale, textObject));
+            yield return new WaitForSeconds(fadeInTime*Time.timeScale);
+            _instance.StartCoroutine(TextFade.FadeTextToZeroAlpha(fadeOutTime*Time.timeScale, textObject));
+            yield return new WaitForSeconds(fadeOutTime*Time.timeScale);
 
             textObject.gameObject.SetActive(false);
         }
@@ -439,23 +455,11 @@ namespace Core
         {
             if (CurrentLevel < MaxLevels)
             {
-                var numberOfRooms = Random.Range(15, 30);
-
                 if (SceneManager.GetActiveScene().name != "Dungeon")
                 {
                     SceneManager.LoadScene("Dungeon");
-                    
-                    SceneManager.sceneLoaded += (scene, mode) =>
-                    {
-                        if (scene.name == "Dungeon")
-                        {
-                            _instance.generator.Generate(numberOfRooms);
-                        }
-                    };
-                }
-                else
-                {
-                    _instance.generator.Generate(numberOfRooms);
+
+                    SceneManager.sceneLoaded += GenerateDungeon;
                 }
             }
             else
@@ -470,6 +474,15 @@ namespace Core
             _instance.StartCoroutine(FadeTextInAndOut("The End"));
             SceneManager.LoadScene("LastLevel");
             GetPlayer().transform.position = new Vector2(8, 1);
+        }
+
+        private static void GenerateDungeon(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "Dungeon")
+            {
+                var numberOfRooms = Random.Range(15, 30);
+                _instance.generator.Generate(numberOfRooms);
+            }
         }
 
         #endregion

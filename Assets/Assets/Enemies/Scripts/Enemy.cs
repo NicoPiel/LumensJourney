@@ -113,7 +113,7 @@ namespace Assets.Enemies.Scripts
             {
                 if (raycastHitInfo)
                 {
-                    Debug.Log(raycastHitInfo.transform.gameObject.tag);
+                    //Debug.Log(raycastHitInfo.transform.gameObject.tag);
                     if (raycastHitInfo.transform.gameObject.CompareTag("Player"))
                     {
                         _animator.SetFloat(Vertical, playerDirection.y);
@@ -138,7 +138,7 @@ namespace Assets.Enemies.Scripts
         // On InnerRadius.onPlayerWalkIntoRange
         private void OnPlayerWalkIntoRange()
         {
-            Debug.Log($"Player walked into {gameObject.name}");
+            //Debug.Log($"Player walked into {gameObject.name}");
 
             PlayerScript playerScipt = GameManager.GetPlayerScript();
             Rigidbody2D playerRigidbody = playerScipt.GetRigidbody();

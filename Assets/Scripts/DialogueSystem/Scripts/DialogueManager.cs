@@ -208,7 +208,7 @@ namespace DialogueSystem.Scripts
                     where dialogue.Attribute("flag")?.Value == currentFlag
                     select dialogue.Attribute("newFlag")?.Value).First();
 
-            Debug.Log($"Current flag for {npcName}: {currentFlag}");
+            //Debug.Log($"Current flag for {npcName}: {currentFlag}");
 
             if (currentFlag != "default")
             {

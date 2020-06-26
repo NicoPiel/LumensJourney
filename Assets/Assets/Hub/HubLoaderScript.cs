@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Core;
+﻿using Core;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class HubLoaderScript : MonoBehaviour
+namespace Assets.Hub
 {
-    
-    // Start is called before the first frame update
-
-    void Start()
+    public class HubLoaderScript : MonoBehaviour
     {
-        GameManager.GetGameManager().onHubEntered.Invoke();
-        Debug.Log("Hub Loaded.");
+        private void Start()
+        {
+            GameManager.GetGameManager().onHubEntered.Invoke();
+        }
     }
 }

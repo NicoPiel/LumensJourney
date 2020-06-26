@@ -1,4 +1,5 @@
-﻿using Assets.ProceduralGeneration.Core;
+﻿using System.Collections;
+using Assets.ProceduralGeneration.Core;
 using Core;
 using Unity.Burst;
 using UnityEngine;
@@ -10,11 +11,12 @@ namespace Assets.ProceduralGeneration.Resources.Teleporter
     [BurstCompile]
     public class Teleporter : MonoBehaviour
     {
-        private void OnTriggerEnter2D(Collider2D other)
+        private IEnumerator OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player"))
             {
                 GameManager.GenerateNextLevel();
+                yield return new WaitForEndOfFrame();
             }
         }
     }

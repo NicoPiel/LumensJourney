@@ -70,7 +70,7 @@ namespace Assets.Items.Scripts
                     item.ValueIncreases.Add(attribute, val);
                 }
             }
-            Debug.Log("Itemgeneration:"+ itemName);
+            //Debug.Log("Itemgeneration:"+ itemName);
             item.ItemSprite = Resources.Load<Sprite>(itemName);
             
             return item;

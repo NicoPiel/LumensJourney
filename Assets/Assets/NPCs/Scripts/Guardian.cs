@@ -28,6 +28,8 @@ namespace Assets.NPCs.Scripts
         {
             inRange = true;
             GameManager.GetDialogueManager().StartCorrectDialogue(npcName);
+
+            Time.timeScale = 1f;
         }
 
         protected void OnTriggerExit2D(Collider2D other)
@@ -47,7 +49,6 @@ namespace Assets.NPCs.Scripts
                 GameManager.GetSaveSystem().RunsCompleted++;
 
                 SceneManager.LoadScene("Hub");
-                GameManager.GetPlayerScript().transform.position = new Vector3(-2, -2, 0);
             }
         }
     }

@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using Assets.Items.Scripts;
 using Core;
 using Unity.Burst;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using Utility.Tooltip;
 using Random = UnityEngine.Random;
 
 namespace Assets.Player.Script
@@ -92,6 +95,7 @@ namespace Assets.Player.Script
 
             AddAudioClips();
             GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
+            onPlayerDied.AddListener(OnPlayerDied);
 
             _canAttack = true;
             hitCollider.gameObject.SetActive(false);
@@ -101,6 +105,10 @@ namespace Assets.Player.Script
         public void ResetPlayer()
         {
             _player = new Player("Pacolos");
+            onPlayerStatChanged.Invoke("MaxHealth");
+            onPlayerLifeChanged.Invoke();
+            onPlayerLightLevelChanged.Invoke();
+            onItemAddedToPlayerInventory.Invoke();
         }
 
         #endregion
@@ -141,18 +149,15 @@ namespace Assets.Player.Script
                 }
 #endif
 
-                var f = (int) Input.GetAxis("LightSphere");
+                var f = Input.GetButtonDown("LightSphere");
                 var upDown = (int) Input.GetAxis("SwingUpDown");
                 //var up = Input.GetKeyDown(KeyCode.UpArrow);
                 //var down = Input.GetKeyDown(KeyCode.DownArrow);
                 var leftRight = (int) Input.GetAxis("SwingLeftRight");
                 //var left = Input.GetKeyDown(KeyCode.LeftArrow);
                 //var right = Input.GetKeyDown(KeyCode.RightArrow);
-                
-                Debug.Log($"upDown={upDown}");
-                Debug.Log($"leftRight={leftRight}");
-                
-                if (f == 1)
+
+                if (f)
                 {
                     GameObject teleporter = GameManager.GetGenerator().teleporter;
                     if (teleporter != null) SendLightSphereFromPlayer(teleporter.transform.position);
@@ -303,6 +308,7 @@ namespace Assets.Player.Script
         {
             _player.Inventory.AddItem(item);
             OnItemChange(item, false);
+            onItemAddedToPlayerInventory.Invoke();
         }
 
         public Collider2D GetCollider()
@@ -342,7 +348,6 @@ namespace Assets.Player.Script
         private void KillPlayer()
         {
             onPlayerDied.Invoke();
-            Debug.Log("The player died.");
         }
 
         public void PlayerTakeHeal(int heal)
@@ -366,20 +371,35 @@ namespace Assets.Player.Script
             return playerDamage;
         }
 
+        private void OnPlayerDied()
+        {
+            FreezeControls();
+            Debug.Log("The player died.");
+            Tooltip.HideTooltip_Static();
+            _animator.Play("Death");
+        }
+
+        private void DeathAnimationExit()
+        {
+            GameManager.playerDied = true;
+            SceneManager.LoadScene("Hub");
+            _animator.Play("Idle");
+        }
+
         #endregion
 
         #region Sounds
 
         public void PlayFootsteps()
         {
-            int rnd = Random.Range(0, 3);
+            var rnd = Random.Range(0, 3);
             _audioSource.clip = _audioClips["footstep0" + rnd];
             _audioSource.Play();
         }
 
         public void PlaySwordWoosh()
         {
-            int rnd = Random.Range(1, 8);
+            var rnd = Random.Range(1, 8);
             _audioSource.clip = _audioClips["woosh" + rnd];
             _audioSource.Play();
         }
@@ -534,10 +554,15 @@ namespace Assets.Player.Script
             }
         }
 
-        private void HealPlayerFull()
+        public void HealPlayerFull()
         {
             _player.PlayerStats["CurrentHealth"] = _player.PlayerStats["MaxHealth"];
             onPlayerLifeChanged.Invoke();
+        }
+
+        public Inventory GetPlayerInventory()
+        {
+            return _player.Inventory;
         }
     }
 }

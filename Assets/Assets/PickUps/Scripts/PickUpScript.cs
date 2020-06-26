@@ -23,9 +23,9 @@ namespace Assets.PickUps.Scripts
 
         public void SetPickUpItem(string itemName)
         {
-            Debug.Log("Incomming: "+itemName);
+            //Debug.Log("Incoming: "+itemName);
             _item = GameItem.ConstructItem(itemName);
-            Debug.Log("Generated Item:"+_item.ItemName);
+            //Debug.Log("Generated Item:"+_item.ItemName);
             itemSprite.sprite = _item.ItemSprite;
         }
 
