@@ -55,9 +55,9 @@ namespace Core
         public int DiaryProgression { get; set; }
         public int RunsCompleted { get; set; }
 
-        public static string persistentItemFilePath;
-        public static string persistentDialogueFilePath;
-        public static string persistentObjectsFilePath;
+        public static string streamingItemFilePath;
+        public static string streamingDialogueFilePath;
+        public static string streamingObjectsFilePath;
 
         #endregion
 
@@ -75,8 +75,8 @@ namespace Core
         public static bool cameFromGuardian;
         public static bool playerDied;
 
-        private const string PathToItemFileInProject = "Assets/Assets/Items/Data/items.xml";
-        private const string PathToDialogueFileInProject = "Assets/Scripts/DialogueSystem/Data/dialogues.xml";
+        private const string PathToItemFileInProject = "XML/items.xml";
+        private const string PathToDialogueFileInProject = "XML/";
         private const string PathToObjectsFileInProject = "Assets/Scripts/DialogueSystem/Data/storyobjects.xml";
 
         #endregion
@@ -100,49 +100,10 @@ namespace Core
 
             CurrentLevel = 0;
 
-            persistentDialogueFilePath = Application.persistentDataPath + "/dialogues.xml";
-            persistentItemFilePath = Application.persistentDataPath + "/items.xml";
-            persistentObjectsFilePath = Application.persistentDataPath + "/storyobjects.xml";
-
-#if !UNITY_EDITOR
-            // Files
-            if (!File.Exists(persistentDialogueFilePath))
-            {
-                File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
-            }
-
-            if (!File.Exists(persistentItemFilePath))
-            {
-                File.Copy(PathToItemFileInProject, persistentItemFilePath);
-            }
-            
-            if (!File.Exists(persistentObjectsFilePath))
-            {
-                File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
-            }
-#else
-            // Files
-            if (File.Exists(persistentDialogueFilePath))
-            {
-                File.Delete(persistentDialogueFilePath);
-            }
-
-            File.Copy(PathToDialogueFileInProject, persistentDialogueFilePath);
-
-            if (File.Exists(persistentItemFilePath))
-            {
-                File.Delete(persistentItemFilePath);
-            }
-
-            File.Copy(PathToItemFileInProject, persistentItemFilePath);
-
-            if (File.Exists(persistentObjectsFilePath))
-            {
-                File.Delete(persistentObjectsFilePath);
-            }
-
-            File.Copy(PathToObjectsFileInProject, persistentObjectsFilePath);
-#endif
+            streamingDialogueFilePath = Application.streamingAssetsPath+ "/XML/dialogues.xml";
+            streamingItemFilePath = Application.streamingAssetsPath + "/XML/items.xml";
+            streamingObjectsFilePath = Application.streamingAssetsPath + "/XML/storyobjects.xml";
+            Debug.Log(streamingDialogueFilePath);
         }
 
         /// <summary>

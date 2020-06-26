@@ -34,6 +34,8 @@
       <Path>.idea</Path>
       <Path>Builds</Path>
       <Path>Library</Path>
+      <Path>Lumen's Journey_Data</Path>
+      <Path>MonoBleedingEdge</Path>
       <Path>Temp</Path>
       <Path>obj</Path>
     </explicitExcludes>

@@ -44,9 +44,9 @@ namespace DialogueSystem.Scripts
             _gameManager = GameManager.GetGameManager();
             _saveSystem = GameManager.GetSaveSystem();
 
-            _persistentPathToDialogueFile = GameManager.persistentDialogueFilePath;
+            _persistentPathToDialogueFile = GameManager.streamingDialogueFilePath;
             _dialoguesXml = XElement.Load(_persistentPathToDialogueFile);
-            _persistentPathToObjectsFile = GameManager.persistentObjectsFilePath;
+            _persistentPathToObjectsFile = GameManager.streamingObjectsFilePath;
             _objectsXml = XElement.Load(_persistentPathToObjectsFile);
             if (_dialoguesXml != null) Debug.Log($"Loaded dialogues.xml from {_persistentPathToDialogueFile}");
             else throw new NullReferenceException("diaolgues.xml could not be found.");

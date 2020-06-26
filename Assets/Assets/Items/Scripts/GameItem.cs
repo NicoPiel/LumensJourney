@@ -41,7 +41,7 @@ namespace Assets.Items.Scripts
         
         public static GameItem ConstructItem(string itemName)
         {
-            persistentPathToItemFile = GameManager.persistentItemFilePath;
+            persistentPathToItemFile = GameManager.streamingItemFilePath;
             if (!File.Exists(persistentPathToItemFile))
             {
                 Debug.Log("File not found:" + persistentPathToItemFile);
@@ -78,7 +78,7 @@ namespace Assets.Items.Scripts
 
         public static List<string> GetItemNames()
         {
-            persistentPathToItemFile = GameManager.persistentItemFilePath;
+            persistentPathToItemFile = GameManager.streamingItemFilePath;
             
             XElement rootNode = XElement.Load(persistentPathToItemFile);
             var items =
