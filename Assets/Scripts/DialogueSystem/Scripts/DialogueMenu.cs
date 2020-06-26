@@ -19,6 +19,7 @@ namespace DialogueSystem.Scripts
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text namePlate;
         [SerializeField] private TMP_Text dialogueText;
+        [SerializeField] private TMP_Text continueText;
 
         public bool shown;
         public bool endOfLine;
@@ -90,13 +91,15 @@ namespace DialogueSystem.Scripts
             onEndOfLine.Invoke();
         }
 
-        public void OnStartOfLine()
+        private void OnStartOfLine()
         {
+            continueText.gameObject.SetActive(false);
             endOfLine = false;
         }
 
-        public void OnEndOfLine()
+        private void OnEndOfLine()
         {
+            continueText.gameObject.SetActive(true);
             endOfLine = true;
         }
 

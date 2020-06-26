@@ -3,14 +3,14 @@
 <dialogues>
     <Smith>
         <dialogue index="1" flag="first" newFlag="default">
-            <line>Na jungchen, immer noch vor den Rest des Knasts zu erkunden? </line>
-            <line>Dir ist aber klar, dass du vermutlich da draußen umkommen wirst.</line>
-            <line>Es ist vermutlich besser, wenn du einfach hier in Sanctuary bleibst, hier ist es wohl am sichersten.</line>
+            <line>He, boy. So you still wanna reach the top, eh?</line>
+            <line>You do know, you'll likely die out there, aye?</line>
+            <line>It's probably better for you to just stay in Sanctuary. It's safe here. As safe as it gets.</line>
             <line>...</line>
-            <line>Du lässt dich von dem Gedanken wohl nicht mehr abhalten, oder?</line>
-            <line>Nun gut, wenn du etwas brauchst, frag mich einfach.</line>
-            <line>...</line>
-            <line>Oh und du solltest dich wohl von allen verabschieden...</line>
+            <line>Well, there seems to be nothing I can say to sway you, hm?</line>
+            <line>Well then. If you need anything, don't hesitate to ask.</line>
+            <line>Oh and...</line>
+            <line>You should probably say goodbye to everyone, hahaha.</line>
         </dialogue>
         <dialogue index="2" flag="default" newFlag="default">
             <line>Welcome, what can I do for ye?</line>
@@ -23,7 +23,7 @@
             <line>I brew potions, yes? Hehehe.</line>
         </dialogue>
         <dialogue index="2" flag="second" newFlag="default">
-            <line>Hehe, solltest du wieder kommen, bring wenigstens Kräuter mit. Hehehe</line>
+            <line>Hehe, if you do come back, you could bring me some herbs, yes? Hehehe.</line>
         </dialogue>
         <dialogue index="3" flag="default" newFlag="default">
             <line>Welcome back my child, hehehe.</line>
@@ -31,13 +31,15 @@
     </Witch>
     <Sheldon>
         <dialogue index="1" flag="default" newFlag="default">
-            <line>Du gehst? Tja war schön dich gekannt zu haben</line>
-            <line>Ich wette 100 Kristalle, dass du eh drauf gehst</line>
+            <line>You're leaving? Well, it was... pleasant to have known you.</line>
+            <line>I'll bet a hundred crystals on your inevitable doom.</line>
         </dialogue>
     </Sheldon>
     <Bibsy>
         <dialogue index="1" flag="default" newFlag="default">
             <line>Hey man. Like my library?</line>
+            <line>You know, I remember reading something about "light" in a dusty old book.</line>
+            <line>It said: "Press F to have a sphere of light show you the way to the exit."</line>
         </dialogue>
     </Bibsy>
     <Guardian>
@@ -59,6 +61,9 @@
         </dialogue>
         <dialogue index="2" flag="default" newFlag="default">
             <line>Hello again.</line>
+            <line>You're getting stronger by the minute.</line>
+            <line>Still, you aren't strong enough to survive what is waiting out there for you.</line>
+            <line>Try again.</line>
         </dialogue>
     </Guardian>
 </dialogues>

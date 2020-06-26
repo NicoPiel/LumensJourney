@@ -50,7 +50,7 @@ namespace Core
         #region Public variables
 
         public static int CurrentLevel { get; set; }
-        public static int MaxLevels { get; set; } = 1;
+        public static int MaxLevels { get; set; } = 5;
         public int StoryStoneProgression { get; set; }
         public int DiaryProgression { get; set; }
         public int RunsCompleted { get; set; }
@@ -461,6 +461,10 @@ namespace Core
 
                     SceneManager.sceneLoaded += GenerateDungeon;
                 }
+                else
+                {
+                    GenerateDungeon(SceneManager.GetActiveScene());
+                }
             }
             else
             {
@@ -476,7 +480,7 @@ namespace Core
             GetPlayer().transform.position = new Vector2(8, 1);
         }
 
-        private static void GenerateDungeon(Scene scene, LoadSceneMode mode)
+        private static void GenerateDungeon(Scene scene, LoadSceneMode mode = LoadSceneMode.Single)
         {
             if (scene.name == "Dungeon")
             {
