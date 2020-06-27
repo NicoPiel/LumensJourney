@@ -17,7 +17,7 @@ namespace Assets.Items.Scripts
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
-            _player = GameManager.GetPlayer();
+            _player = GameManager.GetUnityPlayerObject();
             _particleSystem = GetComponent<ParticleSystem>();
         }
 
@@ -37,7 +37,7 @@ namespace Assets.Items.Scripts
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                GameManager.GetPlayerScript().PlayerChangeLightShards(1);
+                GameManager.GetPlayerScript().GetPlayerInventory().PlayerChangeLightShards(1);
                 _particleSystem.Play();
                 yield return new WaitForSeconds(0.1f);
                 Destroy(gameObject);

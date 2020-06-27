@@ -37,7 +37,7 @@ namespace Assets.Enemies.Scripts
             {
                 PlayerScript playerScipt = GameManager.GetPlayerScript();
 
-                _parent.TakeDamage(playerScipt.GetPlayerDamage());
+                _parent.TakeDamage(playerScipt.GetPlayer().GetPlayerDamage());
                 
                 Vector3 moveDirection =  _parent.GetRigidbody().transform.position - playerScipt.transform.position;
                 _parent.GetRigidbody().AddForce( moveDirection.normalized * 500f);

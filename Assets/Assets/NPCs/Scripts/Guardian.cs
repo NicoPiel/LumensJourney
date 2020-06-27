@@ -20,8 +20,8 @@ namespace Assets.NPCs.Scripts
         private new void Start()
         {
             inRange = false;
-            GameManager.GetDialogueManager().onDialogueEnd.AddListener(OnDialogueEnd);
-            _playerTransform = GameManager.GetPlayer().transform;
+            GameManager.GetEventHandler().onDialogueEnd.AddListener(OnDialogueEnd);
+            _playerTransform = GameManager.GetUnityPlayerObject().transform;
         }
 
         protected void OnTriggerEnter2D(Collider2D other)

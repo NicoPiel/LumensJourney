@@ -55,7 +55,7 @@ namespace Assets.ProceduralGeneration.Core
         private void Start()
         {
             _generator = GameManager.GetGenerator();
-            _generator.onDungeonGenerated.AddListener(Decorate);
+            GameManager.GetEventHandler().onDungeonGenerated.AddListener(Decorate);
 
             items = GameItem.GetItemNames();
 
@@ -215,7 +215,7 @@ namespace Assets.ProceduralGeneration.Core
 
         private Vector2 GetRandomPositionAwayFromPlayer(int leftXBoundary, int rightXBoundary, int leftYBoundary, int rightYBoundary)
         {
-            Vector2 playerPosition = GameManager.GetPlayer().transform.position;
+            Vector2 playerPosition = GameManager.GetUnityPlayerObject().transform.position;
             var spawnPosition = new Vector2(Random.Range(leftXBoundary, rightXBoundary), Random.Range(leftYBoundary, rightYBoundary));
             var distanceToPlayer = (playerPosition - spawnPosition).magnitude;
 

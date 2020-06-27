@@ -18,16 +18,16 @@ namespace Assets.Hub.Bank.Menu
             if (_bankScript == null)
             {
                 _bankScript =  GameObject.Find("Bank").GetComponent<BankScript>();
-                _bankScript.onLightShardsStoredInBank.AddListener(OnLightShardsChanged);
+                GameManager.GetEventHandler().onLightShardsStoredInBank.AddListener(OnLightShardsChanged);
             }
         
-            shardsOnPlayer.text = GameManager.GetPlayerScript().GetLightShardAmount().ToString();
+            shardsOnPlayer.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
             shardsInBank.text = _bankScript.GetStoredLightShards().ToString();
         }
 
         private void OnLightShardsChanged()
         {
-            shardsOnPlayer.text = GameManager.GetPlayerScript().GetLightShardAmount().ToString();
+            shardsOnPlayer.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
             shardsInBank.text = _bankScript.GetStoredLightShards().ToString();
         }
 

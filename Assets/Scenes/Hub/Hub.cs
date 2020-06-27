@@ -14,7 +14,7 @@ namespace Scenes.Hub
     {
         private void Start()
         {
-            GameObject player = GameManager.GetPlayer();
+            GameObject player = GameManager.GetUnityPlayerObject();
             
             if (Camera.main != null && player != null)
             {

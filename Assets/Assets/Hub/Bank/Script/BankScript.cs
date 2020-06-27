@@ -21,17 +21,8 @@ namespace Assets.Hub.Bank.Script
         public AudioClip openChestSound;
         public AudioClip closeChestSound;
 
-        public UnityEvent onLightShardsStoredInBank;
-        public UnityEvent onChestClosed;
-        public UnityEvent onChestOpened;
-
-        // Start is called before the first frame update
-        private void OnEnable()
-        {
-            onChestClosed = new UnityEvent();
-            onChestOpened = new UnityEvent();
-            onLightShardsStoredInBank = new UnityEvent();
-        }
+        
+        
 
         void Start()
         {
@@ -43,8 +34,8 @@ namespace Assets.Hub.Bank.Script
 
             _storedLightShards = GameManager.GetSaveSystem().BankedShards;
 
-            onChestClosed.AddListener(OnChestClosed);
-            onChestOpened.AddListener(OnChestOpened);
+            GameManager.GetEventHandler().onChestClosed.AddListener(OnChestClosed);
+            GameManager.GetEventHandler().onChestOpened.AddListener(OnChestOpened);
         }
 
         public void Update()
@@ -54,11 +45,11 @@ namespace Assets.Hub.Bank.Script
                 if (_menuOpen)
                 {
                     Tooltip.ShowTooltip_Static("Press E");
-                    onChestClosed.Invoke();
+                    GameManager.GetEventHandler().onChestClosed.Invoke();
                 }
                 else
                 {
-                    onChestOpened.Invoke();
+                    GameManager.GetEventHandler().onChestOpened.Invoke();
                 }
             }
         }
@@ -97,18 +88,18 @@ namespace Assets.Hub.Bank.Script
             if (other.gameObject.CompareTag("Player"))
             {
                 Tooltip.HideTooltip_Static();
-                onChestClosed.Invoke();
+                GameManager.GetEventHandler().onChestClosed.Invoke();
                 _entered = false;
             }
         }
 
         public void StoreAllLightShardsInBank()
         {
-            _storedLightShards += GameManager.GetPlayerScript().GetLightShardAmount();
-            GameManager.GetPlayerScript().PlayerSetLightShards(0);
+            _storedLightShards += GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount();
+            GameManager.GetPlayerScript().GetPlayerInventory().PlayerSetLightShards(0);
             GameManager.GetSaveSystem().BankedShards = _storedLightShards;
 
-            onLightShardsStoredInBank.Invoke();
+            GameManager.GetEventHandler().onLightShardsStoredInBank.Invoke();
 
             GameManager.GetSaveSystem().CreateSave();
         }

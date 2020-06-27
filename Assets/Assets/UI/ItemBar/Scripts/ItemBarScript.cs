@@ -11,17 +11,11 @@ namespace Assets.UI.ItemBar.Scripts
     [BurstCompile]
     public class ItemBarScript : MonoBehaviour
     {
-        private static ItemBarScript _instance;
         [SerializeField] private GameObject ItemIcon;
-
-        public void Awake()
-        {
-            _instance = this;
-        }
 
         private void Start()
         {
-            GameManager.GetPlayerScript().onItemAddedToPlayerInventory.AddListener(UpdateItemBar);
+            GameManager.GetEventHandler().onInventoryChanged.AddListener(UpdateItemBar);
         }
 
         private void UpdateItemBar()

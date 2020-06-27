@@ -14,7 +14,7 @@ namespace Assets.PickUps.Scripts
     {
         private GameItem _item;
         private bool _entered;
-        private PlayerScript _player;
+        private Inventory _inventory;
         
         [SerializeField]
         private SpriteRenderer itemSprite;
@@ -31,13 +31,13 @@ namespace Assets.PickUps.Scripts
 
         public void Start()
         {
-            _player = GameManager.GetPlayerScript();
+            _inventory = GameManager.GetPlayerScript().GetPlayerInventory();
         }
 
         public void Update()
         {
             if (_entered && Input.GetKeyDown(KeyCode.E)){
-                _player.AddToInventory(_item);
+                _inventory.AddItem(_item);
                 Tooltip.HideTooltip_Static();
                 Destroy(gameObject);
             }

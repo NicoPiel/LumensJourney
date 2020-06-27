@@ -19,12 +19,12 @@ namespace Assets.ProceduralGeneration.Core
         /// <summary>
         /// Triggers when a dungeon level has been fully generated.
         /// </summary>
-        public UnityEvent onDungeonGenerated;
+        
 
         /// <summary>
         /// Triggers when something in an existing dungeon changes (e.g. a door opens).
         /// </summary>
-        public UnityEvent onDungeonChanged;
+        
 
         #endregion
 
@@ -78,16 +78,10 @@ namespace Assets.ProceduralGeneration.Core
 
         #region UnityEvent functions
 
-        private void Awake()
-        {
-            onDungeonGenerated = new UnityEvent();
-            onDungeonChanged = new UnityEvent();
-        }
-
         private void Start()
         {
-            onDungeonGenerated.AddListener(OnDungeonGenerated);
-            onDungeonChanged.AddListener(OnDungeonChanged);
+            GameManager.GetEventHandler().onDungeonGenerated.AddListener(OnDungeonGenerated);
+            GameManager.GetEventHandler().onDungeonChanged.AddListener(OnDungeonChanged);
 
             teleporter = null;
         }
@@ -122,7 +116,7 @@ namespace Assets.ProceduralGeneration.Core
 
             PlacePlayer();
 
-            onDungeonGenerated?.Invoke();
+            GameManager.GetEventHandler().onDungeonGenerated?.Invoke();
             return true;
         }
 
@@ -454,7 +448,7 @@ namespace Assets.ProceduralGeneration.Core
         private void PlacePlayer()
         {
             Rect firstRoom = _rooms[0];
-            GameManager.GetPlayer().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
+            GameManager.GetUnityPlayerObject().transform.position = new Vector3(firstRoom.x + 2, firstRoom.y + 2, 0);
         }
 
         #endregion

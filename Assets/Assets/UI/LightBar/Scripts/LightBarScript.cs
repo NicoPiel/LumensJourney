@@ -22,13 +22,13 @@ namespace Assets.UI.LightBar.Scripts
             _slider = gameObject.GetComponent<Slider>();
             _slider.value = 1000;
             
-            GameManager.GetPlayerScript().onPlayerLightLevelChanged.AddListener(ChangeProgress);
+            GameManager.GetEventHandler().onPlayerLightLevelChanged.AddListener(ChangeProgress);
         }
         
         private void ChangeProgress()
         {
-            var playerMaxLightValue = GameManager.GetPlayerScript().GetPlayerMaxLightValue();
-            var playerCurrentLightValue  = GameManager.GetPlayerScript().GetPlayerCurrentLightValue();
+            var playerMaxLightValue = GameManager.GetPlayer().GetPlayerMaxLightValue();
+            var playerCurrentLightValue  = GameManager.GetPlayer().GetPlayerCurrentLightValue();
             _slider.maxValue = playerMaxLightValue;
             _slider.value = playerCurrentLightValue;
             var temp = ((float) playerCurrentLightValue / playerMaxLightValue); // 980/1000
