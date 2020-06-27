@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 2340561861014254804}
   - component: {fileID: 1967023119039712301}
   - component: {fileID: 1583675803}
+  - component: {fileID: 2219766370342699157}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -187,7 +188,7 @@ MonoBehaviour:
     type: 3}
   mainCamera: {fileID: 0}
   menuManagerScript: {fileID: 0}
-  dialogueManager: {fileID: 1583675803}
+  dialogueManager: {fileID: 2219766370342699157}
   eventHandler: {fileID: 1967023119039712301}
 --- !u!114 &4450038217365722209
 MonoBehaviour:
@@ -392,6 +393,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1583675803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845780113571387580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00874c1430d62c94cb0111debcbd62b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2219766370342699157
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
