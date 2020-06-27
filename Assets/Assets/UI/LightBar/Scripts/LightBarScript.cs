@@ -11,16 +11,14 @@ namespace Assets.UI.LightBar.Scripts
     public class LightBarScript : MonoBehaviour
     {
         // Start is called before the first frame update
-        private Slider _slider;
-        private TMP_Text _tmpText;
+        [SerializeField] private Slider slider;
+        [SerializeField] private TMP_Text tmpText;
         
         
-        void Start()
+        private void Start()
         {
-            _tmpText = gameObject.GetComponentInChildren<TMP_Text>();
-            _tmpText.text = "100%";
-            _slider = gameObject.GetComponent<Slider>();
-            _slider.value = 1000;
+            tmpText.text = "100%";
+            slider.value = 1000;
             
             GameManager.GetEventHandler().onPlayerLightLevelChanged.AddListener(ChangeProgress);
         }
@@ -29,12 +27,12 @@ namespace Assets.UI.LightBar.Scripts
         {
             var playerMaxLightValue = GameManager.GetPlayer().GetPlayerMaxLightValue();
             var playerCurrentLightValue  = GameManager.GetPlayer().GetPlayerCurrentLightValue();
-            _slider.maxValue = playerMaxLightValue;
-            _slider.value = playerCurrentLightValue;
+            slider.maxValue = playerMaxLightValue;
+            slider.value = playerCurrentLightValue;
             var temp = ((float) playerCurrentLightValue / playerMaxLightValue); // 980/1000
             
             
-            _tmpText.text = Math.Ceiling(temp * 100d) + "%";
+            tmpText.text = Math.Ceiling(temp * 100d) + "%";
         }
     
     }

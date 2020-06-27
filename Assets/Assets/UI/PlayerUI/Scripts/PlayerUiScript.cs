@@ -11,15 +11,15 @@ namespace Assets.UI.PlayerUI.Scripts
     [BurstCompile]
     public class PlayerUiScript : MonoBehaviour
     {
-        public GameObject healthbar;
+        [SerializeField] private GameObject healthbar;
 
-        public GameObject itembar;
+        [SerializeField] private GameObject itembar;
 
-        public GameObject lightbar;
+        [SerializeField] private GameObject lightbar;
 
-        public GameObject lightShardCounter;
+        [SerializeField] private GameObject lightShardCounter;
 
-        public GameObject levelTooltip;
+        [SerializeField] private GameObject levelTooltip;
 
         private static PlayerUiScript _instance;
         

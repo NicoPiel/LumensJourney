@@ -6,23 +6,17 @@ namespace Assets.UI.LightShards.Script
 {
     public class LightShardDisplayScript : MonoBehaviour
     {
-        private TMP_Text _textbox;
+        [SerializeField] private TMP_Text textBox;
 
-        public void Awake()
+        private void Start()
         {
-            _textbox = gameObject.GetComponentInChildren<TMP_Text>();
-        
-        }
-
-        public void Start()
-        {
-            _textbox.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
+            textBox.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
             GameManager.GetEventHandler().onPlayerLightShardsChanged.AddListener(UpdateLightShardDisplay);
         }
 
-        public void UpdateLightShardDisplay()
+        private void UpdateLightShardDisplay()
         {
-            _textbox.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
+            textBox.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
         }
     }
 }

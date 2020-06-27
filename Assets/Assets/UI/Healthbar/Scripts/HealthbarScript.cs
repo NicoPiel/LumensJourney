@@ -9,14 +9,14 @@ namespace Assets.UI.Healthbar.Scripts
     [BurstCompile]
     public class HealthbarScript : MonoBehaviour
     {
-        public GameObject heart;
-        public Sprite full;
-        public Sprite firstfull;
-        public Sprite firstempty;
-        public Sprite empty;
-        private Dictionary<int, Image> hearts;
+        [SerializeField] private GameObject heart;
+        [SerializeField] private Sprite full;
+        [SerializeField] private Sprite firstFull;
+        [SerializeField] private Sprite firstEmpty;
+        [SerializeField] private Sprite empty;
+        private Dictionary<int, Image> _hearts;
 
-        public void Start()
+        private void Start()
         {
             //Debug.Log("HealthBarLoaded");
             ChangeMaxHearts();
@@ -35,7 +35,7 @@ namespace Assets.UI.Healthbar.Scripts
 
         private void ChangeMaxHearts()
         {
-            hearts = new Dictionary<int, Image>();
+            _hearts = new Dictionary<int, Image>();
             //Debug.Log("Trying to Change MaxHealth");
             var maxHealth = GameManager.GetPlayer().GetPlayerMaxHealth();
             //Debug.Log($"MaxHealth will be {maxHealth}");
@@ -58,7 +58,7 @@ namespace Assets.UI.Healthbar.Scripts
                 rectTrans.sizeDelta = new Vector2(50, 35);
 
                 var image = heartSlot.GetComponent<Image>();
-                hearts.Add(i, image);
+                _hearts.Add(i, image);
                 x += 75;
             }
 
@@ -69,15 +69,15 @@ namespace Assets.UI.Healthbar.Scripts
         private void ChangeHearts()
         {
             var currentHealth = GameManager.GetPlayer().GetPlayerCurrentHealth();
-            for (var i = 1; i <= hearts.Count; i++)
+            for (var i = 1; i <= _hearts.Count; i++)
             {
                 if (currentHealth >= i)
                 {
-                    hearts[i].sprite = i == 1 ? firstfull : full;
+                    _hearts[i].sprite = i == 1 ? firstFull : full;
                 }
                 else
                 {
-                    hearts[i].sprite = i == 1 ? firstempty : empty;
+                    _hearts[i].sprite = i == 1 ? firstEmpty : empty;
                 }
             }
         }

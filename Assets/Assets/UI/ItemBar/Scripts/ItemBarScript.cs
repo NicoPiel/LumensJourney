@@ -29,7 +29,7 @@ namespace Assets.UI.ItemBar.Scripts
             var x = 33f;
             var y = -40f;
             
-            foreach(GameItem item in GameManager.GetPlayerScript().GetPlayerInventory().Items)
+            foreach(GameItem item in GameManager.GetPlayer().GetInventory().Items)
             {
                 GameObject itemIcon = Instantiate(ItemIcon, transform);
                 itemIcon.transform.Find("ItemBackground").transform.Find("ItemSprite").GetComponent<Image>().sprite = item.ItemSprite;
