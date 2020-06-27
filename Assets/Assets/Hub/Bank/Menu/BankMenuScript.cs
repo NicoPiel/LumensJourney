@@ -7,8 +7,8 @@ namespace Assets.Hub.Bank.Menu
 {
     public class BankMenuScript : MonoBehaviour
     {
-        public TMP_Text shardsOnPlayer;
-        public TMP_Text shardsInBank;
+        [SerializeField] private TMP_Text shardsOnPlayer;
+        [SerializeField] private TMP_Text shardsInBank;
         private BankScript _bankScript;
 
         private void OnEnable()

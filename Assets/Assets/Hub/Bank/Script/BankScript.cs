@@ -16,10 +16,10 @@ namespace Assets.Hub.Bank.Script
         private bool _menuOpen;
         private int _storedLightShards;
 
-        public Sprite openChestSprite;
-        public Sprite closedChestSprite;
-        public AudioClip openChestSound;
-        public AudioClip closeChestSound;
+        [SerializeField] private Sprite openChestSprite;
+        [SerializeField] private Sprite closedChestSprite;
+        [SerializeField] private AudioClip openChestSound;
+        [SerializeField] private AudioClip closeChestSound;
 
         
         
@@ -58,6 +58,7 @@ namespace Assets.Hub.Bank.Script
         {
             GameManager.GetMenuManagerScript().UnloadCurrentMenu();
             _spriteRenderer.sprite = closedChestSprite;
+            _audioSource.clip = closeChestSound;
             if (_menuOpen)
                 _audioSource.Play();
             _menuOpen = false;

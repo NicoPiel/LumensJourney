@@ -55,7 +55,7 @@ namespace Assets.MenuManager.Scripts
                     _currentMenu = null;
                     break;
                 default:
-                    Debug.Log("_currentMenu false");
+                    //Debug.Log("_currentMenu false");
                     break;
             }
         }
