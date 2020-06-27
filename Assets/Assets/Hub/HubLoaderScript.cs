@@ -7,7 +7,7 @@ namespace Assets.Hub
     {
         private void Start()
         {
-            GameManager.GetGameManager().onHubEntered.Invoke();
+            GameManager.GetEventHandler().onHubEntered.Invoke();
         }
     }
 }

@@ -16,14 +16,14 @@ namespace Utility
 
         private CinemachineImpulseSource _impulseSource;
         
-        private PlayerScript _player;
+        private Player _player;
         private AudioSource _doorSound;
 
         private bool _entered;
 
         private void Start()
         {
-            _player = GameManager.GetPlayer().GetComponent<PlayerScript>();
+            _player = GameManager.GetPlayer();
             _doorSound = GetComponent<AudioSource>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
         }
@@ -80,7 +80,7 @@ namespace Utility
 
         private void OnDisable()
         {
-            GameManager.GetGenerator().onDungeonChanged.Invoke();
+            GameManager.GetEventHandler().onDungeonChanged.Invoke();
         }
     }
 }

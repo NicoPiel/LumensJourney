@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Player.Script
 {
-    public class OnPlayerStatChanged : UnityEvent<string>{}
+    
     
     [BurstCompile]
     public class PlayerScript : MonoBehaviour
@@ -22,7 +22,6 @@ namespace Assets.Player.Script
 
         [SerializeField] private float timeBetweenAttacks;
         [SerializeField] private float invunerabilityTime;
-        [SerializeField] private int playerDamage;
         [SerializeField] private GameObject lightSphereGameObject;
         [SerializeField] private float lightSphereSpeed;
         [SerializeField] private float lightSphereCooldown;
@@ -47,10 +46,12 @@ namespace Assets.Player.Script
         private SpriteRenderer _spriteRenderer;
 
         private Dictionary<string, AudioClip> _audioClips;
-        private bool _invulnerable;
+        
         private bool _canAttack;
         private bool _canSendLightSphere;
         private bool _frozen;
+        private bool _invulnerable;
+        
 
         private static readonly int StateExit = Animator.StringToHash("StateExit");
         private static readonly int LastHorizontal = Animator.StringToHash("LastHorizontal");
@@ -60,28 +61,11 @@ namespace Assets.Player.Script
         private static readonly int Speed = Animator.StringToHash("Speed");
 
         #endregion
-
-        #region UnityEvents
-
-        public UnityEvent onPlayerTakeDamage;
-        public UnityEvent onPlayerTakeHeal;
-        public UnityEvent onItemAddedToPlayerInventory;
-        public UnityEvent onPlayerLightLevelChanged;
-        public UnityEvent onPlayerLightShardsChanged;
-        public UnityEvent onPlayerLifeChanged;
-        public UnityEvent onPlayerDied;
-        public OnPlayerStatChanged onPlayerStatChanged;
-
-        #endregion
+        
 
         #region UnityEvent functions
 
         // Start is called before the first frame update
-        private void Awake()
-        {
-            SetUpEvents();
-        }
-
         private void Start()
         {
             _player = new Player("Pacolos");
@@ -94,8 +78,9 @@ namespace Assets.Player.Script
             _spriteRenderer = GetComponent<SpriteRenderer>();
 
             AddAudioClips();
-            GameManager.GetGenerator().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
-            onPlayerDied.AddListener(OnPlayerDied);
+            
+            GameManager.GetEventHandler().onDungeonGenerated.AddListener(() => { StartCoroutine(LoseLightPerSecond()); });
+            GameManager.GetEventHandler().onPlayerDied.AddListener(OnPlayerDied);
 
             _canAttack = true;
             hitCollider.gameObject.SetActive(false);
@@ -105,10 +90,10 @@ namespace Assets.Player.Script
         public void ResetPlayer()
         {
             _player = new Player("Pacolos");
-            onPlayerStatChanged.Invoke("MaxHealth");
-            onPlayerLifeChanged.Invoke();
-            onPlayerLightLevelChanged.Invoke();
-            onItemAddedToPlayerInventory.Invoke();
+            GameManager.GetEventHandler().onPlayerStatChanged.Invoke("MaxHealth");
+            GameManager.GetEventHandler().onPlayerLifeChanged.Invoke();
+            GameManager.GetEventHandler().onPlayerLightLevelChanged.Invoke();
+            GameManager.GetEventHandler().onInventoryChanged.Invoke();
         }
 
         #endregion
@@ -130,12 +115,12 @@ namespace Assets.Player.Script
                 
                 if (j)
                 {
-                    PlayerChangeLightShards(50);
+                    GetPlayerInventory().PlayerChangeLightShards(50);
                 }
 
                 if (k)
                 {
-                    PlayerChangeLightShards(-50);
+                    GetPlayerInventory().PlayerChangeLightShards(-50);
                 }
 
                 if (v)
@@ -145,7 +130,7 @@ namespace Assets.Player.Script
 
                 if (b)
                 {
-                    PlayerTakeHeal(1);
+                    _player.PlayerTakeHeal(1);
                 }
 #endif
 
@@ -215,28 +200,6 @@ namespace Assets.Player.Script
 
         #endregion
 
-        private void SetUpEvents()
-        {
-            onPlayerTakeDamage = new UnityEvent();
-            onItemAddedToPlayerInventory = new UnityEvent();
-            onPlayerLightLevelChanged = new UnityEvent();
-            onPlayerLightShardsChanged = new UnityEvent();
-            onPlayerTakeHeal = new UnityEvent();
-            onPlayerLifeChanged = new UnityEvent();
-            onPlayerDied = new UnityEvent();
-            onPlayerStatChanged = new OnPlayerStatChanged();
-            
-            onPlayerLightShardsChanged.AddListener(OnPlayerLightShardsChanged);
-            onPlayerStatChanged.AddListener((key)=>
-            {
-                if (key == "MaxHealth")
-                {
-                    HealPlayerFull();
-                }
-                
-            });
-        }
-
         private void HitInDirection(float rotation, Vector2 size, Vector2 offset, string stateName)
         {
             if (_canAttack)
@@ -301,76 +264,17 @@ namespace Assets.Player.Script
             _animator.SetFloat(Horizontal, _change.x);
             _animator.SetFloat(Vertical, _change.y);
             _animator.SetFloat(Speed, _change.magnitude);
-            _playerRigidbody2D.MovePosition(transform.position + _change * (_player.PlayerStats["Speed"] * Time.fixedDeltaTime));
+            _playerRigidbody2D.MovePosition(transform.position + _change * (_player.GetPlayerSpeed() * Time.fixedDeltaTime));
         }
-
-        public void AddToInventory(GameItem item)
-        {
-            _player.Inventory.AddItem(item);
-            OnItemChange(item, false);
-            onItemAddedToPlayerInventory.Invoke();
-        }
-
         public Collider2D GetCollider()
         {
             return _playerCollider;
         }
-
         public Rigidbody2D GetRigidbody()
         {
             return _playerRigidbody2D;
         }
-
-        #region PlayerDamage
-
-        public void PlayerTakeDamage(int damage)
-        {
-            if (_invulnerable) return;
-
-            var remainingHealth = _player.PlayerStats["CurrentHealth"] -= damage;
-
-            if (remainingHealth > 0)
-            {
-                _player.PlayerStats["CurrentHealth"] = remainingHealth;
-                PlayerChangeLightLevel(-damage * 10);
-                onPlayerLifeChanged.Invoke();
-                onPlayerTakeDamage.Invoke();
-            }
-            else
-            {
-                _player.PlayerStats["CurrentHealth"] = 0;
-                KillPlayer();
-            }
-
-            StartCoroutine(Invulnerable());
-        }
-
-        private void KillPlayer()
-        {
-            onPlayerDied.Invoke();
-        }
-
-        public void PlayerTakeHeal(int heal)
-        {
-            _player.PlayerStats["CurrentHealth"] += heal;
-            onPlayerLifeChanged.Invoke();
-        }
-
-        public int GetPlayerCurrentHealth()
-        {
-            return _player.PlayerStats["CurrentHealth"];
-        }
-
-        public int GetPlayerMaxHealth()
-        {
-            return _player.PlayerStats["MaxHealth"];
-        }
-
-        public int GetPlayerDamage()
-        {
-            return playerDamage;
-        }
-
+        
         private void OnPlayerDied()
         {
             FreezeControls();
@@ -378,16 +282,12 @@ namespace Assets.Player.Script
             Tooltip.HideTooltip_Static();
             _animator.Play("Death");
         }
-
         private void DeathAnimationExit()
         {
             GameManager.playerDied = true;
             SceneManager.LoadScene("Hub");
             _animator.Play("Idle");
         }
-
-        #endregion
-
         #region Sounds
 
         public void PlayFootsteps()
@@ -418,33 +318,7 @@ namespace Assets.Player.Script
         }
 
         #endregion
-
-        #region Getter/Setter and Timer for LightLevel
-
-        //Setter
-        public void PlayerChangeLightLevel(int lightlevel)
-        {
-            _player.PlayerStats["CurrentLightLevel"] += lightlevel;
-            if (_player.PlayerStats["CurrentLightLevel"] < 0) _player.PlayerStats["CurrentLightLevel"] = 0;
-            onPlayerLightLevelChanged.Invoke();
-        }
-
-        //Getter
-        public float GetPlayerLightLevel()
-        {
-            return _player.PlayerStats["CurrentLightLevel"] / (float) _player.PlayerStats["MaxLightLevel"];
-        }
-
-        public int GetPlayerCurrentLightValue()
-        {
-            return _player.PlayerStats["CurrentLightLevel"];
-        }
-
-        public int GetPlayerMaxLightValue()
-        {
-            return _player.PlayerStats["MaxLightLevel"];
-        }
-
+        
         //Timer
         private IEnumerator LoseLightPerSecond()
         {
@@ -452,40 +326,10 @@ namespace Assets.Player.Script
             while (maxLightLevelLoss > 0)
             {
                 maxLightLevelLoss -= lightLoss;
-                PlayerChangeLightLevel(-lightLoss);
+                _player.PlayerChangeLightLevel(-lightLoss);
                 yield return new WaitForSeconds(1f);
             }
         }
-
-        #endregion
-
-        #region Getter/Setter for LightShards
-
-        //Setter
-        public void PlayerChangeLightShards(int lightShards)
-        {
-            _player.Inventory.Lightshard += lightShards;
-            onPlayerLightShardsChanged.Invoke();
-        }
-
-        public void PlayerSetLightShards(int lightShards)
-        {
-            _player.Inventory.Lightshard = lightShards;
-            onPlayerLightShardsChanged.Invoke();
-        }
-
-        //Getter
-        public int GetLightShardAmount()
-        {
-            return _player.Inventory.Lightshard;
-        }
-
-        private void OnPlayerLightShardsChanged()
-        {
-            GameManager.GetSaveSystem().ShardsOnPlayer = GetLightShardAmount();
-        }
-
-        #endregion
 
         private IEnumerator CanAttack()
         {
@@ -504,6 +348,26 @@ namespace Assets.Player.Script
             _invulnerable = false;
         }
 
+        public void PlayerTakeDamage(int damage)
+        {
+            if (_invulnerable) return;
+
+            var remainingHealth = _player.GetPlayerStat("CurrentHealth") - damage;
+
+            if (remainingHealth > 0)
+            {
+                _player.SetPlayerCurrentHealth(remainingHealth);
+                _player.PlayerChangeLightLevel(-damage * 10);
+                GameManager.GetEventHandler().onPlayerTakeDamage.Invoke();
+            }
+            else
+            {
+                _player.SetPlayerCurrentHealth(0);
+                _player.KillPlayer();
+            }
+
+            StartCoroutine(Invulnerable());
+        }
         private void StopPlayer()
         {
             _change = new Vector3(0, 0, 0);
@@ -514,55 +378,22 @@ namespace Assets.Player.Script
             StopPlayer();
             _frozen = true;
         }
-
         public void UnfreezeControls()
         {
             _frozen = false;
         }
-
         public float GetTimeBetweenAttacks()
         {
             return timeBetweenAttacks;
         }
-        public void OnItemChange(GameItem item, bool removed)
-        {
-            foreach (var itemStat in item.ValueIncreases)
-            {
-                if (removed)
-                {
-                    if (_player.PlayerStats.ContainsKey(itemStat.Key))
-                    {
-                        
-                        _player.PlayerStats[itemStat.Key] -= itemStat.Value;
-                        onPlayerStatChanged.Invoke(itemStat.Key);
-                    }
-                }
-                else
-                {
-                    if (_player.PlayerStats.ContainsKey(itemStat.Key))
-                    {
-                        Debug.Log(itemStat.Key);
-                        _player.PlayerStats[itemStat.Key] += itemStat.Value;
-                        onPlayerStatChanged.Invoke(itemStat.Key);
-                    }
-                    else
-                    {
-                        _player.PlayerStats.Add(itemStat.Key, itemStat.Value);
-                        onPlayerStatChanged.Invoke(itemStat.Key);
-                    }
-                }
-            }
-        }
-
-        public void HealPlayerFull()
-        {
-            _player.PlayerStats["CurrentHealth"] = _player.PlayerStats["MaxHealth"];
-            onPlayerLifeChanged.Invoke();
-        }
-
         public Inventory GetPlayerInventory()
         {
-            return _player.Inventory;
+            return _player.GetInventory();
         }
+        public Player GetPlayer()
+        {
+            return _player;
+        }
+        
     }
 }

@@ -22,8 +22,8 @@ namespace Assets.UI.Healthbar.Scripts
             ChangeMaxHearts();
             ChangeHearts();
 
-            GameManager.GetPlayerScript().onPlayerLifeChanged.AddListener(ChangeHearts);
-            GameManager.GetPlayerScript().onPlayerStatChanged.AddListener((key) =>
+            GameManager.GetEventHandler().onPlayerLifeChanged.AddListener(ChangeHearts);
+            GameManager.GetEventHandler().onPlayerStatChanged.AddListener((key) =>
             {
                 //Debug.Log($"HealthbarScript received: {key}");
                 if (key == "MaxHealth")
@@ -37,7 +37,7 @@ namespace Assets.UI.Healthbar.Scripts
         {
             hearts = new Dictionary<int, Image>();
             //Debug.Log("Trying to Change MaxHealth");
-            var maxHealth = GameManager.GetPlayerScript().GetPlayerMaxHealth();
+            var maxHealth = GameManager.GetPlayer().GetPlayerMaxHealth();
             //Debug.Log($"MaxHealth will be {maxHealth}");
             foreach (Transform child in transform)
             {
@@ -68,7 +68,7 @@ namespace Assets.UI.Healthbar.Scripts
 
         private void ChangeHearts()
         {
-            var currentHealth = GameManager.GetPlayerScript().GetPlayerCurrentHealth();
+            var currentHealth = GameManager.GetPlayer().GetPlayerCurrentHealth();
             for (var i = 1; i <= hearts.Count; i++)
             {
                 if (currentHealth >= i)

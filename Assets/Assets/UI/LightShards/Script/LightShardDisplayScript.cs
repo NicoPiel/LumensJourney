@@ -16,13 +16,13 @@ namespace Assets.UI.LightShards.Script
 
         public void Start()
         {
-            _textbox.text = GameManager.GetPlayerScript().GetLightShardAmount().ToString();
-            GameManager.GetPlayerScript().onPlayerLightShardsChanged.AddListener(UpdateLightShardDisplay);
+            _textbox.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
+            GameManager.GetEventHandler().onPlayerLightShardsChanged.AddListener(UpdateLightShardDisplay);
         }
 
         public void UpdateLightShardDisplay()
         {
-            _textbox.text = GameManager.GetPlayerScript().GetLightShardAmount().ToString();
+            _textbox.text = GameManager.GetPlayerScript().GetPlayerInventory().GetLightShardAmount().ToString();
         }
     }
 }

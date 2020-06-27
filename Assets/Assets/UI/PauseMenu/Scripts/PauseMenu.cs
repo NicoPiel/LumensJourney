@@ -34,7 +34,7 @@ namespace Assets.UI.PauseMenu.Scripts
             _instance._canUseMenu = false;
             
             Time.timeScale = 1.0f;
-            GameManager.GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(true);
+            GameManager.GetUnityPlayerObject().transform.Find("PlayerUI").gameObject.SetActive(true);
 
             _instance._pauseMenuTransform.LeanMoveX(-600, 0.5f).setOnComplete(() =>
             {
@@ -53,7 +53,7 @@ namespace Assets.UI.PauseMenu.Scripts
             _canUseMenu = false;
             
             Time.timeScale = 1.0f;
-            GameManager.GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(true);
+            GameManager.GetUnityPlayerObject().transform.Find("PlayerUI").gameObject.SetActive(true);
             
             _pauseMenuTransform.LeanMoveX(-600, 0.5f).setOnComplete(() =>
             {
@@ -71,7 +71,7 @@ namespace Assets.UI.PauseMenu.Scripts
 
             _instance._canUseMenu = false;
 
-            GameManager.GetPlayer().transform.Find("PlayerUI").gameObject.SetActive(false);
+            GameManager.GetUnityPlayerObject().transform.Find("PlayerUI").gameObject.SetActive(false);
             _instance._pauseMenuTransform.LeanMoveX(0, 0.5f).setOnComplete(() =>
             {
                 Time.timeScale = 0.0f;

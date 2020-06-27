@@ -24,26 +24,16 @@ namespace Core
         // Singleton instance of the game manager
         private static GameManager _instance;
 
-        #region Events
-
-        // Events
-        public UnityEvent onNewGameStarted;
-        public UnityEvent onGameLoaded;
-        public UnityEvent onPlayerSpawned;
-        public UnityEvent onNewLevel;
-        public UnityEvent onHubEntered;
-
-        #endregion
-
         #region Inspector variables
 
         [SerializeField] private SaveSystem saveSystem;
         [SerializeField] private Generator generator;
-        [SerializeField] private GameObject player;
+        [SerializeField] private GameObject unityPlayerObject;
         [SerializeField] private PlayerScript playerScript;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private MenuManagerScript menuManagerScript;
         [SerializeField] private DialogueManager dialogueManager;
+        [SerializeField] private EventHandler eventHandler;
 
         #endregion
 
@@ -75,10 +65,6 @@ namespace Core
         public static bool cameFromGuardian;
         public static bool playerDied;
 
-        private const string PathToItemFileInProject = "XML/items.xml";
-        private const string PathToDialogueFileInProject = "XML/";
-        private const string PathToObjectsFileInProject = "Assets/Scripts/DialogueSystem/Data/storyobjects.xml";
-
         #endregion
 
         #region UnityEvent functions
@@ -90,20 +76,13 @@ namespace Core
         {
             DontDestroyOnLoad(this);
             _instance = this;
-
+            
             _menuSound = Resources.Load<AudioClip>("Clicks/click3");
-
-            // Events
-            onNewGameStarted = new UnityEvent();
-            onNewLevel = new UnityEvent();
-            onHubEntered = new UnityEvent();
-
             CurrentLevel = 0;
 
             streamingDialogueFilePath = Application.streamingAssetsPath+ "/XML/dialogues.xml";
             streamingItemFilePath = Application.streamingAssetsPath + "/XML/items.xml";
             streamingObjectsFilePath = Application.streamingAssetsPath + "/XML/storyobjects.xml";
-            Debug.Log(streamingDialogueFilePath);
         }
 
         /// <summary>
@@ -111,12 +90,10 @@ namespace Core
         /// </summary>
         private void Start()
         {
+            
             menuManagerScript = GetComponentInChildren<MenuManagerScript>();
-            dialogueManager = GetComponent<DialogueManager>();
-
-            onPlayerSpawned.AddListener(OnPlayerSpawned);
-
-            onHubEntered.AddListener(() =>
+            eventHandler.onPlayerSpawned.AddListener(OnPlayerSpawned);
+            eventHandler.onHubEntered.AddListener(() =>
             {
                 HubEntered();
             });
@@ -199,7 +176,7 @@ namespace Core
         {
             Setup();
 
-            onNewGameStarted?.Invoke();
+            eventHandler.onNewGameStarted?.Invoke();
         }
 
         /// <summary>
@@ -209,7 +186,7 @@ namespace Core
         {
             saveSystem.LoadSave();
             Setup();
-            onGameLoaded.Invoke();
+            eventHandler.onGameLoaded.Invoke();
         }
 
         /// <summary>
@@ -227,8 +204,7 @@ namespace Core
             {
                 if (scene.name == "Dungeon")
                 {
-                    player.GetComponent<PlayerScript>().onPlayerLightLevelChanged
-                        .AddListener(OnPlayerLightLevelChanged);
+                    eventHandler.onPlayerLightLevelChanged.AddListener(OnPlayerLightLevelChanged);
                 }
             };
 
@@ -242,7 +218,7 @@ namespace Core
             Debug.Assert(CurrentLevel == 0, "CurrentLevel is not 0");
             GetPlayerScript().ResetPlayer();
 
-            player.transform.position = new Vector3(-2,-2,0);
+            unityPlayerObject.transform.position = new Vector3(-2,-2,0);
 
             SceneManager.sceneLoaded -= GenerateDungeon;
 
@@ -272,7 +248,7 @@ namespace Core
         {
             if (generator == null) return;
             generator.name = "DungeonGenerator";
-            generator.onDungeonGenerated.AddListener(OnDungeonGenerated);
+            eventHandler.onDungeonGenerated.AddListener(OnDungeonGenerated);
         }
 
         /// <summary>
@@ -283,11 +259,11 @@ namespace Core
         {
             _canvas = GetMenuManagerScript().pauseMenu;
 
-            player = Instantiate(player, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
-            player.name = "Player";
-            if (player != null) _camera = player.transform.Find("MainCamera").GetComponent<Camera>();
-            if (player != null) playerScript = player.GetComponent<PlayerScript>();
-            onPlayerSpawned.Invoke();
+            unityPlayerObject = Instantiate(unityPlayerObject, new Vector3(-2, -2, 0), Quaternion.identity, gameObject.transform);
+            unityPlayerObject.name = "Player";
+            if (unityPlayerObject != null) _camera = unityPlayerObject.transform.Find("MainCamera").GetComponent<Camera>();
+            if (unityPlayerObject != null) playerScript = unityPlayerObject.GetComponent<PlayerScript>();
+            eventHandler.onPlayerSpawned.Invoke();
         }
 
         #endregion
@@ -299,11 +275,11 @@ namespace Core
         /// </summary>
         private void OnPlayerLightLevelChanged()
         {
-            if (!_ingame || Camera.main == null || player == null) return;
+            if (!_ingame || Camera.main == null || unityPlayerObject == null) return;
 
-            var playerLight = player.transform.Find("PlayerLight").GetComponent<Light2D>();
+            var playerLight = unityPlayerObject.transform.Find("PlayerLight").GetComponent<Light2D>();
             playerLight.intensity = 1;
-            playerLight.pointLightOuterRadius = 6 * playerScript.GetPlayerLightLevel() + 2;
+            playerLight.pointLightOuterRadius = 6 * GetPlayer().GetPlayerLightLevel() + 2;
 
             var volume = _camera.GetComponent<Volume>();
 
@@ -313,10 +289,10 @@ namespace Core
             volume.profile.TryGet(out chromaticAberration);
             volume.profile.TryGet(out lensDistortion);
 
-            chromaticAberration.intensity.value = 0.7f * playerScript.GetPlayerLightLevel();
+            chromaticAberration.intensity.value = 0.7f * GetPlayer().GetPlayerLightLevel();
             lensDistortion.intensity.value = 0.1f;
 
-            player.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().effectEnabled = true;
+            unityPlayerObject.transform.Find("PlayerLight").GetComponent<LightFlickerEffect>().effectEnabled = true;
         }
 
         /// <summary>
@@ -333,7 +309,7 @@ namespace Core
                 text.gameObject.SetActive(true);
             }
 
-            playerScript.HealPlayerFull();
+            playerScript.GetPlayer().HealPlayerFull();
 
             StartCoroutine(FadeLevelTextInAndOut());
         }
@@ -343,7 +319,7 @@ namespace Core
         /// </summary>
         private void OnPlayerSpawned()
         {
-            _camera = GetPlayer().transform.Find("MainCamera").GetComponent<Camera>();
+            _camera = GetUnityPlayerObject().transform.Find("MainCamera").GetComponent<Camera>();
         }
 
         private void OnRunCompleted()
@@ -438,7 +414,7 @@ namespace Core
         {
             _instance.StartCoroutine(FadeTextInAndOut("The End"));
             SceneManager.LoadScene("LastLevel");
-            GetPlayer().transform.position = new Vector2(8, 1);
+            GetUnityPlayerObject().transform.position = new Vector2(8, 1);
         }
 
         private static void GenerateDungeon(Scene scene, LoadSceneMode mode = LoadSceneMode.Single)
@@ -454,9 +430,9 @@ namespace Core
 
         #region Getters
 
-        public static GameObject GetPlayer()
+        public static GameObject GetUnityPlayerObject()
         {
-            return _instance.player;
+            return _instance.unityPlayerObject;
         }
 
         public static PlayerScript GetPlayerScript()
@@ -467,6 +443,11 @@ namespace Core
         public static Generator GetGenerator()
         {
             return _instance.generator;
+        }
+
+        public static Player GetPlayer()
+        {
+            return _instance.playerScript.GetPlayer();
         }
 
         public static SaveSystem GetSaveSystem()
@@ -492,6 +473,11 @@ namespace Core
         public static GameManager GetGameManager()
         {
             return _instance;
+        }
+
+        public static EventHandler GetEventHandler()
+        {
+            return _instance.eventHandler;
         }
 
         public static string GetItemFilePath()

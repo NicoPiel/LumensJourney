@@ -11,13 +11,6 @@ namespace Assets.Enemies.Scripts
 {
     public class Enemy : MonoBehaviour
     {
-        #region Events
-
-        public UnityEvent onDeath;
-        public UnityEvent onDamageTaken;
-
-        #endregion
-
         #region Inspector variables
 
         [Header("AI settings")] 
@@ -62,12 +55,6 @@ namespace Assets.Enemies.Scripts
 
         #region UnityEvent functions
 
-        private void Awake()
-        {
-            onDeath = new UnityEvent();
-            onDamageTaken = new UnityEvent();
-        }
-
         private void Start()
         {
             _collider = GetComponent<BoxCollider2D>();
@@ -101,7 +88,7 @@ namespace Assets.Enemies.Scripts
         private void MoveToPlayer()
         {
             Vector2 enemyPosition = transform.position;
-            Vector2 playerPosition = GameManager.GetPlayer().transform.position + (Vector3) GameManager.GetPlayerScript().GetCollider().offset;
+            Vector2 playerPosition = GameManager.GetUnityPlayerObject().transform.position + (Vector3) GameManager.GetPlayerScript().GetCollider().offset;
             Vector2 vectorToPlayer = playerPosition - enemyPosition;
             Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
             var distanceToPlayer = vectorToPlayer.magnitude;
@@ -177,13 +164,13 @@ namespace Assets.Enemies.Scripts
         private void Die()
         {
             Debug.Log($"{gameObject.name} died.");
-            GameManager.GetPlayerScript().PlayerChangeLightLevel(health*10);
-            GameManager.GetPlayerScript().PlayerChangeLightShards(health*10);
-            
+            GameManager.GetPlayer().PlayerChangeLightLevel(health*10);
+            GameManager.GetPlayerScript().GetPlayerInventory().PlayerChangeLightShards(health*10);
+
             _particleSystem.Play();
             DropShards();
             _audioSource.PlayOneShot(soundOnDeath);
-            onDeath.Invoke();
+            GameManager.GetEventHandler().onEnemyDeath.Invoke();
             Destroy(gameObject, 0.2f);
         }
 

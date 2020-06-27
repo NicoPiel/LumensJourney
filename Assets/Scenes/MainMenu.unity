@@ -346,6 +346,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1583675796 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 845780113571387580, guid: d809ff8be5b6d694da04e14cf7f25865,
+    type: 3}
+  m_PrefabInstance: {fileID: 845780112907540052}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1583675803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583675796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00874c1430d62c94cb0111debcbd62b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &845780112907540052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -413,6 +431,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 845780113571387582, guid: d809ff8be5b6d694da04e14cf7f25865,
+        type: 3}
+      propertyPath: unityPlayerObject
+      value: 
+      objectReference: {fileID: 8759012663102982383, guid: e968301f1b4fce9488e840d8ebda0d1d,
+        type: 3}
+    - target: {fileID: 845780113571387582, guid: d809ff8be5b6d694da04e14cf7f25865,
+        type: 3}
+      propertyPath: dialogueManager
+      value: 
+      objectReference: {fileID: 1583675803}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d809ff8be5b6d694da04e14cf7f25865, type: 3}
 --- !u!1001 &2010919515290640471

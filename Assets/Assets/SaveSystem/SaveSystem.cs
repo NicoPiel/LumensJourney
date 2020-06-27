@@ -14,8 +14,8 @@ namespace Assets.SaveSystem
 {
     public class SaveSystem : MonoBehaviour
     {
-        public UnityEvent onBeforeSave;
-        public UnityEvent onGameSaved;
+        
+        
         
         private string _saveFilePath;
 
@@ -34,21 +34,17 @@ namespace Assets.SaveSystem
         public void Awake()
         {
             _saveFilePath = Application.persistentDataPath + "/save.json";
-            
             DialogueFlags = new Dictionary<string, Dictionary<string, bool>>();
             BankedShards = 0;
             ShardsOnPlayer = 0;
             StoryStoneProgression = 1;
             DiaryProgression = 1;
             RunsCompleted = 0;
-            
-            onBeforeSave = new UnityEvent();
-            onGameSaved = new UnityEvent();
         }
 
         private void Start()
         {
-            GameManager.GetGameManager().onNewGameStarted.AddListener(CreateSave);
+            GameManager.GetEventHandler().onNewGameStarted.AddListener(CreateSave);
         }
 
         public bool SaveExists()
@@ -76,7 +72,7 @@ namespace Assets.SaveSystem
 
         public void CreateSave()
         {
-            onBeforeSave.Invoke();
+            GameManager.GetEventHandler().onBeforeSave.Invoke();
             
             //Debug.Log(DialogueFlags.Count);
             Save save = CreateSaveGameObject();
@@ -86,7 +82,7 @@ namespace Assets.SaveSystem
 
             Debug.Log($"Saved to {_saveFilePath}");
             
-            onGameSaved.Invoke();
+            GameManager.GetEventHandler().onGameSaved.Invoke();
         }
 
         private Save CreateSaveGameObject()

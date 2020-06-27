@@ -29,20 +29,15 @@ namespace DialogueSystem.Scripts
 
         private GameManager _gameManager;
         private SaveSystem _saveSystem;
-
-        public UnityEvent onDialogueStart;
-        public UnityEvent onDialogueEnd;
-
-        private void Awake()
-        {
-            onDialogueStart = new UnityEvent();
-            onDialogueEnd = new UnityEvent();
-        }
+        private EventHandler _eventHandler;
+        
 
         private void Start()
         {
             _gameManager = GameManager.GetGameManager();
             _saveSystem = GameManager.GetSaveSystem();
+            _eventHandler = GameManager.GetEventHandler();
+            
 
             _persistentPathToDialogueFile = GameManager.streamingDialogueFilePath;
             _dialoguesXml = XElement.Load(_persistentPathToDialogueFile);
@@ -53,13 +48,12 @@ namespace DialogueSystem.Scripts
             if (_objectsXml != null) Debug.Log($"Loaded storyobjects.xml from {_persistentPathToObjectsFile}");
             else throw new NullReferenceException("storyobjects.xml could not be found.");
 
-            _gameManager.onGameLoaded.AddListener(OnGameLoaded);
-            _gameManager.onNewGameStarted.AddListener(OnNewGameStarted);
-
-            _saveSystem.onBeforeSave.AddListener(OnBeforeSave);
+            _eventHandler.onGameLoaded.AddListener(OnGameLoaded);
+            _eventHandler.onNewGameStarted.AddListener(OnNewGameStarted);
+            _eventHandler.onBeforeSave.AddListener(OnBeforeSave);
             
-            onDialogueStart.AddListener(OnDialogueStarted);
-            onDialogueEnd.AddListener(OnDialogueEnded);
+            _eventHandler.onDialogueStart.AddListener(OnDialogueStarted);
+            _eventHandler.onDialogueEnd.AddListener(OnDialogueEnded);
         }
 
         public void StartCorrectDialogue(string npcName)
@@ -90,7 +84,7 @@ namespace DialogueSystem.Scripts
         private IEnumerator StartDialogue(string npcName, string flag)
         {
             _inDialogue = true;
-            onDialogueStart.Invoke();
+            _eventHandler.onDialogueStart.Invoke();
 
             Dialogue dialogue = BuildDialogueWithFlag(npcName, flag);
 
@@ -114,7 +108,7 @@ namespace DialogueSystem.Scripts
             }
 
             DialogueMenu.HideDialogueWindow();
-            onDialogueEnd.Invoke();
+            _eventHandler.onDialogueEnd.Invoke();
             //Debug.Log("Hide dialogue window.");
         }
 
@@ -131,7 +125,7 @@ namespace DialogueSystem.Scripts
         public IEnumerator StartDialogue(string nameplate, List<string> lines)
         {
             _inDialogue = true;
-            onDialogueStart.Invoke();
+            _eventHandler.onDialogueStart.Invoke();
 
             var dialogue = new Dialogue(lines);
 
@@ -155,14 +149,14 @@ namespace DialogueSystem.Scripts
             }
 
             DialogueMenu.HideDialogueWindow();
-            onDialogueEnd.Invoke();
+            _eventHandler.onDialogueEnd.Invoke();
             //Debug.Log("Hide dialogue window.");
         }
 
         private IEnumerator StartDialogueStoryStone(int storyStoneindex)
         {
             _inDialogue = true;
-            onDialogueStart.Invoke();
+            _eventHandler.onDialogueStart.Invoke();
 
             Dialogue dialogue = BuildDialogueStoryStone(storyStoneindex);
             _currentStoryStone = dialogue;
@@ -187,7 +181,7 @@ namespace DialogueSystem.Scripts
             }
 
             DialogueMenu.HideDialogueWindow();
-            onDialogueEnd.Invoke();
+            _eventHandler.onDialogueEnd.Invoke();
             //Debug.Log("Hide dialogue window.");
         }
 
