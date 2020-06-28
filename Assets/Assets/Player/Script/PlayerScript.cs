@@ -352,7 +352,7 @@ namespace Assets.Player.Script
         {
             if (_invulnerable) return;
 
-            var remainingHealth = _player.GetPlayerStat("CurrentHealth") - damage;
+            var remainingHealth = _player.GetPlayerCurrentHealth() - damage;
 
             if (remainingHealth > 0)
             {
