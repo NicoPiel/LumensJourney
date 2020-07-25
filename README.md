@@ -1,6 +1,6 @@
-# H-BRS: Game Development 1
+## H-BRS: Game Development 1 Projektarbeit
 
-## Roguelite - Lumen's Journey
+# Roguelite - Lumen's Journey
 
 Vor langer, langer Zeit herrschten Chaos und Anarchie in der Welt. Völker brachten einander um, der Konsequenzen unbewusst.
 Doch eines Tages hatten die Götter genug. Sie waren traurig darüber, all dieses Leid in der Welt zu sehen, die sie erschaffen hatten.
@@ -28,3 +28,4 @@ Wirst du sie jemals sehen?
   Spieldaten -> XML, JSON\
 \
 **Team: Pascal Staadt, René Reifen, Nico Piel**
+**Hochschule Bonn-Rhein-Sieg**
