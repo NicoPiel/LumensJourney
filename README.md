@@ -27,5 +27,5 @@ Wirst du sie jemals sehen?
   Organisation -> Issues\
   Spieldaten -> XML, JSON\
 \
-**Team: Pascal Staadt, René Reifen, Nico Piel**
+**Team: Pascal Staadt, René Reifen, Nico Piel**\
 **Hochschule Bonn-Rhein-Sieg**
