@@ -48,6 +48,7 @@ MonoBehaviour:
     type: 3}
   newGameButton: {fileID: 0}
   loadGameButton: {fileID: 0}
+  deleteGameButton: {fileID: 0}
 --- !u!82 &2010919515996897246
 AudioSource:
   m_ObjectHideFlags: 0

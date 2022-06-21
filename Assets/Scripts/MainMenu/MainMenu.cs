@@ -13,6 +13,7 @@ namespace MainMenu
         public Sprite cursorSprite;
         public GameObject newGameButton;
         public GameObject loadGameButton;
+        public GameObject deleteGameButton;
 
         private void Start()
         {
